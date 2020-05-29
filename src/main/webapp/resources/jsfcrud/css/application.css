@@ -48,7 +48,7 @@ div.actions {
     padding-left: 0;
 }
 
-.error_explanation {
+.errorExplanation {
     width: 450px;
     border: 2px solid red;
     padding: 15px 45px;
@@ -56,7 +56,7 @@ div.actions {
     background-color: #f0f0f0; 
 }
 
-.error_explanation li {
+.errorExplanation li {
     font-size: 12px;
     list-style: square; 
 }
