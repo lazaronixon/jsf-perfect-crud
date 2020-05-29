@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 
 @Transactional
 @ApplicationScoped
-public class StudentService extends ApplicationService<Student> implements Serializable {
+public class StudentsService extends ApplicationService<Student> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,7 +21,7 @@ public class StudentService extends ApplicationService<Student> implements Seria
         return em;
     }
 
-    public StudentService() {
+    public StudentsService() {
         super(Student.class);
     }
 }

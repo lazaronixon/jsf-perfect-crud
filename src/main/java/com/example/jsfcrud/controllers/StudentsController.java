@@ -1,7 +1,7 @@
 package com.example.jsfcrud.controllers;
 
 import com.example.jsfcrud.models.Student;
-import com.example.jsfcrud.services.StudentService;
+import com.example.jsfcrud.services.StudentsService;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.view.ViewScoped;
@@ -15,14 +15,14 @@ public class StudentsController extends ApplicationController implements Seriali
     private static final long serialVersionUID = 1L;
 
     @Inject
-    private StudentService studentService;
+    private StudentsService studentsService;
 
     private List<Student> students;
 
     private Student student;
 
     public void index() {
-        students = studentService.all();
+        students = studentsService.all();
     }
 
     public void build() {
@@ -30,22 +30,22 @@ public class StudentsController extends ApplicationController implements Seriali
     }
 
     public String create() {
-        studentService.create(student);
+        studentsService.create(student);
         return redirectTo("/views/students/show.xhtml?id=" + student.getId(), "Student was successfully created.");
     }
 
     public String update() {
-        studentService.update(student);
+        studentsService.update(student);
         return redirectTo("/views/students/show.xhtml?id=" + student.getId(), "Student was successfully updated.");
     }
 
     public String destroy() {
-        studentService.destroy(student);
+        studentsService.destroy(student);
         return redirectTo(null, this::index, "Student was successfully destroyed.");
     }
 
     public void loadStudent() {
-        student = studentService.find(Integer.parseInt(getParams().get("id")));
+        student = studentsService.find(Integer.parseInt(getParams().get("id")));
     }
 
     //<editor-fold defaultstate="collapsed" desc="Get/Set">
