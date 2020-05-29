@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"      
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/views/layouts/application.xhtml">
+        <f:metadata><f:viewAction action="#{studentsController.index}"/></f:metadata>
+
+        <ui:define name="yield">
+            <h:messages styleClass="notice" globalOnly="true" />
+
+            <h1>Students</h1>
+
+            <h:dataTable value="#{studentsController.students}" var="student">
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    <h:outputText value="#{student.name}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Address</f:facet>
+                    <h:outputText value="#{student.address}" />
+                </h:column>              
+                <h:column>
+                    <h:link value="Show" outcome="/views/students/show.xhtml" style="margin-left: 10px;">
+                        <f:param name="id" value="#{student.id}" />
+                    </h:link>
+                    <h:link value="Edit" outcome="/views/students/edit.xhtml" style="margin-left: 10px;">
+                        <f:param name="id" value="#{student.id}" />
+                    </h:link>
+                    <h:form style="margin-left: 10px; display: inline;">
+                        <h:commandLink value="Destroy" action="#{studentsController.destroy}" onclick="return confirm('Are your sure?')">
+                            <f:setPropertyActionListener value="#{student}" target="#{studentsController.student}" />
+                        </h:commandLink>
+                    </h:form>
+                </h:column>                   
+            </h:dataTable>
+
+            <br/>
+
+            <h:link value="New Student" outcome="/views/students/new.xhtml" />
+        </ui:define>
+    </ui:composition>
+</html>

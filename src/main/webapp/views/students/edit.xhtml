@@ -1,0 +1,17 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"      
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/views/layouts/application.xhtml">
+        <f:metadata><f:viewAction action="#{studentsController.loadStudent}" /></f:metadata>
+
+        <ui:define name="yield">
+            <h1>Editing Student</h1>
+            
+            <ui:include src="_form.xhtml" />
+            
+            <h:link value="Show" outcome="/views/students/show.xhtml?id=#{studentsController.student.id}" /> |
+            <h:link value="Back" outcome="/views/students/index.xhtml" />
+        </ui:define>
+    </ui:composition>
+</html>

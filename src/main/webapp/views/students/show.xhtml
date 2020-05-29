@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"      
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/views/layouts/application.xhtml">
+        <f:metadata><f:viewAction action="#{studentsController.loadStudent}" /></f:metadata>
+
+        <ui:define name="yield">
+            <h:messages styleClass="notice" globalOnly="true" />
+
+            <p>
+                <strong>Name: </strong>
+                <h:outputText value="#{studentsController.student.name}" />
+            </p>
+
+            <p>
+                <strong>Address: </strong>
+                <h:outputText value="#{studentsController.student.address}" />
+            </p>   
+
+            <h:link value="Edit" outcome="/views/students/edit.xhtml?id=#{studentsController.student.id}" /> |
+            <h:link value="Back" outcome="/views/students/index.xhtml" />
+        </ui:define>
+    </ui:composition>
+</html>
