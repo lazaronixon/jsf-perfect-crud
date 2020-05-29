@@ -1,7 +1,6 @@
 package com.example.jsfcrud.controllers;
 
 import java.util.Map;
-import java.util.concurrent.Callable;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 

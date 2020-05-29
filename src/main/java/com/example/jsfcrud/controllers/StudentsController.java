@@ -1,9 +1,9 @@
 package com.example.jsfcrud.controllers;
 
-import static java.lang.Integer.parseInt;
 import com.example.jsfcrud.models.Student;
 import com.example.jsfcrud.services.StudentsService;
 import java.io.Serializable;
+import static java.lang.Integer.parseInt;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;

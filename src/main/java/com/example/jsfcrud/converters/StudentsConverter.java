@@ -1,8 +1,8 @@
 package com.example.jsfcrud.converters;
 
-import static java.lang.Integer.parseInt;
 import com.example.jsfcrud.models.Student;
 import com.example.jsfcrud.services.StudentsService;
+import static java.lang.Integer.parseInt;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
