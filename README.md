@@ -34,4 +34,3 @@ CREATE TABLE STUDENT (
 * https://www.primefaces.org/showcase
 * https://balusc.omnifaces.org
 * https://www.amazon.com/Practical-JSF-Java-EE-8/dp/1484230299
-* 
