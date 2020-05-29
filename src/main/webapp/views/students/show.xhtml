@@ -3,7 +3,11 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"      
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="/views/layouts/application.xhtml">
-        <f:metadata><f:viewAction action="#{studentsController.loadStudent}" /></f:metadata>
+        <ui:define name="metadata">
+            <f:metadata>
+                <f:viewAction action="#{studentsController.loadStudent}" />
+            </f:metadata>
+        </ui:define>        
 
         <ui:define name="yield">
             <h:messages styleClass="notice" globalOnly="true" />
