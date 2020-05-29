@@ -1,5 +1,6 @@
 package com.example.jsfcrud.controllers;
 
+import static java.lang.Integer.parseInt;
 import com.example.jsfcrud.models.Student;
 import com.example.jsfcrud.services.StudentsService;
 import java.io.Serializable;
@@ -45,18 +46,18 @@ public class StudentsController extends ApplicationController implements Seriali
     }
 
     public void loadStudent() {
-        student = studentsService.find(Integer.parseInt(getParams().get("id")));
+        student = studentsService.find(parseInt(getParams().get("id")));
     }
 
     //<editor-fold defaultstate="collapsed" desc="Get/Set">
     public List<Student> getStudents() {
         return students;
     }
-    
+
     public Student getStudent() {
         return student;
     }
-    
+
     public void setStudent(Student student) {
         this.student = student;
     }
