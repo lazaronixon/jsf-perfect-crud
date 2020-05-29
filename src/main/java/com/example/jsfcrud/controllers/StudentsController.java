@@ -41,7 +41,7 @@ public class StudentsController extends ApplicationController implements Seriali
 
     public String destroy() {
         studentService.destroy(student);
-        return redirectTo("/views/students/index.xhtml", "Student was successfully destroyed.");
+        return redirectTo(null, this::index, "Student was successfully destroyed.");
     }
 
     public void loadStudent() {

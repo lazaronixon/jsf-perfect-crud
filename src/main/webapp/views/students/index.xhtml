@@ -32,7 +32,8 @@
                     </h:link>
                     <h:form style="margin-left: 10px; display: inline;">
                         <h:commandLink value="Destroy" action="#{studentsController.destroy}" onclick="return confirm('Are your sure?')">
-                            <f:setPropertyActionListener value="#{student}" target="#{studentsController.student}" />
+                            <f:setPropertyActionListener value="#{student}" target="#{studentsController.student}" />                            
+                            <f:ajax render="body" />
                         </h:commandLink>
                     </h:form>
                 </h:column>                   
