@@ -32,5 +32,5 @@ CREATE TABLE STUDENT (
 
 * https://netbeans.org/kb/trails/java-ee.html
 * https://www.primefaces.org/showcase
-* https://balusc.omnifaces.org
+* https://jsf.zeef.com/bauke.scholtz
 * https://www.amazon.com/Practical-JSF-Java-EE-8/dp/1484230299
