@@ -1,8 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:form="http://xmlns.jcp.org/jsf/composite/form">
     <ui:composition>
         <h:form id="student">
             <h:messages styleClass="error-explanation" globalOnly="false" />
@@ -18,16 +17,12 @@
             </div>            
 
             <div class="actions">
-                <c:if test="#{studentsController.student.newRecord}">
-                    <h:commandButton value="Create Student" action="#{studentsController.create}" >
-                        <f:ajax execute="@form" render="body" />
-                    </h:commandButton>
-                </c:if>
-                <c:if test="#{studentsController.student.persisted}">
-                    <h:commandButton value="Update Student" action="#{studentsController.update}" >
-                        <f:ajax execute="@form" render="body" />
-                    </h:commandButton>
-                </c:if>                
+                <form:submit isNewRecord="#{studentsController.student.newRecord}" 
+                             isPersisted="#{studentsController.student.persisted}" 
+                             createAction="#{studentsController.create}"
+                             updateAction="#{studentsController.update}" 
+                             createValue="Create Student"
+                             updateValue="Update Student" />           
             </div>            
         </h:form>
     </ui:composition>

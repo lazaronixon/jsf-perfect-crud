@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="isNewRecord" required="true" />
+        <cc:attribute name="isPersisted" required="true" />        
+        <cc:attribute name="createAction" required="true" method-signature="java.lang.Object action()" />
+        <cc:attribute name="updateAction" required="true" method-signature="java.lang.Object action()" />        
+        <cc:attribute name="createValue" default="Create" />
+        <cc:attribute name="updateValue" default="Update" />
+        <cc:attribute name="style" />
+        <cc:attribute name="styleClass" />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <c:if test="#{cc.attrs.isNewRecord}">
+            <h:commandButton value="#{cc.attrs.createValue}" action="#{cc.attrs.createAction}" style="#{cc.attrs.style}" styleClass="#{cc.attrs.styleClass}">
+                <f:ajax execute="@form" render="@form" />
+            </h:commandButton>
+        </c:if>
+        <c:if test="#{cc.attrs.isPersisted}">
+            <h:commandButton value="#{cc.attrs.updateValue}" action="#{cc.attrs.updateAction}" style="#{cc.attrs.style}" styleClass="#{cc.attrs.styleClass}">
+                <f:ajax execute="@form" render="@form" />
+            </h:commandButton>
+        </c:if>    
+    </cc:implementation>
+</html>
