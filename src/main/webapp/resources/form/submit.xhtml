@@ -10,8 +10,8 @@
     <cc:interface>
         <cc:attribute name="isNewRecord" required="true" />
         <cc:attribute name="isPersisted" required="true" />        
-        <cc:attribute name="createAction" required="true" method-signature="java.lang.Object action()" />
-        <cc:attribute name="updateAction" required="true" method-signature="java.lang.Object action()" />        
+        <cc:attribute name="createAction" method-signature="java.lang.Object action()" required="true" />
+        <cc:attribute name="updateAction" method-signature="java.lang.Object action()" required="true" />        
         <cc:attribute name="createValue" default="Create" />
         <cc:attribute name="updateValue" default="Update" />
         <cc:attribute name="style" />
@@ -23,11 +23,13 @@
         <c:if test="#{cc.attrs.isNewRecord}">
             <h:commandButton value="#{cc.attrs.createValue}" action="#{cc.attrs.createAction}" style="#{cc.attrs.style}" styleClass="#{cc.attrs.styleClass}">
                 <f:ajax execute="@form" render="@form" />
+                <cc:insertChildren />
             </h:commandButton>
         </c:if>
         <c:if test="#{cc.attrs.isPersisted}">
             <h:commandButton value="#{cc.attrs.updateValue}" action="#{cc.attrs.updateAction}" style="#{cc.attrs.style}" styleClass="#{cc.attrs.styleClass}">
                 <f:ajax execute="@form" render="@form" />
+                <cc:insertChildren />
             </h:commandButton>
         </c:if>    
     </cc:implementation>
