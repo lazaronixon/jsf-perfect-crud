@@ -22,7 +22,7 @@
                 <h:outputText value="#{studentsController.student.address}" />
             </p>   
 
-            <h:link value="Edit" outcome="/views/students/edit.xhtml?id=#{studentsController.student.id}" /> |
+            <h:link value="Edit" outcome="/views/students/edit.xhtml"><f:param name="id" value="#{studentsController.student.id}" /></h:link> |
             <h:link value="Back" outcome="/views/students/index.xhtml" />
         </ui:define>
     </ui:composition>

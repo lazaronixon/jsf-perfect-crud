@@ -14,7 +14,7 @@
 
             <ui:include src="_form.xhtml" />
 
-            <h:link value="Show" outcome="/views/students/show.xhtml?id=#{studentsController.student.id}" /> |
+            <h:link value="Show" outcome="/views/students/show.xhtml"><f:param name="id" value="#{studentsController.student.id}" /></h:link> |
             <h:link value="Back" outcome="/views/students/index.xhtml" />
         </ui:define>
     </ui:composition>
