@@ -2,6 +2,7 @@ package com.example.jsfcrud.controllers;
 
 import java.util.Map;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 
 public abstract class ApplicationController {
@@ -16,15 +17,15 @@ public abstract class ApplicationController {
         }
     }
 
-    protected String redirectTo(String path, String notice) {
-        getFacesContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, notice, null));
+    protected String redirectTo(String path, Severity severity, String message) {
+        getFacesContext().addMessage(null, new FacesMessage(severity, message, null));
         getFacesContext().getExternalContext().getFlash().setKeepMessages(true);
         return redirectTo(path);
     }
     
-    protected String redirectTo(String path, Runnable action, String notice) {
+    protected String redirectTo(String path, Runnable action, Severity severity, String message) {
         action.run();
-        return redirectTo(path, notice);
+        return redirectTo(path, severity, message);
     }
 
     protected FacesContext getFacesContext() {

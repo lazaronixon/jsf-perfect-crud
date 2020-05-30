@@ -5,6 +5,7 @@ import com.example.jsfcrud.services.StudentsService;
 import java.io.Serializable;
 import static java.lang.Integer.parseInt;
 import java.util.List;
+import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,17 +33,17 @@ public class StudentsController extends ApplicationController implements Seriali
 
     public String create() {
         studentsService.create(student);
-        return redirectTo("/views/students/show.xhtml?id=" + student.getId(), "Student was successfully created.");
+        return redirectTo("/views/students/show.xhtml?id=" + student.getId(), SEVERITY_INFO, "Student was successfully created.");
     }
 
     public String update() {
         studentsService.update(student);
-        return redirectTo("/views/students/show.xhtml?id=" + student.getId(), "Student was successfully updated.");
+        return redirectTo("/views/students/show.xhtml?id=" + student.getId(), SEVERITY_INFO, "Student was successfully updated.");
     }
 
     public String destroy() {
         studentsService.destroy(student);
-        return redirectTo(null, this::index, "Student was successfully destroyed.");
+        return redirectTo(null, this::index, SEVERITY_INFO, "Student was successfully destroyed.");
     }
 
     public void loadStudent() {
