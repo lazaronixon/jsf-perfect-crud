@@ -30,11 +30,11 @@ public abstract class ApplicationController {
     }
     
     protected String redirectTo(ApplicationRecord model, Severity severity, String message) {
-        return redirectTo(model.getOutcome(), severity, message);
+        return redirectTo(model.getPath(), severity, message);
     }
     
     protected String redirectTo(ApplicationRecord model, Runnable action, Severity severity, String message) {
-        return redirectTo(model.getOutcome(), action, severity, message);
+        return redirectTo(model.getPath(), action, severity, message);
     }  
 
     protected FacesContext getFacesContext() {

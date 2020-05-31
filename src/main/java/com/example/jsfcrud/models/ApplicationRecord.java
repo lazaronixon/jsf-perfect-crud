@@ -13,18 +13,30 @@ public abstract class ApplicationRecord<I> {
     public boolean isNewRecord() {
         return getId() == null;
     }
-    
+
     public boolean isPersisted() {
         return getId() != null;
     }
-    
-    public abstract String getOutcome();
-    
-    public abstract String getOutcomeIndex();
+
+    public String getIndexPath() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String getNewPath() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String getEditPath() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String getPath() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
     @Override
     public int hashCode() {
-        return (getId() != null) ? Objects.hash(getId()): super.hashCode();
+        return (getId() != null) ? Objects.hash(getId()) : super.hashCode();
     }
 
     @Override

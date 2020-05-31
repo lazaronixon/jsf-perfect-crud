@@ -18,22 +18,32 @@ public class Student extends ApplicationRecord<Integer> implements Serializable 
 
     @NotNull(message = "Name can't be blank")
     private String name;
-    
+
     private String address;
 
     public Student() {
     }
 
     @Override
-    public String getOutcome() {
-        return "/views/students/show.xhtml?id=" + getId();
-    }
-    
-    @Override
-    public String getOutcomeIndex() {
+    public String getIndexPath() {
         return "/views/students/index.xhtml";
     }
 
+    @Override
+    public String getNewPath() {
+        return "/views/students/new.xhtml";
+    }
+
+    @Override
+    public String getEditPath() {
+        return "/views/students/edit.xhtml?id=" + getId();
+    }
+
+    @Override
+    public String getPath() {
+        return "/views/students/show.xhtml?id=" + getId();
+    }
+    
     //<editor-fold defaultstate="collapsed" desc="Get/Set">    
     @Override
     public Integer getId() {
@@ -44,7 +54,7 @@ public class Student extends ApplicationRecord<Integer> implements Serializable 
     public void setId(Integer id) {
         this.id = id;
     }
-    
+
     public String getName() {
         return name;
     }
