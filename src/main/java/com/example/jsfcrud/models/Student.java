@@ -23,16 +23,6 @@ public class Student extends ApplicationRecord<Integer> implements Serializable 
 
     public Student() {
     }
-
-    @Override
-    public String getEditPath() {
-        return "/views/students/edit.xhtml?id=" + getId();
-    }
-
-    @Override
-    public String getPath() {
-        return "/views/students/show.xhtml?id=" + getId();
-    }
     
     //<editor-fold defaultstate="collapsed" desc="Get/Set">    
     @Override

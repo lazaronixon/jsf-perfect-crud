@@ -1,5 +1,6 @@
 package com.example.jsfcrud.controllers;
 
+import static com.example.jsfcrud.helpers.StudentsHelper.studentPath;
 import com.example.jsfcrud.models.Student;
 import com.example.jsfcrud.services.StudentsService;
 import java.io.Serializable;
@@ -33,12 +34,12 @@ public class StudentsController extends ApplicationController implements Seriali
 
     public String create() {
         studentsService.create(student);
-        return redirectTo(student, SEVERITY_INFO, "Student was successfully created.");
+        return redirectTo(studentPath(student), SEVERITY_INFO, "Student was successfully created.");
     }
 
     public String update() {
         studentsService.update(student);
-        return redirectTo(student, SEVERITY_INFO, "Student was successfully updated.");
+        return redirectTo(studentPath(student), SEVERITY_INFO, "Student was successfully updated.");
     }
 
     public String destroy() {
