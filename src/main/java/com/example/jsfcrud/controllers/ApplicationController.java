@@ -1,5 +1,6 @@
 package com.example.jsfcrud.controllers;
 
+import com.example.jsfcrud.models.ApplicationRecord;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -8,9 +9,9 @@ import javax.faces.context.FacesContext;
 public abstract class ApplicationController {
 
     protected String redirectTo(String path) {
-        if (path == null) return null;
-
-        if (path.endsWith(".xhtml")) {
+        if (path.isEmpty()) {
+            return null;
+        } else if (path.endsWith(".xhtml")) {
             return path + "?faces-redirect=true";
         } else {
             return path + "&faces-redirect=true";
@@ -27,6 +28,14 @@ public abstract class ApplicationController {
         action.run();
         return redirectTo(path, severity, message);
     }
+    
+    protected String redirectTo(ApplicationRecord model, Severity severity, String message) {
+        return redirectTo(model.getOutcome(), severity, message);
+    }
+    
+    protected String redirectTo(ApplicationRecord model, Runnable action, Severity severity, String message) {
+        return redirectTo(model.getOutcome(), action, severity, message);
+    }  
 
     protected FacesContext getFacesContext() {
         return FacesContext.getCurrentInstance();

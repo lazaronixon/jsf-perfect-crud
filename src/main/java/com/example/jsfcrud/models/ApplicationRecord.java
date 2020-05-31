@@ -17,6 +17,10 @@ public abstract class ApplicationRecord<I> {
     public boolean isPersisted() {
         return getId() != null;
     }
+    
+    public abstract String getOutcome();
+    
+    public abstract String getOutcomeIndex();
 
     @Override
     public int hashCode() {

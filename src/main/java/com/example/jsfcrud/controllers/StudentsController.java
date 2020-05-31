@@ -33,17 +33,17 @@ public class StudentsController extends ApplicationController implements Seriali
 
     public String create() {
         studentsService.create(student);
-        return redirectTo("/views/students/show.xhtml?id=" + student.getId(), SEVERITY_INFO, "Student was successfully created.");
+        return redirectTo(student, SEVERITY_INFO, "Student was successfully created.");
     }
 
     public String update() {
         studentsService.update(student);
-        return redirectTo("/views/students/show.xhtml?id=" + student.getId(), SEVERITY_INFO, "Student was successfully updated.");
+        return redirectTo(student, SEVERITY_INFO, "Student was successfully updated.");
     }
 
     public String destroy() {
         studentsService.destroy(student);
-        return redirectTo(null, this::index, SEVERITY_INFO, "Student was successfully destroyed.");
+        return redirectTo("", this::index, SEVERITY_INFO, "Student was successfully destroyed.");
     }
 
     public void loadStudent() {

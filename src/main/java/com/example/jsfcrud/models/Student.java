@@ -24,6 +24,16 @@ public class Student extends ApplicationRecord<Integer> implements Serializable 
     public Student() {
     }
 
+    @Override
+    public String getOutcome() {
+        return "/views/students/show.xhtml?id=" + getId();
+    }
+    
+    @Override
+    public String getOutcomeIndex() {
+        return "/views/students/index.xhtml";
+    }
+
     //<editor-fold defaultstate="collapsed" desc="Get/Set">    
     @Override
     public Integer getId() {
