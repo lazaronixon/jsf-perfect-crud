@@ -10,7 +10,7 @@ This project is a implementation of generated crud of Ruby on Rails using JSF 2.
 
 ![preview](https://nixo-etc.s3-sa-east-1.amazonaws.com/javajsf.gif)
 
-![controller](https://nixo-etc.s3-sa-east-1.amazonaws.com/screenshot_jsfcrud_2.png)
+![controller](https://nixo-etc.s3-sa-east-1.amazonaws.com/screenshot_jsfcrud_3.png)
 
 ## URL
 * http://localhost:8080/jsfcrud/views/students/index.xhtml
