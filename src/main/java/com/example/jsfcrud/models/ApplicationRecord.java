@@ -18,14 +18,6 @@ public abstract class ApplicationRecord<I> {
         return getId() != null;
     }
 
-    public String getEditPath() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public String getPath() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     @Override
     public int hashCode() {
         return (getId() != null) ? Objects.hash(getId()) : super.hashCode();
