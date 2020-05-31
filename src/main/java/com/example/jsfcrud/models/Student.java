@@ -25,16 +25,6 @@ public class Student extends ApplicationRecord<Integer> implements Serializable 
     }
 
     @Override
-    public String getIndexPath() {
-        return "/views/students/index.xhtml";
-    }
-
-    @Override
-    public String getNewPath() {
-        return "/views/students/new.xhtml";
-    }
-
-    @Override
     public String getEditPath() {
         return "/views/students/edit.xhtml?id=" + getId();
     }

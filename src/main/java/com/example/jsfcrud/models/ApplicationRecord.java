@@ -18,14 +18,6 @@ public abstract class ApplicationRecord<I> {
         return getId() != null;
     }
 
-    public String getIndexPath() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public String getNewPath() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     public String getEditPath() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
