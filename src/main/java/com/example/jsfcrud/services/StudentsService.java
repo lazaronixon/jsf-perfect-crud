@@ -17,7 +17,7 @@ public class StudentsService extends ApplicationService<Student> implements Seri
     private EntityManager em;
 
     @Override
-    protected EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         return em;
     }
 

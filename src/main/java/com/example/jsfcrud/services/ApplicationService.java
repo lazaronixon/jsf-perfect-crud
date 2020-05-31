@@ -16,7 +16,7 @@ public abstract class ApplicationService<T> {
         this.entityClass = entityClass;
     }
 
-    protected abstract EntityManager getEntityManager();
+    public abstract EntityManager getEntityManager();
     
     public void create(ApplicationRecord entity) {
         getEntityManager().persist(entity);
