@@ -23,13 +23,11 @@
         <c:if test="#{cc.attrs.isNewRecord}">
             <h:commandButton value="#{cc.attrs.createValue}" action="#{cc.attrs.createAction}" style="#{cc.attrs.style}" styleClass="#{cc.attrs.styleClass}">
                 <f:ajax execute="@form" render="@form" />
-                <cc:insertChildren />
             </h:commandButton>
         </c:if>
         <c:if test="#{cc.attrs.isPersisted}">
             <h:commandButton value="#{cc.attrs.updateValue}" action="#{cc.attrs.updateAction}" style="#{cc.attrs.style}" styleClass="#{cc.attrs.styleClass}">
                 <f:ajax execute="@form" render="@form" />
-                <cc:insertChildren />
             </h:commandButton>
         </c:if>    
     </cc:implementation>
