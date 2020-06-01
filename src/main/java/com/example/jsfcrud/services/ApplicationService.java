@@ -40,7 +40,7 @@ public abstract class ApplicationService<T> {
     }
 
     public List<T> all() {
-        return getEntityManager().createQuery(format("SELECT this FROM %s this", entityClass.getSimpleName())).getResultList();
+        return getEntityManager().createQuery(format("SELECT this FROM %s this", entityClass.getName())).getResultList();
     }
 
 }
