@@ -1,10 +1,9 @@
 package com.example.jsfcrud.services;
 
 import com.example.jsfcrud.models.ApplicationRecord;
+import static java.lang.String.format;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 public abstract class ApplicationService<T> {
 
@@ -15,14 +14,14 @@ public abstract class ApplicationService<T> {
     }
 
     public abstract EntityManager getEntityManager();
-    
+
     public void create(ApplicationRecord entity) {
         getEntityManager().persist(entity);
     }
-    
+
     public void update(ApplicationRecord entity) {
         getEntityManager().merge(entity);
-    }    
+    }
 
     public void save(ApplicationRecord entity) {
         if (entity.isNewRecord()) {
@@ -41,13 +40,7 @@ public abstract class ApplicationService<T> {
     }
 
     public List<T> all() {
-        CriteriaQuery cq = createCriteriaQuery(entityClass);
-        Root star = cq.from(entityClass);
-        return getEntityManager().createQuery(cq.select(star)).getResultList();
+        return getEntityManager().createQuery(format("SELECT this FROM %s this", entityClass.getSimpleName())).getResultList();
     }
-    
-    private CriteriaQuery<T> createCriteriaQuery(Class resultClass) {
-        return getEntityManager().getCriteriaBuilder().createQuery(resultClass);
-    }
-           
+
 }
