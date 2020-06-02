@@ -48,5 +48,13 @@ public abstract class ApplicationService<T> {
     public List<T> all(String order) {
         return getEntityManager().createQuery(format("SELECT this FROM %s this ORDER BY %s", entityClass.getName(), order)).getResultList();
     }
+    
+    public List<T> allInRange(int first, int pageSize) {
+        return getEntityManager().createQuery(format("SELECT this FROM %s this", entityClass.getSimpleName())).setFirstResult(first).setMaxResults(pageSize).getResultList();
+    }
+    
+    public Long count() {
+        return getEntityManager().createQuery(format("SELECT COUNT(this) FROM %s this", entityClass.getSimpleName()), Long.class).getSingleResult();
+    }    
 
 }
