@@ -8,9 +8,7 @@ import javax.faces.context.FacesContext;
 public abstract class ApplicationController {
 
     protected String redirectTo(String path) {
-        if (path.isEmpty()) {
-            return null;
-        } else if (path.endsWith(".xhtml")) {
+        if (path.endsWith(".xhtml")) {
             return path + "?faces-redirect=true";
         } else {
             return path + "&faces-redirect=true";
