@@ -14,6 +14,8 @@ public abstract class ApplicationService<T> {
     }
 
     public abstract EntityManager getEntityManager();
+    
+    public abstract T find(String id);
 
     public void create(ApplicationRecord entity) {
         getEntityManager().persist(entity);

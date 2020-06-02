@@ -5,7 +5,6 @@ import static com.example.jsfcrud.helpers.StudentsHelper.studentsPath;
 import com.example.jsfcrud.models.Student;
 import com.example.jsfcrud.services.StudentsService;
 import java.io.Serializable;
-import static java.lang.Integer.parseInt;
 import java.util.List;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import javax.faces.view.ViewScoped;
@@ -49,7 +48,7 @@ public class StudentsController extends ApplicationController implements Seriali
     }
 
     public void loadStudent() {
-        student = studentsService.find(parseInt(getParams().get("id")));
+        student = studentsService.find(getParams().get("id"));
     }
 
     //<editor-fold defaultstate="collapsed" desc="Get/Set">
