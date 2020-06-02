@@ -24,14 +24,14 @@
                     <h:outputText value="#{student.address}" />
                 </h:column>              
                 <h:column>
-                    <h:link value="Show" outcome="/views/students/show.xhtml" style="margin-left: 10px;">
-                        <f:param name="id" value="#{student.id}" />
-                    </h:link>
-                    <h:link value="Edit" outcome="/views/students/edit.xhtml" style="margin-left: 10px;">
-                        <f:param name="id" value="#{student.id}" />
-                    </h:link>
-                    <h:form style="margin-left: 10px; display: inline;">
-                        <h:commandLink value="Destroy" action="#{studentsController.destroy}" onclick="return confirm('Are your sure?')">
+                    <h:form>
+                        <h:link value="Show" outcome="/views/students/show.xhtml" style="margin-left: 10px;">
+                            <f:param name="id" value="#{student.id}" />
+                        </h:link>
+                        <h:link value="Edit" outcome="/views/students/edit.xhtml" style="margin-left: 10px;">
+                            <f:param name="id" value="#{student.id}" />
+                        </h:link>                    
+                        <h:commandLink value="Destroy" action="#{studentsController.destroy}" onclick="return confirm('Are your sure?')" style="margin-left: 10px;">
                             <f:setPropertyActionListener value="#{student}" target="#{studentsController.student}" />
                         </h:commandLink>
                     </h:form>
