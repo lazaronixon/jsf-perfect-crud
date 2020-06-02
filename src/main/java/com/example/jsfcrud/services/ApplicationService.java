@@ -42,5 +42,9 @@ public abstract class ApplicationService<T> {
     public List<T> all() {
         return getEntityManager().createQuery(format("SELECT this FROM %s this", entityClass.getName())).getResultList();
     }
+    
+    public List<T> all(String order) {
+        return getEntityManager().createQuery(format("SELECT this FROM %s this ORDER BY %s", entityClass.getName(), order)).getResultList();
+    }
 
 }
