@@ -4,11 +4,11 @@ import java.util.Objects;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class ApplicationRecord<I> {
+public abstract class ApplicationRecord<ID> {
 
-    public abstract I getId();
+    public abstract ID getId();
 
-    public abstract void setId(I id);
+    public abstract void setId(ID id);
 
     public boolean isNewRecord() {
         return getId() == null;
