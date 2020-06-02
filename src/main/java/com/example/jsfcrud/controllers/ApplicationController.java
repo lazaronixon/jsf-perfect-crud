@@ -22,11 +22,6 @@ public abstract class ApplicationController {
         getFacesContext().getExternalContext().getFlash().setKeepMessages(true);
         return redirectTo(path);
     }
-    
-    protected String redirectTo(String path, Runnable action, Severity severity, String message) {
-        action.run();
-        return redirectTo(path, severity, message);
-    }    
 
     protected FacesContext getFacesContext() {
         return FacesContext.getCurrentInstance();

@@ -1,6 +1,7 @@
 package com.example.jsfcrud.controllers;
 
 import static com.example.jsfcrud.helpers.StudentsHelper.studentPath;
+import static com.example.jsfcrud.helpers.StudentsHelper.studentsPath;
 import com.example.jsfcrud.models.Student;
 import com.example.jsfcrud.services.StudentsService;
 import java.io.Serializable;
@@ -44,7 +45,7 @@ public class StudentsController extends ApplicationController implements Seriali
 
     public String destroy() {
         studentsService.destroy(student);
-        return redirectTo("", this::index, SEVERITY_INFO, "Student was successfully destroyed.");
+        return redirectTo(studentsPath(), SEVERITY_INFO, "Student was successfully destroyed.");
     }
 
     public void loadStudent() {
