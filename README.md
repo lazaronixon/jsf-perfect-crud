@@ -8,7 +8,7 @@ Even now on this times of javascript on everything, json everywhere, quees and d
 
 This project is a implementation of generated crud of Ruby on Rails using JSF 2.3 and JavaEE 8.
 
-![preview](https://nixo-etc.s3-sa-east-1.amazonaws.com/javajsf.gif)
+![preview](https://nixo-etc.s3-sa-east-1.amazonaws.com/primefaces.gif)
 
 ![controller](https://nixo-etc.s3-sa-east-1.amazonaws.com/screenshot_jsfcrud_8.png)
 
