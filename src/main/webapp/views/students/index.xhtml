@@ -1,7 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"      
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     <ui:composition template="/views/layouts/application.xhtml">
         <ui:define name="metadata">
             <f:metadata>
@@ -10,37 +11,37 @@
         </ui:define>
 
         <ui:define name="yield">
-            <h:messages styleClass="notice" globalOnly="true" />
+            <p:growl globalOnly="true" />
 
             <h1>Students</h1>
 
-            <h:dataTable value="#{studentsController.students}" var="student">
-                <h:column>
-                    <f:facet name="header">Name</f:facet>
+            <p:dataTable value="#{studentsController.students}" var="student">
+                <p:column headerText="Name">
                     <h:outputText value="#{student.name}" />
-                </h:column>
-                <h:column>
+                </p:column>
+                <p:column headerText="Address">
                     <f:facet name="header">Address</f:facet>
                     <h:outputText value="#{student.address}" />
-                </h:column>              
-                <h:column>
+                </p:column>              
+                <p:column>
                     <h:form>
-                        <h:link value="Show" outcome="/views/students/show.xhtml" style="margin-left: 10px;">
+                        <p:linkButton title="Show" icon="pi pi-eye" outcome="/views/students/show.xhtml" style="margin-left: 5px">
                             <f:param name="id" value="#{student.id}" />
-                        </h:link>
-                        <h:link value="Edit" outcome="/views/students/edit.xhtml" style="margin-left: 10px;">
+                        </p:linkButton>
+                        <p:linkButton title="Edit" icon="pi pi-pencil" outcome="/views/students/edit.xhtml" style="margin-left: 5px">
                             <f:param name="id" value="#{student.id}" />
-                        </h:link>                    
-                        <h:commandLink value="Destroy" action="#{studentsController.destroy}" onclick="return confirm('Are your sure?')" style="margin-left: 10px;">
+                        </p:linkButton>                    
+                        <p:commandButton title="Remover" icon="pi pi-trash" action="#{studentsController.destroy}" style="margin-left: 5px">
+                            <p:confirm header="Confirmation" message="Are you sure?" icon="fa fa-exclamation-triangle" />
                             <f:setPropertyActionListener value="#{student}" target="#{studentsController.student}" />
-                        </h:commandLink>
+                        </p:commandButton>
                     </h:form>
-                </h:column>                   
-            </h:dataTable>
+                </p:column>                   
+            </p:dataTable>
 
             <br/>
 
-            <h:link value="New Student" outcome="/views/students/new.xhtml" />
+            <p:linkButton value="New Student" icon="pi pi-file" outcome="/views/students/new.xhtml" />
         </ui:define>
     </ui:composition>
 </html>

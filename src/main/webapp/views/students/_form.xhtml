@@ -1,29 +1,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:form="http://xmlns.jcp.org/jsf/composite/form">
+      xmlns:form="http://xmlns.jcp.org/jsf/composite/form"
+      xmlns:p="http://primefaces.org/ui">
     <ui:composition>
         <h:form id="student">
-            <h:messages styleClass="error-explanation" globalOnly="false" />
+            <p:messages globalOnly="false" />
 
-            <div class="field">
-                <h:outputLabel for="name" value="Name" />
-                <h:inputText id="name" value="#{studentsController.student.name}" />
-            </div>            
+            <p:panelGrid columns="1" layout="grid" styleClass="ui-fluid ui-panelgrid-blank" style="margin: 0 -10px 20px">
+                <p:outputLabel for="name" value="Name" />
+                <p:inputText id="name" value="#{studentsController.student.name}" />
 
-            <div class="field">
-                <h:outputLabel for="address" value="Address" />
-                <h:inputText id="address" value="#{studentsController.student.address}" />
-            </div>            
+                <p:outputLabel for="address" value="Address" />
+                <p:inputText id="address" value="#{studentsController.student.address}" />        
+            </p:panelGrid>            
 
-            <div class="actions">
+            <div style="margin-bottom: 10px;">
                 <form:submit isNewRecord="#{studentsController.student.newRecord}" 
                              isPersisted="#{studentsController.student.persisted}" 
                              createAction="#{studentsController.create}"
                              updateAction="#{studentsController.update}" 
                              createValue="Create Student"
-                             updateValue="Update Student" />           
-            </div>            
+                             updateValue="Update Student" />               
+            </div>
         </h:form>
     </ui:composition>
 </html>

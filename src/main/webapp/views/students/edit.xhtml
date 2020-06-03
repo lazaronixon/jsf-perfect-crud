@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"      
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"      
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     <ui:composition template="/views/layouts/application.xhtml">
         <ui:define name="metadata">
             <f:metadata>
@@ -14,10 +14,10 @@
 
             <ui:include src="_form.xhtml" />
 
-            <h:link value="Show" outcome="/views/students/show.xhtml">
+            <p:link value="Show" outcome="/views/students/show.xhtml">
                 <f:param name="id" value="#{studentsController.student.id}" />
-            </h:link> |
-            <h:link value="Back" outcome="/views/students/index.xhtml" />
+            </p:link>
+            <p:link value="Back" outcome="/views/students/index.xhtml" style="margin-left: 10px" />
         </ui:define>
     </ui:composition>
 </html>

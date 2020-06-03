@@ -1,8 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:cc="http://xmlns.jcp.org/jsf/composite"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:p="http://primefaces.org/ui">
 
     <!-- INTERFACE -->
     <cc:interface>
@@ -19,14 +18,10 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <c:if test="#{cc.attrs.isNewRecord}">
-            <h:commandButton value="#{cc.attrs.createValue}" action="#{cc.attrs.createAction}" style="#{cc.attrs.style}" styleClass="#{cc.attrs.styleClass}">
-                <f:ajax execute="@form" render="@form" />
-            </h:commandButton>
+            <p:commandButton value="#{cc.attrs.createValue}" action="#{cc.attrs.createAction}" update="@form" style="#{cc.attrs.style}" styleClass="#{cc.attrs.styleClass}" />
         </c:if>
         <c:if test="#{cc.attrs.isPersisted}">
-            <h:commandButton value="#{cc.attrs.updateValue}" action="#{cc.attrs.updateAction}" style="#{cc.attrs.style}" styleClass="#{cc.attrs.styleClass}">
-                <f:ajax execute="@form" render="@form" />
-            </h:commandButton>
+            <p:commandButton value="#{cc.attrs.updateValue}" action="#{cc.attrs.updateAction}" update="@form" style="#{cc.attrs.style}" styleClass="#{cc.attrs.styleClass}" />
         </c:if>    
     </cc:implementation>
 </html>

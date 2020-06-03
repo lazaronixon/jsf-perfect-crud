@@ -1,7 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"      
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     <ui:composition template="/views/layouts/application.xhtml">
         <ui:define name="metadata">
             <f:metadata>
@@ -10,22 +11,20 @@
         </ui:define>        
 
         <ui:define name="yield">
-            <h:messages styleClass="notice" globalOnly="true" />
+            <p:growl globalOnly="true" />
 
-            <p>
-                <strong>Name: </strong>
+            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank" columnClasses="ui-g-2, ui-g-10" style="margin: 0 -10px 20px">
+                <h:outputText value="Name:" />
                 <h:outputText value="#{studentsController.student.name}" />
-            </p>
 
-            <p>
-                <strong>Address: </strong>
+                <h:outputText value="Address:" />
                 <h:outputText value="#{studentsController.student.address}" />
-            </p>   
+            </p:panelGrid>
 
-            <h:link value="Edit" outcome="/views/students/edit.xhtml">
+            <p:linkButton value="Edit" outcome="/views/students/edit.xhtml">
                 <f:param name="id" value="#{studentsController.student.id}" />
-            </h:link> |
-            <h:link value="Back" outcome="/views/students/index.xhtml" />
+            </p:linkButton>
+            <p:linkButton value="Back" outcome="/views/students/index.xhtml" style="margin-left: 5px" />
         </ui:define>
     </ui:composition>
 </html>
