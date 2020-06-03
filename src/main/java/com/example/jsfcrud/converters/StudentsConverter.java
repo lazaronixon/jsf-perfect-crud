@@ -2,7 +2,6 @@ package com.example.jsfcrud.converters;
 
 import com.example.jsfcrud.models.Student;
 import com.example.jsfcrud.services.StudentsService;
-import static java.lang.Integer.parseInt;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -17,7 +16,7 @@ public class StudentsConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        return value != null ? studentsService.find(parseInt(value)) : null;
+        return value != null ? studentsService.find(value) : null;
     }
 
     @Override
