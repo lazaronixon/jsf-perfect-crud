@@ -15,6 +15,9 @@ This project is a implementation of generated crud of Ruby on Rails using JSF 2.
 ## URL
 * http://localhost:8080/jsfcrud/views/students/index.xhtml
 
+## Primefaces Version
+* https://github.com/lazaronixon/jsf-perfect-crud/tree/primefaces
+
 ## Requirements
 
 * OpenJDK 11
