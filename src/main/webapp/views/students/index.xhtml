@@ -15,7 +15,7 @@
 
             <h1>Students</h1>
 
-            <p:dataTable value="#{studentsController.students}" var="student">
+            <p:dataTable value="#{studentsController.students}" var="student" paginator="true" rows="10">
                 <p:column headerText="Name">
                     <h:outputText value="#{student.name}" />
                 </p:column>
