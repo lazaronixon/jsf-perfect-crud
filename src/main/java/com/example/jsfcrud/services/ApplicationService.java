@@ -102,7 +102,7 @@ public abstract class ApplicationService<T> {
     }
 
     private void setPositionalParameters(Query query, Object[] positionalParameters) {
-        range(0, positionalParameters.length).forEach(i -> query.setParameter(i, positionalParameters[i]));
+        range(0, positionalParameters.length).forEach(i -> query.setParameter(i + 1, positionalParameters[i]));
     }
 
 }
