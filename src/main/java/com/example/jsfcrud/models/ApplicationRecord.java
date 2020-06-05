@@ -27,6 +27,17 @@ public abstract class ApplicationRecord<ID> {
         // If you want timestamp it should be overridden on child.
     }
 
+    @PrePersist
+    private void beforeCreate() {
+        setCreatedAt(LocalDateTime.now());
+        setUpdatedAt(LocalDateTime.now());
+    }
+
+    @PreUpdate
+    private void beforeUpdate() {
+        setUpdatedAt(LocalDateTime.now());
+    }
+
     @Override
     public int hashCode() {
         return (getId() != null) ? Objects.hash(getId()) : super.hashCode();
@@ -37,17 +48,6 @@ public abstract class ApplicationRecord<ID> {
         return (getId() != null && getClass().isInstance(other) && other.getClass().isInstance(this))
                 ? getId().equals(((ApplicationRecord<?>) other).getId())
                 : (other == this);
-    }
-
-    @PrePersist
-    private void prePersist() {
-        setCreatedAt(LocalDateTime.now());
-        setUpdatedAt(LocalDateTime.now());
-    }
-
-    @PreUpdate
-    private void preUpdate() {
-        setUpdatedAt(LocalDateTime.now());
     }
 
 }

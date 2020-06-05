@@ -1,6 +1,7 @@
 package com.example.jsfcrud.models;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +21,10 @@ public class Student extends ApplicationRecord<Integer> implements Serializable 
     private String name;
 
     private String address;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     public Student() {
     }
@@ -49,5 +54,24 @@ public class Student extends ApplicationRecord<Integer> implements Serializable 
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    @Override
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    @Override
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     //</editor-fold>
 }
