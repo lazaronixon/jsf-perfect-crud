@@ -30,7 +30,6 @@ public class Student extends ApplicationRecord<Integer> implements Serializable 
         return this.id;
     }
 
-    @Override
     public void setId(Integer id) {
         this.id = id;
     }
