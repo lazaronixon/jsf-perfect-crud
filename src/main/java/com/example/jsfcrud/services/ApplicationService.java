@@ -52,11 +52,11 @@ public abstract class ApplicationService<T> {
     }
 
     public List<T> all() {
-        return getEntityManager().createQuery(format(SELECT_STAR, entityClass.getName())).getResultList();
+        return getEntityManager().createQuery(format(SELECT_STAR, entityClass.getSimpleName())).getResultList();
     }
 
     public List<T> all(String order) {
-        return getEntityManager().createQuery(format(SELECT_STAR_ORDER, entityClass.getName(), order)).getResultList();
+        return getEntityManager().createQuery(format(SELECT_STAR_ORDER, entityClass.getSimpleName(), order)).getResultList();
     }
 
     public List<T> all(int limit, int offset) {
@@ -68,25 +68,25 @@ public abstract class ApplicationService<T> {
     }
 
     public List<T> where(String conditions, Object... params) {
-        Query query = getEntityManager().createQuery(format(SELECT_STAR_WHERE, entityClass.getName(), conditions));
+        Query query = getEntityManager().createQuery(format(SELECT_STAR_WHERE, entityClass.getSimpleName(), conditions));
         setPositionalParameters(query, params);
         return query.getResultList();
     }
 
     public List<T> where(String conditions, String order, Object... params) {
-        Query query = getEntityManager().createQuery(format(SELECT_STAR_WHERE_ORDER, entityClass.getName(), conditions, order));
+        Query query = getEntityManager().createQuery(format(SELECT_STAR_WHERE_ORDER, entityClass.getSimpleName(), conditions, order));
         setPositionalParameters(query, params);
         return query.getResultList();
     }
 
     public List<T> where(String conditions, int limit, int offset, Object... params) {
-        Query query = getEntityManager().createQuery(format(SELECT_STAR_WHERE, entityClass.getName(), conditions)).setMaxResults(limit).setFirstResult(offset);
+        Query query = getEntityManager().createQuery(format(SELECT_STAR_WHERE, entityClass.getSimpleName(), conditions)).setMaxResults(limit).setFirstResult(offset);
         setPositionalParameters(query, params);
         return query.getResultList();
     }
 
     public List<T> where(String conditions, String order, int limit, int offset, Object... params) {
-        Query query = getEntityManager().createQuery(format(SELECT_STAR_WHERE_ORDER, entityClass.getName(), conditions, order)).setMaxResults(limit).setFirstResult(offset);
+        Query query = getEntityManager().createQuery(format(SELECT_STAR_WHERE_ORDER, entityClass.getSimpleName(), conditions, order)).setMaxResults(limit).setFirstResult(offset);
         setPositionalParameters(query, params);
         return query.getResultList();
     }
