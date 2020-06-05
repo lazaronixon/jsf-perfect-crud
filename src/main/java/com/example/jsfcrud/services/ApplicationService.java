@@ -6,6 +6,7 @@ import java.util.List;
 import static java.util.stream.IntStream.range;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 public abstract class ApplicationService<T> {
 
@@ -62,7 +63,7 @@ public abstract class ApplicationService<T> {
         return getEntityManager().createQuery(format(SELECT_STAR, entityClass.getSimpleName())).setMaxResults(limit).setFirstResult(offset).getResultList();
     }
 
-    public List<T> all(int limit, int offset, String order) {
+    public List<T> all(String order, int limit, int offset) {
         return getEntityManager().createQuery(format(SELECT_STAR_ORDER, entityClass.getSimpleName(), order)).setMaxResults(limit).setFirstResult(offset).getResultList();
     }
 
@@ -84,7 +85,7 @@ public abstract class ApplicationService<T> {
         return query.getResultList();
     }
 
-    public List<T> where(String conditions, int limit, int offset, String order, Object... params) {
+    public List<T> where(String conditions, String order, int limit, int offset, Object... params) {
         Query query = getEntityManager().createQuery(format(SELECT_STAR_WHERE_ORDER, entityClass.getName(), conditions, order)).setMaxResults(limit).setFirstResult(offset);
         setPositionalParameters(query, params);
         return query.getResultList();
@@ -94,8 +95,10 @@ public abstract class ApplicationService<T> {
         return getEntityManager().createQuery(format(SELECT_COUNT_STAR, entityClass.getSimpleName()), Long.class).getSingleResult();
     }
 
-    public Long count(String conditions) {
-        return getEntityManager().createQuery(format(SELECT_COUNT_STAR_WHERE, entityClass.getSimpleName(), conditions), Long.class).getSingleResult();
+    public Long count(String conditions, Object... params) {
+        TypedQuery<Long> query = getEntityManager().createQuery(format(SELECT_COUNT_STAR_WHERE, entityClass.getSimpleName(), conditions), Long.class);
+        setPositionalParameters(query, params);
+        return query.getSingleResult();
     }
 
     private void setPositionalParameters(Query query, Object[] positionalParameters) {
