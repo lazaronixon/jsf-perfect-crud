@@ -72,11 +72,11 @@ public abstract class ApplicationService<T> {
         return createQuery(format(SELECT_STAR_ORDER, entityName(), order)).getResultList();
     }
 
-    public List<T> orderLimit(String order, int limit) {
+    public List<T> order(String order, int limit) {
         return createQuery(format(SELECT_STAR_ORDER, entityName(), order)).setMaxResults(limit).getResultList();
     }
 
-    public List<T> orderInRange(String order, int limit, int offset) {
+    public List<T> order(String order, int limit, int offset) {
         return createQuery(format(SELECT_STAR_ORDER, entityName(), order)).setMaxResults(limit).setFirstResult(offset).getResultList();
     }
 
@@ -84,23 +84,23 @@ public abstract class ApplicationService<T> {
         return parametize(createQuery(format(SELECT_STAR_WHERE, entityName(), condition)), params).getResultList();
     }
 
-    public List<T> whereLimit(String condition, int limit, Object... params) {
+    public List<T> where(String condition, int limit, Object... params) {
         return parametize(createQuery(format(SELECT_STAR_WHERE, entityName(), condition)), params).setMaxResults(limit).getResultList();
     }
 
-    public List<T> whereInRange(String condition, int limit, int offset, Object... params) {
+    public List<T> where(String condition, int limit, int offset, Object... params) {
         return parametize(createQuery(format(SELECT_STAR_WHERE, entityName(), condition)), params).setMaxResults(limit).setFirstResult(offset).getResultList();
     }
 
-    public List<T> whereOrder(String condition, String order, Object... params) {
+    public List<T> where(String condition, String order, Object... params) {
         return parametize(createQuery(format(SELECT_STAR_WHERE_ORDER, entityName(), condition, order)), params).getResultList();
     }
 
-    public List<T> whereOrderLimit(String condition, String order, int limit, Object... params) {
+    public List<T> where(String condition, String order, int limit, Object... params) {
         return parametize(createQuery(format(SELECT_STAR_WHERE_ORDER, entityName(), condition, order)), params).setMaxResults(limit).getResultList();
     }
 
-    public List<T> whereOrderInRange(String condition, String order, int limit, int offset, Object... params) {
+    public List<T> where(String condition, String order, int limit, int offset, Object... params) {
         return parametize(createQuery(format(SELECT_STAR_WHERE_ORDER, entityName(), condition, order)), params).setMaxResults(limit).setFirstResult(offset).getResultList();
     }
 
@@ -108,7 +108,7 @@ public abstract class ApplicationService<T> {
         return createQuery(format(SELECT_COUNT_STAR, entityName()), Long.class).getSingleResult();
     }
 
-    public Long countWhere(String condition, Object... params) {
+    public Long count(String condition, Object... params) {
         return parametize(createQuery(format(SELECT_COUNT_STAR_WHERE, entityName(), condition), Long.class), params).getSingleResult();
     }
 
@@ -116,7 +116,7 @@ public abstract class ApplicationService<T> {
         return createQuery(format(SELECT_AVERAGE, field, entityName()), resultClass).getSingleResult();
     }
 
-    public <R> R averageWhere(String field, Class<R> resultClass, String condition, Object... params) {
+    public <R> R average(String field, Class<R> resultClass, String condition, Object... params) {
         return parametize(createQuery(format(SELECT_AVERAGE_WHERE, field, entityName(), condition), resultClass), params).getSingleResult();
     }
 
@@ -124,7 +124,7 @@ public abstract class ApplicationService<T> {
         return createQuery(format(SELECT_MINIMUM, field, entityName()), resultClass).getSingleResult();
     }
 
-    public <R> R minimumWhere(String field, Class<R> resultClass, String condition, Object... params) {
+    public <R> R minimum(String field, Class<R> resultClass, String condition, Object... params) {
         return parametize(createQuery(format(SELECT_MINIMUM_WHERE, field, entityName(), condition), resultClass), params).getSingleResult();
     }
 
@@ -132,7 +132,7 @@ public abstract class ApplicationService<T> {
         return createQuery(format(SELECT_MAXIMUM, field, entityName()), resultClass).getSingleResult();
     }
 
-    public <R> R maximumWhere(String field, Class<R> resultClass, String condition, Object... params) {
+    public <R> R maximum(String field, Class<R> resultClass, String condition, Object... params) {
         return parametize(createQuery(format(SELECT_MAXIMUM_WHERE, field, entityName(), condition), resultClass), params).getSingleResult();
     }
 
@@ -140,7 +140,7 @@ public abstract class ApplicationService<T> {
         return createQuery(format(SELECT_SUM, field, entityName()), resultClass).getSingleResult();
     }
 
-    public <R> R sumWhere(String field, Class<R> resultClass, String condition, Object... params) {
+    public <R> R sum(String field, Class<R> resultClass, String condition, Object... params) {
         return parametize(createQuery(format(SELECT_SUM_WHERE, field, entityName(), condition), resultClass), params).getSingleResult();
     }
 
