@@ -6,30 +6,30 @@ import javax.transaction.Transactional;
 public interface Persistence<T> extends EntityManager<T> {
 
     @Transactional
-    public default void create(ApplicationRecord entity) {
-        getEntityManager().persist(entity);
+    public default T create(T entity) {
+        getEntityManager().persist(entity); return entity;
     }
 
     @Transactional
-    public default void update(ApplicationRecord entity) {
-        getEntityManager().merge(entity);
+    public default T update(T entity) {
+        return getEntityManager().merge(entity);
     }
 
     @Transactional
-    public default void destroy(ApplicationRecord entity) {
+    public default void destroy(T entity) {
         getEntityManager().remove(getEntityManager().merge(entity));
     }
 
     @Transactional
-    public default void save(ApplicationRecord entity) {
+    public default T save(ApplicationRecord entity) {
         if (entity.isNewRecord()) {
-            getEntityManager().persist(entity);
+            return create((T) entity);
         } else {
-            getEntityManager().merge(entity);
+            return update((T) entity);
         }
     }
 
-    public default void reload(ApplicationRecord entity) {
+    public default void reload(T entity) {
         getEntityManager().refresh(entity);
     }
 
