@@ -1,28 +1,40 @@
+
 package com.example.jsfcrud.services.support;
 
-import static java.lang.String.format;
+import javax.persistence.EntityManager;
 
-public interface Calculations<T> extends EntityManager<T> {
+public interface Calculations<T> {
 
-    public final static String SELECT_COUNT = "SELECT COUNT(%s) FROM %s";
-    public final static String SELECT_COUNT_WHERE = "SELECT COUNT(%s) FROM %s WHERE %s";
-    public final static String SELECT_CALCULATION = "SELECT %s FROM %s";
-    public final static String SELECT_CALCULATION_WHERE = "SELECT %s FROM %s this WHERE %s";
+    public EntityManager getEntityManager();
+
+    public Class<T> getEntityClass();
+
+    public default long count() {
+        return buildRelation().count();
+    }
 
     public default long count(String field) {
-        return createQuery(format(SELECT_COUNT, field, entityName()), Long.class).getSingleResult();
+        return buildRelation().count(field);
     }
 
-    public default long count(String field, String where, Object... params) {
-        return createQuery(format(SELECT_COUNT_WHERE, field, entityName(), where), Long.class).getSingleResult();
+    public default <R> R min(String field, Class<R> resultClass) {
+       return buildRelation().min(field, resultClass);
     }
 
-    public default <R> R calc(String expr, Class<R> resultClass) {
-        return createQuery(format(SELECT_CALCULATION, expr, entityName()), resultClass).getSingleResult();
+    public default <R> R max(String field, Class<R> resultClass) {
+        return buildRelation().max(field, resultClass);
     }
 
-    public default <R> R calc(String expr, Class<R> resultClass, String where, Object... params) {
-        return parametize(createQuery(format(SELECT_CALCULATION_WHERE, expr, entityName(), where), resultClass), params).getSingleResult();
+    public default <R> R avg(String field, Class<R> resultClass) {
+        return buildRelation().avg(field, resultClass);
+    }
+
+    public default <R> R sum(String field, Class<R> resultClass) {
+        return buildRelation().sum(field, resultClass);
+    }
+
+    private Relation<T> buildRelation() {
+        return new Relation(getEntityManager(), getEntityClass());
     }
 
 }

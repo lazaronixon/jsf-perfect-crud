@@ -1,9 +1,12 @@
 package com.example.jsfcrud.services.support;
 
 import com.example.jsfcrud.models.ApplicationRecord;
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-public interface Persistence<T> extends EntityManager<T> {
+public interface Persistence<T> {
+
+    public EntityManager getEntityManager();
 
     @Transactional
     public default T create(T entity) {

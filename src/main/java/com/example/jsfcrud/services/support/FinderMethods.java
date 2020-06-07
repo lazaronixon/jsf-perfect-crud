@@ -1,27 +1,45 @@
+
 package com.example.jsfcrud.services.support;
 
-import static java.lang.String.format;
+import java.util.List;
+import javax.persistence.EntityManager;
 
-public interface FinderMethods<T> extends EntityManager<T> {
+public interface FinderMethods<T> {
 
-    public static final String SELECT_EXISTS = "SELECT 1 AS one FROM %s this %s";
+    public EntityManager getEntityManager();
 
-    public T find(String id);
+    public Class<T> getEntityClass();
 
     public default T find(Object id) {
         return getEntityManager().find(getEntityClass(), id);
     }
 
-    public default T findBy(String query, Object... params) {
-        return parametize(createQuery(format(SELECT_STAR_QUERY, getEntityClass(), query)), params).setMaxResults(1).getResultStream().findFirst().orElse(null);
+    public default T take() {
+        return buildRelation().take();
     }
 
-    public default T findByAlt(String query, Object... params) {
-        return parametize(createQuery(format(SELECT_STAR_QUERY, getEntityClass(), query)), params).setMaxResults(1).getSingleResult();
+    public default T takeAlt() {
+        return buildRelation().takeAlt();
     }
 
-    public default boolean exists(String query, Object... params) {
-        return parametize(createQuery(format(SELECT_EXISTS, entityName(), query)), params).setMaxResults(1).getResultStream().findFirst().isPresent();
+    public default List<T> take(int limit) {
+        return buildRelation().take(limit);
+    }
+
+    public default T findBy(String conditions, Object... params) {
+        return buildRelation().findBy(conditions, params);
+    }
+
+    public default T findByAlt(String conditions, Object... params) {
+        return buildRelation().findByAlt(conditions, params);
+    }
+
+    public default boolean exists(String conditions, Object... params) {
+        return buildRelation().exists(conditions, params);
+    }
+
+    private Relation<T> buildRelation() {
+        return new Relation(getEntityManager(), getEntityClass());
     }
 
 }

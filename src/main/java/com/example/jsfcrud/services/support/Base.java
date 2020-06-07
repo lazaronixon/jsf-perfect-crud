@@ -1,5 +1,5 @@
 package com.example.jsfcrud.services.support;
 
-public interface Base<T> extends Persistence<T>, FinderMethods<T>, QueryMethods<T>, Calculations<T> {
-
+public abstract class Base<T> implements Persistence<T>, FinderMethods<T>, QueryMethods<T>, Calculations<T> {
+    
 }
