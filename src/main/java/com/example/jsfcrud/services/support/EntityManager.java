@@ -7,6 +7,9 @@ import javax.persistence.TypedQuery;
 
 public interface EntityManager<T> {
 
+    public static final String SELECT_STAR = "SELECT this FROM %s this";
+    public static final String SELECT_STAR_QUERY = "SELECT this FROM %s this %s";
+
     public javax.persistence.EntityManager getEntityManager();
 
     public Class<T> getEntityClass();
