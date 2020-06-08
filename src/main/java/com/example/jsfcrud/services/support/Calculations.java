@@ -1,13 +1,9 @@
 
 package com.example.jsfcrud.services.support;
 
-import javax.persistence.EntityManager;
-
 public interface Calculations<T> {
 
-    public EntityManager getEntityManager();
-
-    public Class<T> getEntityClass();
+    public Relation<T> buildRelation();
 
     public default long count() {
         return buildRelation().count();
@@ -31,10 +27,6 @@ public interface Calculations<T> {
 
     public default <R> R sum(String field, Class<R> resultClass) {
         return buildRelation().sum(field, resultClass);
-    }
-
-    private Relation<T> buildRelation() {
-        return new Relation(getEntityManager(), getEntityClass());
     }
 
 }

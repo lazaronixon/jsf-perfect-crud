@@ -12,6 +12,8 @@ public interface QueryMethods<T> {
 
     public Class<T> getEntityClass();
 
+    public Relation<T> buildRelation();
+
     public default Relation<T> all() {
         return buildRelation().all();
     }
@@ -41,7 +43,19 @@ public interface QueryMethods<T> {
     }
 
     public default List selectAll(String sqlQuery, Object... params) {
-        return parametize(createNativeQueryBasic(sqlQuery), params).getResultList();
+        return parametize(createNativeQueryGeneric(sqlQuery), params).getResultList();
+    }
+
+    public default Query createNativeQuery(String qlString) {
+        return getEntityManager().createNativeQuery(qlString, getEntityClass());
+    }
+
+    public default Query createNativeQuery(String qlString, Class resultClass) {
+        return getEntityManager().createNativeQuery(qlString, resultClass);
+    }
+
+    public default Query createNativeQueryGeneric(String sqlQuery) {
+        return getEntityManager().createNativeQuery(sqlQuery);
     }
 
     public default TypedQuery<T> createQuery(String qlString) {
@@ -54,18 +68,6 @@ public interface QueryMethods<T> {
 
     public default TypedQuery<T> createNamedQuery(String name) {
         return getEntityManager().createNamedQuery(name, getEntityClass());
-    }
-
-    private Relation<T> buildRelation() {
-        return new Relation(getEntityManager(), getEntityClass());
-    }
-
-    private Query createNativeQuery(String sqlQuery) {
-        return getEntityManager().createNativeQuery(sqlQuery, getEntityClass());
-    }
-
-    private Query createNativeQueryBasic(String sqlQuery) {
-        return getEntityManager().createNativeQuery(sqlQuery);
     }
 
     private Query parametize(Query query, Object[] params) {
