@@ -18,7 +18,7 @@ This project is a implementation of generated crud of Ruby on Rails using JSF 2.
 ## Primefaces Version
 * https://github.com/lazaronixon/jsf-perfect-crud/tree/primefaces
 
-## Query Framework
+## Small Query Framework
 
 ```java
 student  = studentsService.find(10);
