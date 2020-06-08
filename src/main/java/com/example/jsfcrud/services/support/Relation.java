@@ -141,7 +141,7 @@ public class Relation<T> {
     }
 
     private boolean getExistsResult() {
-        return createParameterizedQuery(buildQlString()).getResultStream().findFirst().isPresent();
+        return createParameterizedQuery(buildQlString()).getResultStream().findAny().isPresent();
     }
 
     private TypedQuery<T> createParameterizedQuery(String qlString) {
