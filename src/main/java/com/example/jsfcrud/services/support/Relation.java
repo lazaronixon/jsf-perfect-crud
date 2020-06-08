@@ -33,12 +33,12 @@ public class Relation<T> {
 
     public T take() {
         this.limit = 1;
-        return this.getSingleResult();
+        return this.fetchSingle();
     }
 
     public T takeAlt() {
         this.limit = 1;
-        return this.getSingleResultAlt();
+        return this.fetchSingleAlt();
     }
 
     public T findBy(String conditions, Object... params) {
@@ -85,35 +85,35 @@ public class Relation<T> {
 
     public long count() {
         this.fields = "COUNT(this)";
-        return this.getSingleResultAs(Long.class);
+        return this.fetchSingleAs(Long.class);
     }
 
     public long count(String field) {
         this.fields = "COUNT(" + field + ")";
-        return this.getSingleResultAs(Long.class);
+        return this.fetchSingleAs(Long.class);
     }
 
     public <R> R min(String field, Class<R> resultClass) {
         this.fields = "MIN(" + field + ")";
-        return this.getSingleResultAs(resultClass);
+        return this.fetchSingleAs(resultClass);
     }
 
     public <R> R max(String field, Class<R> resultClass) {
         this.fields = "MAX(" + field + ")";
-        return this.getSingleResultAs(resultClass);
+        return this.fetchSingleAs(resultClass);
     }
 
     public <R> R avg(String field, Class<R> resultClass) {
         this.fields = "AVG(" + field + ")";
-        return this.getSingleResultAs(resultClass);
+        return this.fetchSingleAs(resultClass);
     }
 
     public <R> R sum(String field, Class<R> resultClass) {
         this.fields = "SUM(" + field + ")";
-        return this.getSingleResultAs(resultClass);
+        return this.fetchSingleAs(resultClass);
     }
 
-    public List<T> list() {
+    public List<T> fetch() {
         return createParameterizedQuery(buildQlString()).getResultList();
     }
 
@@ -124,15 +124,15 @@ public class Relation<T> {
         return qlString.toString();
     }
 
-    private <R> R getSingleResultAs(Class<R> resultClass) {
+    private <R> R fetchSingleAs(Class<R> resultClass) {
         return createParameterizedQuery(buildQlString(), resultClass).getResultStream().findFirst().orElse(null);
     }
 
-    private T getSingleResult() {
+    private T fetchSingle() {
         return createParameterizedQuery(buildQlString()).getResultStream().findFirst().orElse(null);
     }
 
-    private T getSingleResultAlt() {
+    private T fetchSingleAlt() {
         return createParameterizedQuery(buildQlString()).getSingleResult();
     }
 
