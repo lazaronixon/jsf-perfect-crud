@@ -29,6 +29,13 @@ public class Student extends ApplicationRecord<Integer> implements Serializable 
     public Student() {
     }
 
+    public Student(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    
+
     //<editor-fold defaultstate="collapsed" desc="Get/Set">
     @Override
     public Integer getId() {

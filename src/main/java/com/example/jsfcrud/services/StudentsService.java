@@ -5,9 +5,7 @@ import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 
-@Transactional
 @ApplicationScoped
 public class StudentsService extends ApplicationService<Student> implements Serializable {
 
@@ -16,17 +14,17 @@ public class StudentsService extends ApplicationService<Student> implements Seri
     @PersistenceContext(unitName = "jsfcrud")
     private EntityManager em;
 
+    public StudentsService() {
+        super(Student.class);
+    }
+
     @Override
     public EntityManager getEntityManager() {
         return em;
     }
-    
+
     @Override
     public Student find(String id) {
         return getEntityManager().find(Student.class, Integer.parseInt(id));
-    }    
-
-    public StudentsService() {
-        super(Student.class);
     }
 }
