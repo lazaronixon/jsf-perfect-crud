@@ -1,7 +1,6 @@
 
 package com.example.jsfcrud.services.support;
 
-import java.util.List;
 import javax.persistence.EntityManager;
 
 public interface FinderMethods<T> {
@@ -20,10 +19,6 @@ public interface FinderMethods<T> {
 
     public default T takeAlt() {
         return buildRelation().takeAlt();
-    }
-
-    public default List<T> take(int limit) {
-        return buildRelation().take(limit);
     }
 
     public default T findBy(String conditions, Object... params) {

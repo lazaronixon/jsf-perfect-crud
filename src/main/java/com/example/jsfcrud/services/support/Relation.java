@@ -45,11 +45,6 @@ public class Relation<T> {
         return this.getSingleResultAlt();
     }
 
-    public List<T> take(int limit) {
-        this.limit = limit;
-        return this.getResultList();
-    }
-
     public T findBy(String conditions, Object... params) {
         return where(conditions, params).take();
     }
