@@ -13,7 +13,9 @@ public class Relation<T> {
     private final static String WHERE_FRAGMENT = "WHERE %s";
     private final static String ORDER_FRAGMENT = "ORDER BY %s";
 
-    private final ApplicationService service;
+    private final EntityManager entityManager;
+
+    private final Class entityClass;
 
     private String fields = "this";
 
@@ -28,17 +30,16 @@ public class Relation<T> {
     private int offset;
 
     public Relation(ApplicationService service) {
-        this.service = service;
+        this.entityManager = service.getEntityManager();
+        this.entityClass = service.getEntityClass();
     }
 
     public T take() {
-        this.limit = 1;
-        return this.fetchSingle();
+        this.limit = 1; return this.fetchSingle();
     }
 
     public T takeAlt() {
-        this.limit = 1;
-        return this.fetchSingleAlt();
+        this.limit = 1; return this.fetchSingleAlt();
     }
 
     public T findBy(String conditions, Object... params) {
@@ -58,29 +59,23 @@ public class Relation<T> {
     }
 
     public Relation<T> where(String conditions, Object... params) {
-        this.conditions = conditions;
-        this.params = params;
-        return this;
+        this.conditions = conditions; this.params = params; return this;
     }
 
-    public Relation<T> order(String order) {
-        this.order = order;
-        return this;
+    public Relation<T> order(String args) {
+        this.order = args; return this;
     }
 
-    public Relation<T> limit(int limit) {
-        this.limit = limit;
-        return this;
+    public Relation<T> limit(int value) {
+        this.limit = value; return this;
     }
 
-    public Relation<T> offset(int offset) {
-        this.offset = offset;
-        return this;
+    public Relation<T> offset(int value) {
+        this.offset = value; return this;
     }
 
     public Relation<T> select(String fields) {
-        this.fields = constructor(fields);
-        return this;
+        this.fields = constructor(fields); return this;
     }
 
     public long count() {
@@ -88,28 +83,23 @@ public class Relation<T> {
     }
 
     public long count(String field) {
-        this.fields = "COUNT(" + field + ")";
-        return fetchSingleAs(Long.class);
+        this.fields = "COUNT(" + field + ")"; return this.fetchSingleAs(Long.class);
     }
 
     public <R> R min(String field, Class<R> resultClass) {
-        this.fields = "MIN(" + field + ")";
-        return fetchSingleAs(resultClass);
+        this.fields = "MIN(" + field + ")"; return this.fetchSingleAs(resultClass);
     }
 
     public <R> R max(String field, Class<R> resultClass) {
-        this.fields = "MAX(" + field + ")";
-        return fetchSingleAs(resultClass);
+        this.fields = "MAX(" + field + ")"; return this.fetchSingleAs(resultClass);
     }
 
     public <R> R avg(String field, Class<R> resultClass) {
-        this.fields = "AVG(" + field + ")";
-        return fetchSingleAs(resultClass);
+        this.fields = "AVG(" + field + ")"; return this.fetchSingleAs(resultClass);
     }
 
     public <R> R sum(String field, Class<R> resultClass) {
-        this.fields = "SUM(" + field + ")";
-        return fetchSingleAs(resultClass);
+        this.fields = "SUM(" + field + ")"; return this.fetchSingleAs(resultClass);
     }
 
     public List<T> fetch() {
@@ -117,10 +107,26 @@ public class Relation<T> {
     }
 
     private String buildQlString() {
-        StringBuilder qlString = new StringBuilder(format(SELECT_FRAGMENT, fields, entitySimpleName()));
-        if (conditions != null) qlString.append(" ").append(format(WHERE_FRAGMENT, conditions));
-        if (order != null) qlString.append(" ").append(format(ORDER_FRAGMENT, order));
+        StringBuilder qlString = new StringBuilder(formattedSelect());
+        if (conditions != null) qlString.append(" ").append(formattedWhere());
+        if (order != null) qlString.append(" ").append(formattedOrder());
         return qlString.toString();
+    }
+
+    private String formattedSelect() {
+        return format(SELECT_FRAGMENT, fields, entityClass.getSimpleName());
+    }
+
+    private String formattedWhere() {
+        return format(WHERE_FRAGMENT, conditions);
+    }
+
+    private String formattedOrder() {
+        return format(ORDER_FRAGMENT, order);
+    }
+
+    private <R> R fetchSingleAs(Class<R> resultClass) {
+        return createParameterizedQuery(buildQlString(), resultClass).getResultStream().findFirst().orElse(null);
     }
 
     private T fetchSingle() {
@@ -129,10 +135,6 @@ public class Relation<T> {
 
     private T fetchSingleAlt() {
         return createParameterizedQuery(buildQlString()).getSingleResult();
-    }
-
-    private <R> R fetchSingleAs(Class<R> resultClass) {
-        return createParameterizedQuery(buildQlString(), resultClass).getSingleResult();
     }
 
     private boolean fetchExists() {
@@ -148,31 +150,15 @@ public class Relation<T> {
     }
 
     private TypedQuery<T> createQuery(String qlString) {
-        return entityManager().createQuery(qlString, entityClass());
+        return entityManager.createQuery(qlString, entityClass);
     }
 
     private <R> TypedQuery<R> createQuery(String qlString, Class<R> resultClass) {
-        return entityManager().createQuery(qlString, resultClass);
+        return entityManager.createQuery(qlString, resultClass);
     }
 
     private String constructor(String fields) {
-        return format("new %s(%s)", entityName(), fields);
-    }
-
-    private String entitySimpleName() {
-        return entityClass().getSimpleName();
-    }
-
-    private String entityName() {
-        return entityClass().getName();
-    }
-
-    private EntityManager entityManager() {
-        return service.getEntityManager();
-    }
-
-    private Class entityClass() {
-        return service.getEntityClass();
+        return format("new %s(%s)", entityClass.getName(), fields);
     }
 
     private <R> TypedQuery<R> parametize(TypedQuery<R> query, Object[] params) {
