@@ -1,5 +1,6 @@
 package com.example.jsfcrud.services.support;
 
+import com.example.jsfcrud.services.ApplicationService;
 import static java.lang.String.format;
 import java.util.List;
 import static java.util.stream.IntStream.range;
@@ -12,15 +13,13 @@ public class Relation<T> {
     private final static String WHERE_FRAGMENT = "WHERE %s";
     private final static String ORDER_FRAGMENT = "ORDER BY %s";
 
-    private final EntityManager entityManager;
+    private final ApplicationService service;
 
-    private final Class<T> entityClass;
+    private String fields = "this";
 
-    private String fields;
+    private Object[] params = new Object[0];
 
     private String conditions;
-
-    private Object[] params;
 
     private String order;
 
@@ -28,11 +27,8 @@ public class Relation<T> {
 
     private int offset;
 
-    public Relation(EntityManager entityManager, Class<T> entityClass) {
-        this.entityManager = entityManager;
-        this.entityClass = entityClass;
-        this.params = new Object[0];
-        this.fields = "this";
+    public Relation(ApplicationService service) {
+        this.service = service;
     }
 
     public T take() {
@@ -153,11 +149,11 @@ public class Relation<T> {
     }
 
     private TypedQuery<T> createQuery(String qlString) {
-        return entityManager.createQuery(qlString, entityClass);
+        return entityManager().createQuery(qlString, entityClass());
     }
 
     private <R> TypedQuery<R> createQuery(String qlString, Class<R> resultClass) {
-        return entityManager.createQuery(qlString, resultClass);
+        return entityManager().createQuery(qlString, resultClass);
     }
 
     private String constructor(String fields) {
@@ -165,11 +161,19 @@ public class Relation<T> {
     }
 
     private String entitySimpleName() {
-        return entityClass.getSimpleName();
+        return entityClass().getSimpleName();
     }
 
     private String entityName() {
-        return entityClass.getName();
+        return entityClass().getName();
+    }
+
+    private EntityManager entityManager() {
+        return service.getEntityManager();
+    }
+
+    private Class entityClass() {
+        return service.getEntityClass();
     }
 
     private <R> TypedQuery<R> parametize(TypedQuery<R> query, Object[] params) {

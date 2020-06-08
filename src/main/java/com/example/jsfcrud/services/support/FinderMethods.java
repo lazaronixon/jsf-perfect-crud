@@ -9,6 +9,8 @@ public interface FinderMethods<T> {
 
     public Class<T> getEntityClass();
 
+    public Relation<T> buildRelation();
+
     public default T find(Object id) {
         return getEntityManager().find(getEntityClass(), id);
     }
@@ -31,10 +33,6 @@ public interface FinderMethods<T> {
 
     public default boolean exists(String conditions, Object... params) {
         return buildRelation().exists(conditions, params);
-    }
-
-    private Relation<T> buildRelation() {
-        return new Relation(getEntityManager(), getEntityClass());
     }
 
 }
