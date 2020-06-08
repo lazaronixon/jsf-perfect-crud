@@ -10,8 +10,8 @@ import javax.persistence.TypedQuery;
 public class Relation<T> {
 
     private final static String SELECT_FRAGMENT = "SELECT %s FROM %s this";
-    private final static String WHERE_FRAGMENT = "WHERE %s";
-    private final static String ORDER_FRAGMENT = "ORDER BY %s";
+    private final static String WHERE_FRAGMENT  = "WHERE %s";
+    private final static String ORDER_FRAGMENT  = "ORDER BY %s";
 
     private final EntityManager entityManager;
 
@@ -117,16 +117,16 @@ public class Relation<T> {
         return format(ORDER_FRAGMENT, order);
     }
 
-    private <R> R fetchSingleAs(Class<R> resultClass) {
-        return createParameterizedQuery(buildQlString(), resultClass).getResultStream().findFirst().orElse(null);
-    }
-
     private T fetchSingle() {
         return createParameterizedQuery(buildQlString()).getResultStream().findFirst().orElse(null);
     }
 
     private T fetchSingleAlt() {
         return createParameterizedQuery(buildQlString()).getSingleResult();
+    }
+
+    private <R> R fetchSingleAs(Class<R> resultClass) {
+        return createParameterizedQuery(buildQlString(), resultClass).getResultStream().findFirst().orElse(null);
     }
 
     private boolean fetchExists() {
