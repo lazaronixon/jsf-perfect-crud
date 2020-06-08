@@ -15,14 +15,6 @@ public interface FinderMethods<T> {
         return getEntityManager().find(getEntityClass(), id);
     }
 
-    public default T take() {
-        return buildRelation().take();
-    }
-
-    public default T takeAlt() {
-        return buildRelation().takeAlt();
-    }
-
     public default T findBy(String conditions, Object... params) {
         return buildRelation().findBy(conditions, params);
     }
