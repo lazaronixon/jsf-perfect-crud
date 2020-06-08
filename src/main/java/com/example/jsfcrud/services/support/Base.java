@@ -7,4 +7,10 @@ public abstract class Base<T> implements Persistence<T>, FinderMethods<T>, Query
     @Override
     public abstract EntityManager getEntityManager();
 
+    @Override
+    public abstract Class<T> getEntityClass();
+
+    @Override
+    public abstract Relation<T> buildRelation();
+
 }
