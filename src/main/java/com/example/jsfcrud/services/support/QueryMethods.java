@@ -16,7 +16,7 @@ public interface QueryMethods<T> {
         return buildRelation().all();
     }
 
-    public default Relation<T> where(String conditions, Object params) {
+    public default Relation<T> where(String conditions, Object... params) {
         return buildRelation().where(conditions, params);
     }
 
