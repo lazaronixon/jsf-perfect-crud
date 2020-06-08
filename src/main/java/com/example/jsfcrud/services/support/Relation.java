@@ -34,20 +34,12 @@ public class Relation<T> {
         this.entityClass = service.getEntityClass();
     }
 
-    public T take() {
-        this.limit = 1; return this.fetchSingle();
-    }
-
-    public T takeAlt() {
-        this.limit = 1; return this.fetchSingleAlt();
-    }
-
     public T findBy(String conditions, Object... params) {
-        return where(conditions, params).take();
+        return where(conditions, params).limit(1).fetchSingle();
     }
 
     public T findByAlt(String conditions, Object... params) {
-        return where(conditions, params).takeAlt();
+        return where(conditions, params).limit(1).fetchSingleAlt();
     }
 
     public boolean exists(String conditions, Object... params) {

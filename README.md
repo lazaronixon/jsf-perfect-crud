@@ -22,7 +22,6 @@ This project is a implementation of generated crud of Ruby on Rails using JSF 2.
 
 ```java
 student  = studentsService.find(10);
-student  = studentsService.where("this.id = 10").take();
 student  = studentsService.findBy("this.id = 10");
 
 students = studentsService.where("this.id = ?1", 10).fetch();
