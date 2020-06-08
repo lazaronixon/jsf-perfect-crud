@@ -1,7 +1,9 @@
 package com.example.jsfcrud.services.support;
 
 import java.util.List;
+import static java.util.stream.IntStream.range;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 public interface QueryMethods<T> {
 
@@ -33,12 +35,24 @@ public interface QueryMethods<T> {
         return buildRelation().select(fields);
     }
 
-    public default List<T> findBySql(String sql) {
-        return buildRelation().findBySql(sql);
+    public default List<T> findBySql(String sql, Object... params) {
+        return parametize(createNativeQuery(sql), params).getResultList();
+    }
+
+    public default List selectAll(String sqlQuery, Object... params) {
+        return parametize(createNativeQuery(sqlQuery), params).getResultList();
     }
 
     private Relation<T> buildRelation() {
         return new Relation(getEntityManager(), getEntityClass());
+    }
+
+    private Query createNativeQuery(String sqlQuery) {
+        return getEntityManager().createNativeQuery(sqlQuery);
+    }
+
+    private Query parametize(Query query, Object[] params) {
+        range(0, params.length).forEach(i -> query.setParameter(i + 1, params[i])); return query;
     }
 
 }

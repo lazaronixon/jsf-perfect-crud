@@ -4,7 +4,6 @@ import static java.lang.String.format;
 import java.util.List;
 import static java.util.stream.IntStream.range;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 public class Relation<T> {
@@ -93,10 +92,6 @@ public class Relation<T> {
         return this;
     }
 
-    public List<T> findBySql(String sql, Object... params) {
-        return createNativeQuery(sql).getResultList();
-    }
-
     public long count() {
         this.fields = "COUNT(this)";
         return this.getResultAs(Long.class);
@@ -143,7 +138,7 @@ public class Relation<T> {
     }
 
     private <R> R getResultAs(Class<R> resultClass) {
-        return parametize(createQuery(buildQlString(), resultClass), params).getResultStream().findFirst().orElse(null);
+        return createParameterizedQuery(buildQlString(), resultClass).getResultStream().findFirst().orElse(null);
     }
 
     private T getSingleResult() {
@@ -158,16 +153,16 @@ public class Relation<T> {
         return parametize(createQuery(qlString), params).setMaxResults(limit).setFirstResult(offset);
     }
 
+    private <R> TypedQuery<R> createParameterizedQuery(String qlString, Class<R> resultClass) {
+        return parametize(createQuery(qlString, resultClass), params).setMaxResults(limit).setFirstResult(offset);
+    }
+
     private TypedQuery<T> createQuery(String qlString) {
         return entityManager.createQuery(qlString, entityClass);
     }
 
     private <R> TypedQuery<R> createQuery(String qlString, Class<R> resultClass) {
         return entityManager.createQuery(qlString, resultClass);
-    }
-
-    private Query createNativeQuery(String sqlString) {
-        return entityManager.createNativeQuery(sqlString, entityClass);
     }
 
     private String constructor(String fields) {
