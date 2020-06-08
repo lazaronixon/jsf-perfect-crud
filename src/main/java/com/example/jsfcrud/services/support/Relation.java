@@ -50,7 +50,7 @@ public class Relation<T> {
     }
 
     public boolean exists(String conditions, Object... params) {
-        return where(conditions, params).getExistsResult();
+        return where(conditions, params).fetchExists();
     }
 
     public Relation<T> all() {
@@ -63,18 +63,18 @@ public class Relation<T> {
         return this;
     }
 
-    public Relation<T> order(String args) {
-        this.order = args;
+    public Relation<T> order(String order) {
+        this.order = order;
         return this;
     }
 
-    public Relation<T> limit(int value) {
-        this.limit = value;
+    public Relation<T> limit(int limit) {
+        this.limit = limit;
         return this;
     }
 
-    public Relation<T> offset(int value) {
-        this.offset = value;
+    public Relation<T> offset(int offset) {
+        this.offset = offset;
         return this;
     }
 
@@ -84,33 +84,32 @@ public class Relation<T> {
     }
 
     public long count() {
-        this.fields = "COUNT(this)";
-        return this.fetchSingleAs(Long.class);
+        return count("this");
     }
 
     public long count(String field) {
         this.fields = "COUNT(" + field + ")";
-        return this.fetchSingleAs(Long.class);
+        return fetchSingleAs(Long.class);
     }
 
     public <R> R min(String field, Class<R> resultClass) {
         this.fields = "MIN(" + field + ")";
-        return this.fetchSingleAs(resultClass);
+        return fetchSingleAs(resultClass);
     }
 
     public <R> R max(String field, Class<R> resultClass) {
         this.fields = "MAX(" + field + ")";
-        return this.fetchSingleAs(resultClass);
+        return fetchSingleAs(resultClass);
     }
 
     public <R> R avg(String field, Class<R> resultClass) {
         this.fields = "AVG(" + field + ")";
-        return this.fetchSingleAs(resultClass);
+        return fetchSingleAs(resultClass);
     }
 
     public <R> R sum(String field, Class<R> resultClass) {
         this.fields = "SUM(" + field + ")";
-        return this.fetchSingleAs(resultClass);
+        return fetchSingleAs(resultClass);
     }
 
     public List<T> fetch() {
@@ -124,10 +123,6 @@ public class Relation<T> {
         return qlString.toString();
     }
 
-    private <R> R fetchSingleAs(Class<R> resultClass) {
-        return createParameterizedQuery(buildQlString(), resultClass).getResultStream().findFirst().orElse(null);
-    }
-
     private T fetchSingle() {
         return createParameterizedQuery(buildQlString()).getResultStream().findFirst().orElse(null);
     }
@@ -136,7 +131,11 @@ public class Relation<T> {
         return createParameterizedQuery(buildQlString()).getSingleResult();
     }
 
-    private boolean getExistsResult() {
+    private <R> R fetchSingleAs(Class<R> resultClass) {
+        return createParameterizedQuery(buildQlString(), resultClass).getSingleResult();
+    }
+
+    private boolean fetchExists() {
         return createParameterizedQuery(buildQlString()).getResultStream().findAny().isPresent();
     }
 
