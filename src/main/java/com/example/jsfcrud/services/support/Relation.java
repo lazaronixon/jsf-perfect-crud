@@ -50,7 +50,7 @@ public class Relation<T> {
     }
 
     public boolean exists(String conditions, Object... params) {
-        return where(conditions, params).fetchExists();
+        return where(conditions, params).limit(1).fetchExists();
     }
 
     public Relation<T> all() {
