@@ -89,35 +89,35 @@ public class Relation<T> {
 
     public long count() {
         this.fields = "COUNT(this)";
-        return this.getResultAs(Long.class);
+        return this.getSingleResultAs(Long.class);
     }
 
     public long count(String field) {
         this.fields = "COUNT(" + field + ")";
-        return this.getResultAs(Long.class);
+        return this.getSingleResultAs(Long.class);
     }
 
     public <R> R min(String field, Class<R> resultClass) {
         this.fields = "MIN(" + field + ")";
-        return this.getResultAs(resultClass);
+        return this.getSingleResultAs(resultClass);
     }
 
     public <R> R max(String field, Class<R> resultClass) {
         this.fields = "MAX(" + field + ")";
-        return this.getResultAs(resultClass);
+        return this.getSingleResultAs(resultClass);
     }
 
     public <R> R avg(String field, Class<R> resultClass) {
         this.fields = "AVG(" + field + ")";
-        return this.getResultAs(resultClass);
+        return this.getSingleResultAs(resultClass);
     }
 
     public <R> R sum(String field, Class<R> resultClass) {
         this.fields = "SUM(" + field + ")";
-        return this.getResultAs(resultClass);
+        return this.getSingleResultAs(resultClass);
     }
 
-    public List<T> getResultList() {
+    public List<T> list() {
         return createParameterizedQuery(buildQlString()).getResultList();
     }
 
@@ -128,11 +128,7 @@ public class Relation<T> {
         return qlString.toString();
     }
 
-    private boolean getExistsResult() {
-        return createParameterizedQuery(buildQlString()).getResultStream().findFirst().isPresent();
-    }
-
-    private <R> R getResultAs(Class<R> resultClass) {
+    private <R> R getSingleResultAs(Class<R> resultClass) {
         return createParameterizedQuery(buildQlString(), resultClass).getResultStream().findFirst().orElse(null);
     }
 
@@ -142,6 +138,10 @@ public class Relation<T> {
 
     private T getSingleResultAlt() {
         return createParameterizedQuery(buildQlString()).getSingleResult();
+    }
+
+    private boolean getExistsResult() {
+        return createParameterizedQuery(buildQlString()).getResultStream().findFirst().isPresent();
     }
 
     private TypedQuery<T> createParameterizedQuery(String qlString) {

@@ -25,11 +25,11 @@ student  = studentsService.find(10);
 student  = studentsService.where("this.id = 10").take();
 student  = studentsService.findBy("this.id = 10");
 
-students = studentsService.where("this.id = ?1", 10).getResultList();
-students = studentsService.where("this.id > 10").order("this.id").getResultList();
-students = studentsService.limit(10).getResultList();
-students = studentsService.limit(10).offset(2).getResultList();
-students = studentsService.all().getResultList();
+students = studentsService.where("this.id = ?1", 10).list();
+students = studentsService.where("this.id > 10").order("this.id").list();
+students = studentsService.limit(10).list();
+students = studentsService.limit(10).offset(2).list();
+students = studentsService.all().list();
 
 boolean exists = studentsService.exists("this.id = 1");
 
