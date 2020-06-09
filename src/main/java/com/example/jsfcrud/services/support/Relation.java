@@ -155,15 +155,15 @@ public class Relation<T> {
     }
 
     private TypedQuery<T> createParameterizedQuery(String qlString) {
-        return parametize(createQuery(qlString), params).setMaxResults(limit).setFirstResult(offset);
+        return parametize(createQuery(qlString)).setMaxResults(limit).setFirstResult(offset);
     }
 
     private Query createParameterizedQueryGeneric(String qlString) {
-        return parametize(createQueryGeneric(qlString), params).setMaxResults(limit).setFirstResult(offset);
+        return parametize(createQueryGeneric(qlString)).setMaxResults(limit).setFirstResult(offset);
     }
 
     private <R> TypedQuery<R> createParameterizedQuery(String qlString, Class<R> resultClass) {
-        return parametize(createQuery(qlString, resultClass), params).setMaxResults(limit).setFirstResult(offset);
+        return parametize(createQuery(qlString, resultClass)).setMaxResults(limit).setFirstResult(offset);
     }
 
     private TypedQuery<T> createQuery(String qlString) {
@@ -182,11 +182,11 @@ public class Relation<T> {
         return format("new %s(%s)", entityClass.getName(), join(", ", fields));
     }
 
-    private <R> TypedQuery<R> parametize(TypedQuery<R> query, Object[] params) {
+    private <R> TypedQuery<R> parametize(TypedQuery<R> query) {
         range(0, params.length).forEach(i -> query.setParameter(i + 1, params[i])); return query;
     }
 
-    private Query parametize(Query query, Object[] params) {
+    private Query parametize(Query query) {
         range(0, params.length).forEach(i -> query.setParameter(i + 1, params[i])); return query;
     }
 }
