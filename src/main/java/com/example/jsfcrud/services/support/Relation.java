@@ -75,10 +75,6 @@ public class Relation<T> {
         return limit(1).fetchExists();
     }
 
-    public boolean exists(String conditions, Object... params) {
-        return where(conditions, params).limit(1).fetchExists();
-    }
-
     public List<T> take(int limit) {
         return limit(limit).fetch();
     }

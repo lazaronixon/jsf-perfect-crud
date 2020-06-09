@@ -63,8 +63,4 @@ public interface FinderMethods<T> {
         return buildRelation().exists();
     }
 
-    public default boolean exists(String conditions, Object... params) {
-        return buildRelation().exists(conditions, params);
-    }
-
 }
