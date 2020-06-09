@@ -48,19 +48,19 @@ public class Relation<T> {
     }
 
     public T first() {
-        return order(firstOrder()).limit(1).fetchSingle();
+        return order(firstOrder()).take();
     }
 
     public T firstAlt() {
-        return order(firstOrder()).limit(1).fetchSingleAlt();
+        return order(firstOrder()).takeAlt();
     }
 
     public T last() {
-        return order(lastOrder()).limit(1).fetchSingle();
+        return order(lastOrder()).take();
     }
 
     public T lastAlt() {
-        return order(lastOrder()).limit(1).fetchSingleAlt();
+        return order(lastOrder()).takeAlt();
     }
 
     public T findBy(String conditions, Object... params) {
@@ -80,11 +80,11 @@ public class Relation<T> {
     }
 
     public List<T> first(int limit) {
-        return order(firstOrder()).limit(limit).fetch();
+        return order(firstOrder()).take(limit);
     }
 
     public List<T> last(int limit) {
-        return order(lastOrder()).limit(limit).fetch();
+        return order(lastOrder()).take(limit);
     }
 
     public Relation<T> all() {
