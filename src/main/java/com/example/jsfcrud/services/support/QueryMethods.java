@@ -66,10 +66,6 @@ public interface QueryMethods<T> {
         return getEntityManager().createQuery(qlString, resultClass);
     }
 
-    public default TypedQuery<T> createNamedQuery(String name) {
-        return getEntityManager().createNamedQuery(name, getEntityClass());
-    }
-
     private Query parametize(Query query, Object[] params) {
         range(0, params.length).forEach(i -> query.setParameter(i + 1, params[i])); return query;
     }
