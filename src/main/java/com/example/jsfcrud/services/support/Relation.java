@@ -2,6 +2,7 @@ package com.example.jsfcrud.services.support;
 
 import com.example.jsfcrud.services.ApplicationService;
 import static java.lang.String.format;
+import static java.lang.String.join;
 import java.util.List;
 import static java.util.stream.IntStream.range;
 import javax.persistence.EntityManager;
@@ -66,7 +67,7 @@ public class Relation<T> {
         this.offset = value; return this;
     }
 
-    public Relation<T> select(String fields) {
+    public Relation<T> select(String... fields) {
         this.fields = constructor(fields); return this;
     }
 
@@ -149,8 +150,8 @@ public class Relation<T> {
         return entityManager.createQuery(qlString, resultClass);
     }
 
-    private String constructor(String fields) {
-        return format("new %s(%s)", entityClass.getName(), fields);
+    private String constructor(String... fields) {
+        return format("new %s(%s)", entityClass.getName(), join(", ", fields));
     }
 
     private <R> TypedQuery<R> parametize(TypedQuery<R> query, Object[] params) {

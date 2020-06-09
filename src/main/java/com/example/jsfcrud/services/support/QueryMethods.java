@@ -34,7 +34,7 @@ public interface QueryMethods<T> {
         return buildRelation().offset(value);
     }
 
-    public default Relation<T> select(String fields) {
+    public default Relation<T> select(String... fields) {
         return buildRelation().select(fields);
     }
 
