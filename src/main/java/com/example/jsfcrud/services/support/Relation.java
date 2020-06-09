@@ -106,6 +106,10 @@ public class Relation<T> {
         this.fields = join(", ", fields); return this.fetchGeneric();
     }
 
+    public List ids() {
+        return pluck("this.id");
+    }
+
     public List<T> fetch() {
         return createParameterizedQuery(buildQlString()).getResultList();
     }

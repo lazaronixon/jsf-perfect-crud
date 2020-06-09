@@ -34,4 +34,8 @@ public interface Calculations<T> {
         return buildRelation().pluck(field);
     }
 
+    public default List ids() {
+        return buildRelation().ids();
+    }
+
 }
