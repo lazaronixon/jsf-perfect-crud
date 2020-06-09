@@ -36,6 +36,10 @@ public interface QueryMethods<T> {
         return buildRelation().select(fields);
     }
 
+    public default Relation<T> joins(String joins) {
+        return buildRelation().joins(joins);
+    }
+
     public default Query createNativeQuery(String qlString) {
         return getEntityManager().createNativeQuery(qlString, getEntityClass());
     }

@@ -26,6 +26,8 @@ public class Relation<T> {
 
     private String order;
 
+    private String joins;
+
     private int limit;
 
     private int offset;
@@ -71,6 +73,10 @@ public class Relation<T> {
         this.fields = constructor(fields); return this;
     }
 
+    public Relation<T> joins(String joins) {
+        this.joins = joins; return this;
+    }
+
     public long count() {
         return count("this");
     }
@@ -101,6 +107,7 @@ public class Relation<T> {
 
     private String buildQlString() {
         StringBuilder qlString = new StringBuilder(formattedSelect());
+        if (joins != null) qlString.append(" ").append(joins);
         if (conditions != null) qlString.append(" ").append(formattedWhere());
         if (order != null) qlString.append(" ").append(formattedOrder());
         return qlString.toString();
