@@ -43,11 +43,11 @@ public class Relation<T> {
     }
 
     public T take() {
-        return limit(1).fetchSingle();
+        return limit(1).fetchOne();
     }
 
     public T takeAlt() {
-        return limit(1).fetchSingleAlt();
+        return limit(1).fetchOneAlt();
     }
 
     public T first() {
@@ -119,7 +119,7 @@ public class Relation<T> {
     }
 
     public Relation<T> group(String... fields) {
-        this.group = comma_separated(fields); return this;
+        this.group = commaSeparated(fields); return this;
     }
 
     public long count() {
@@ -127,27 +127,27 @@ public class Relation<T> {
     }
 
     public long count(String field) {
-        this.fields = "COUNT(" + field + ")"; return this.fetchSingleAs(Long.class);
+        this.fields = "COUNT(" + field + ")"; return this.fetchOneAs(Long.class);
     }
 
     public <R> R min(String field, Class<R> resultClass) {
-        this.fields = "MIN(" + field + ")"; return this.fetchSingleAs(resultClass);
+        this.fields = "MIN(" + field + ")"; return this.fetchOneAs(resultClass);
     }
 
     public <R> R max(String field, Class<R> resultClass) {
-        this.fields = "MAX(" + field + ")"; return this.fetchSingleAs(resultClass);
+        this.fields = "MAX(" + field + ")"; return this.fetchOneAs(resultClass);
     }
 
     public <R> R avg(String field, Class<R> resultClass) {
-        this.fields = "AVG(" + field + ")"; return this.fetchSingleAs(resultClass);
+        this.fields = "AVG(" + field + ")"; return this.fetchOneAs(resultClass);
     }
 
     public <R> R sum(String field, Class<R> resultClass) {
-        this.fields = "SUM(" + field + ")"; return this.fetchSingleAs(resultClass);
+        this.fields = "SUM(" + field + ")"; return this.fetchOneAs(resultClass);
     }
 
     public List pluck(String... fields) {
-        this.fields = comma_separated(fields); return this.fetchGeneric();
+        this.fields = commaSeparated(fields); return this.fetchAlt();
     }
 
     public List ids() {
@@ -156,6 +156,10 @@ public class Relation<T> {
 
     public List<T> fetch() {
         return createParameterizedQuery(buildQlString()).getResultList();
+    }
+
+    private List fetchAlt() {
+        return createParameterizedQueryAlt(buildQlString()).getResultList();
     }
 
     private String buildQlString() {
@@ -183,15 +187,15 @@ public class Relation<T> {
         return format(ORDER_FRAGMENT, order);
     }
 
-    private T fetchSingle() {
+    private T fetchOne() {
         return createParameterizedQuery(buildQlString()).getResultStream().findFirst().orElse(null);
     }
 
-    private T fetchSingleAlt() {
+    private T fetchOneAlt() {
         return createParameterizedQuery(buildQlString()).getSingleResult();
     }
 
-    private <R> R fetchSingleAs(Class<R> resultClass) {
+    private <R> R fetchOneAs(Class<R> resultClass) {
         return createParameterizedQuery(buildQlString(), resultClass).getSingleResult();
     }
 
@@ -199,16 +203,12 @@ public class Relation<T> {
         return createParameterizedQuery(buildQlString()).getResultStream().findFirst().isPresent();
     }
 
-    private List fetchGeneric() {
-        return createParameterizedQueryGeneric(buildQlString()).getResultList();
-    }
-
     private TypedQuery<T> createParameterizedQuery(String qlString) {
         return parametize(createQuery(qlString)).setMaxResults(limit).setFirstResult(offset);
     }
 
-    private Query createParameterizedQueryGeneric(String qlString) {
-        return parametize(createQueryGeneric(qlString)).setMaxResults(limit).setFirstResult(offset);
+    private Query createParameterizedQueryAlt(String qlString) {
+        return parametize(createQueryAlt(qlString)).setMaxResults(limit).setFirstResult(offset);
     }
 
     private <R> TypedQuery<R> createParameterizedQuery(String qlString, Class<R> resultClass) {
@@ -219,12 +219,12 @@ public class Relation<T> {
         return entityManager.createQuery(qlString, entityClass);
     }
 
-    private <R> TypedQuery<R> createQuery(String qlString, Class<R> resultClass) {
-        return entityManager.createQuery(qlString, resultClass);
+    private Query createQueryAlt(String qlString) {
+        return entityManager.createQuery(qlString);
     }
 
-    private Query createQueryGeneric(String qlString) {
-        return entityManager.createQuery(qlString);
+    private <R> TypedQuery<R> createQuery(String qlString, Class<R> resultClass) {
+        return entityManager.createQuery(qlString, resultClass);
     }
 
     private String firstOrder() {
@@ -236,10 +236,10 @@ public class Relation<T> {
     }
 
     private String constructor(String[] fields) {
-        return format("new %s(%s)", entityClass.getName(), comma_separated(fields));
+        return format("new %s(%s)", entityClass.getName(), commaSeparated(fields));
     }
 
-    private String comma_separated(String[] values) {
+    private String commaSeparated(String[] values) {
         return join(", ", values);
     }
 
