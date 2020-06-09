@@ -22,7 +22,7 @@ public class Relation<T> {
 
     private Object[] params = new Object[0];
 
-    private String conditions;
+    private String where;
 
     private String order;
 
@@ -54,7 +54,7 @@ public class Relation<T> {
     }
 
     public Relation<T> where(String conditions, Object... params) {
-        this.conditions = conditions; this.params = params; return this;
+        this.where = conditions; this.params = params; return this;
     }
 
     public Relation<T> order(String args) {
@@ -108,7 +108,7 @@ public class Relation<T> {
     private String buildQlString() {
         StringBuilder qlString = new StringBuilder(formattedSelect());
         if (joins != null) qlString.append(" ").append(joins);
-        if (conditions != null) qlString.append(" ").append(formattedWhere());
+        if (where != null) qlString.append(" ").append(formattedWhere());
         if (order != null) qlString.append(" ").append(formattedOrder());
         return qlString.toString();
     }
@@ -118,7 +118,7 @@ public class Relation<T> {
     }
 
     private String formattedWhere() {
-        return format(WHERE_FRAGMENT, conditions);
+        return format(WHERE_FRAGMENT, where);
     }
 
     private String formattedOrder() {
