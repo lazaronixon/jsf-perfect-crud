@@ -1,9 +1,16 @@
 package com.example.jsfcrud.services;
 
-import com.example.jsfcrud.services.support.Base;
-import com.example.jsfcrud.services.support.Relation;
+import com.example.jsfcrud.models.ApplicationRecord;
+import static java.lang.String.format;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 
-public abstract class ApplicationService<T> extends Base<T> {
+public abstract class ApplicationService<T> {
+
+    protected abstract EntityManager getEntityManager();
 
     public abstract T find(String id);
 
@@ -13,14 +20,60 @@ public abstract class ApplicationService<T> extends Base<T> {
         this.entityClass = entityClass;
     }
 
-    @Override
-    public Class<T> getEntityClass() {
-        return entityClass;
+    @Transactional
+    public T create(T entity) {
+        getEntityManager().persist(entity); return entity;
     }
 
-    @Override
-    public Relation<T> buildRelation() {
-        return new Relation(this);
+    @Transactional
+    public T update(T entity) {
+        return getEntityManager().merge(entity);
+    }
+
+    @Transactional
+    public void destroy(T entity) {
+        getEntityManager().remove(getEntityManager().merge(entity));
+    }
+
+    @Transactional
+    public T save(ApplicationRecord entity) {
+        if (entity.isNewRecord()) {
+            return create((T) entity);
+        } else {
+            return update((T) entity);
+        }
+    }
+
+    public void reload(T entity) {
+        getEntityManager().refresh(entity);
+    }
+
+    public T find(Object id) {
+        return getEntityManager().find(entityClass, id);
+    }
+
+    public List<T> all() {
+        return createQuery(format("SELECT this FROM %s this", entityClass.getSimpleName())).getResultList();
+    }
+
+    public Query createNativeQuery(String qlString) {
+        return getEntityManager().createNativeQuery(qlString, entityClass);
+    }
+
+    public Query createNativeQuery(String qlString, Class resultClass) {
+        return getEntityManager().createNativeQuery(qlString, resultClass);
+    }
+
+    public Query createNativeQueryAlt(String sqlQuery) {
+        return getEntityManager().createNativeQuery(sqlQuery);
+    }
+
+    public TypedQuery<T> createQuery(String qlString) {
+        return getEntityManager().createQuery(qlString, entityClass);
+    }
+
+    public <R> TypedQuery<R> createQuery(String qlString, Class<R> resultClass) {
+        return getEntityManager().createQuery(qlString, resultClass);
     }
 
 }
