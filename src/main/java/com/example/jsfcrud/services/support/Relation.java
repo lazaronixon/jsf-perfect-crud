@@ -126,11 +126,11 @@ public class Relation<T> {
     }
 
     private <R> R fetchSingleAs(Class<R> resultClass) {
-        return createParameterizedQuery(buildQlString(), resultClass).getResultStream().findFirst().orElse(null);
+        return createParameterizedQuery(buildQlString(), resultClass).getSingleResult();
     }
 
     private boolean fetchExists() {
-        return createParameterizedQuery(buildQlString()).getResultStream().findAny().isPresent();
+        return createParameterizedQuery(buildQlString()).getResultStream().findFirst().isPresent();
     }
 
     private TypedQuery<T> createParameterizedQuery(String qlString) {
