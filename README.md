@@ -18,28 +18,6 @@ This project is a implementation of generated crud of Ruby on Rails using JSF 2.
 ## Primefaces Version
 * https://github.com/lazaronixon/jsf-perfect-crud/tree/primefaces
 
-## Small Query Framework
-
-```java
-student  = studentsService.find(10);
-student  = studentsService.findBy("this.id = 10");
-
-students = studentsService.where("this.id = ?1", 10).fetch();
-students = studentsService.where("this.id > 10").order("this.id").fetch();
-students = studentsService.limit(10).fetch();
-students = studentsService.limit(10).offset(2).fetch();
-students = studentsService.all().fetch();
-
-boolean exists = studentsService.exists("this.id = 1");
-
-long   count   = studentsService.count();
-long   count1  = studentsService.count("this.id");
-int    maximum = studentsService.max("this.id", Integer.class);
-int    minimum = studentsService.min("this.id", Integer.class);
-long   sum     = studentsService.sum("this.id", Long.class);
-double average = studentsService.avg("this.id", Double.class);
-```
-
 ## Requirements
 
 * OpenJDK 11
