@@ -4,6 +4,7 @@ import com.example.jsfcrud.services.ApplicationService;
 import static java.lang.String.format;
 import static java.lang.String.join;
 import java.util.List;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.IntStream.range;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -38,16 +39,56 @@ public class Relation<T> {
         this.entityClass = service.getEntityClass();
     }
 
+    public T take() {
+        return limit(1).fetchSingle();
+    }
+
+    public T takeAlt() {
+        return limit(1).fetchSingleAlt();
+    }
+
+    public T first() {
+        return order(firstOrder()).limit(1).fetchSingle();
+    }
+
+    public T firstAlt() {
+        return order(firstOrder()).limit(1).fetchSingleAlt();
+    }
+
+    public T last() {
+        return order(lastOrder()).limit(1).fetchSingle();
+    }
+
+    public T lastAlt() {
+        return order(lastOrder()).limit(1).fetchSingleAlt();
+    }
+
     public T findBy(String conditions, Object... params) {
-        return where(conditions, params).limit(1).fetchSingle();
+        return where(conditions, params).take();
     }
 
     public T findByAlt(String conditions, Object... params) {
-        return where(conditions, params).limit(1).fetchSingleAlt();
+        return where(conditions, params).takeAlt();
+    }
+
+    public boolean exists() {
+        return limit(1).fetchExists();
     }
 
     public boolean exists(String conditions, Object... params) {
         return where(conditions, params).limit(1).fetchExists();
+    }
+
+    public List<T> take(int limit) {
+        return limit(limit).fetch();
+    }
+
+    public List<T> first(int limit) {
+        return order(firstOrder()).limit(limit).fetch();
+    }
+
+    public List<T> last(int limit) {
+        return order(lastOrder()).limit(limit).fetch();
     }
 
     public Relation<T> all() {
@@ -176,6 +217,14 @@ public class Relation<T> {
 
     private Query createQueryGeneric(String qlString) {
         return entityManager.createQuery(qlString);
+    }
+
+    private String firstOrder() {
+        return ofNullable(this.order).orElse("this.id");
+    }
+
+    private String lastOrder() {
+        return ofNullable(this.order).orElse("this.id DESC");
     }
 
     private String constructor(String... fields) {
