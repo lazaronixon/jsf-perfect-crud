@@ -1,7 +1,5 @@
 package com.example.jsfcrud.services.support;
 
-import java.util.List;
-import static java.util.stream.IntStream.range;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -38,24 +36,12 @@ public interface QueryMethods<T> {
         return buildRelation().select(fields);
     }
 
-    public default List<T> findBySql(String sql, Object... params) {
-        return parametize(createNativeQuery(sql), params).getResultList();
-    }
-
-    public default List selectAll(String sqlQuery, Object... params) {
-        return parametize(createNativeQueryGeneric(sqlQuery), params).getResultList();
-    }
-
     public default Query createNativeQuery(String qlString) {
         return getEntityManager().createNativeQuery(qlString, getEntityClass());
     }
 
     public default Query createNativeQuery(String qlString, Class resultClass) {
         return getEntityManager().createNativeQuery(qlString, resultClass);
-    }
-
-    public default Query createNativeQueryGeneric(String sqlQuery) {
-        return getEntityManager().createNativeQuery(sqlQuery);
     }
 
     public default TypedQuery<T> createQuery(String qlString) {
@@ -66,8 +52,8 @@ public interface QueryMethods<T> {
         return getEntityManager().createQuery(qlString, resultClass);
     }
 
-    private Query parametize(Query query, Object[] params) {
-        range(0, params.length).forEach(i -> query.setParameter(i + 1, params[i])); return query;
+    public default Query createNativeQueryGeneric(String sqlQuery) {
+        return getEntityManager().createNativeQuery(sqlQuery);
     }
 
 }
