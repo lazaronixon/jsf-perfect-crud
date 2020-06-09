@@ -1,5 +1,6 @@
-
 package com.example.jsfcrud.services.support;
+
+import java.util.List;
 
 public interface Calculations<T> {
 
@@ -27,6 +28,10 @@ public interface Calculations<T> {
 
     public default <R> R sum(String field, Class<R> resultClass) {
         return buildRelation().sum(field, resultClass);
+    }
+
+    public default List pluck(String field) {
+        return buildRelation().pluck(field);
     }
 
 }

@@ -6,6 +6,7 @@ import static java.lang.String.join;
 import java.util.List;
 import static java.util.stream.IntStream.range;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 public class Relation<T> {
@@ -101,6 +102,10 @@ public class Relation<T> {
         this.fields = "SUM(" + field + ")"; return this.fetchSingleAs(resultClass);
     }
 
+    public List pluck(String... fields) {
+        this.fields = join(", ", fields); return this.fetchGeneric();
+    }
+
     public List<T> fetch() {
         return createParameterizedQuery(buildQlString()).getResultList();
     }
@@ -141,8 +146,16 @@ public class Relation<T> {
         return createParameterizedQuery(buildQlString()).getResultStream().findFirst().isPresent();
     }
 
+    private List fetchGeneric() {
+        return createParameterizedQueryGeneric(buildQlString()).getResultList();
+    }
+
     private TypedQuery<T> createParameterizedQuery(String qlString) {
         return parametize(createQuery(qlString), params).setMaxResults(limit).setFirstResult(offset);
+    }
+
+    private Query createParameterizedQueryGeneric(String qlString) {
+        return parametize(createQueryGeneric(qlString), params).setMaxResults(limit).setFirstResult(offset);
     }
 
     private <R> TypedQuery<R> createParameterizedQuery(String qlString, Class<R> resultClass) {
@@ -157,11 +170,19 @@ public class Relation<T> {
         return entityManager.createQuery(qlString, resultClass);
     }
 
+    private Query createQueryGeneric(String qlString) {
+        return entityManager.createQuery(qlString);
+    }
+
     private String constructor(String... fields) {
         return format("new %s(%s)", entityClass.getName(), join(", ", fields));
     }
 
     private <R> TypedQuery<R> parametize(TypedQuery<R> query, Object[] params) {
+        range(0, params.length).forEach(i -> query.setParameter(i + 1, params[i])); return query;
+    }
+
+    private Query parametize(Query query, Object[] params) {
         range(0, params.length).forEach(i -> query.setParameter(i + 1, params[i])); return query;
     }
 }

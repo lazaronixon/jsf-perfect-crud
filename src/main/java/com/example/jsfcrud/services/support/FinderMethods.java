@@ -1,4 +1,3 @@
-
 package com.example.jsfcrud.services.support;
 
 import javax.persistence.EntityManager;
