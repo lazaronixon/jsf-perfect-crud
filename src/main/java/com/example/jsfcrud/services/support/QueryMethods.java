@@ -40,6 +40,10 @@ public interface QueryMethods<T> {
         return buildRelation().joins(joins);
     }
 
+    public default Relation<T> group(String group) {
+        return buildRelation().joins(group);
+    }
+
     public default Query createNativeQuery(String qlString) {
         return getEntityManager().createNativeQuery(qlString, getEntityClass());
     }
@@ -48,16 +52,16 @@ public interface QueryMethods<T> {
         return getEntityManager().createNativeQuery(qlString, resultClass);
     }
 
+    public default Query createNativeQueryGeneric(String sqlQuery) {
+        return getEntityManager().createNativeQuery(sqlQuery);
+    }
+
     public default TypedQuery<T> createQuery(String qlString) {
         return getEntityManager().createQuery(qlString, getEntityClass());
     }
 
     public default <R> TypedQuery<R> createQuery(String qlString, Class<R> resultClass) {
         return getEntityManager().createQuery(qlString, resultClass);
-    }
-
-    public default Query createNativeQueryGeneric(String sqlQuery) {
-        return getEntityManager().createNativeQuery(sqlQuery);
     }
 
 }

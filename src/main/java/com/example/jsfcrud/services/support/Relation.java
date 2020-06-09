@@ -14,17 +14,20 @@ public class Relation<T> {
 
     private final static String SELECT_FRAGMENT = "SELECT %s FROM %s this";
     private final static String WHERE_FRAGMENT  = "WHERE %s";
+    private final static String GROUP_FRAGMENT  = "GROUP BY %s";
     private final static String ORDER_FRAGMENT  = "ORDER BY %s";
 
     private final EntityManager entityManager;
 
     private final Class entityClass;
 
-    private String fields = "this";
-
     private Object[] params = new Object[0];
 
+    private String fields = "this";
+
     private String where;
+
+    private String group;
 
     private String order;
 
@@ -115,6 +118,10 @@ public class Relation<T> {
         this.joins = joins; return this;
     }
 
+    public Relation<T> group(String... fields) {
+        this.group = comma_separated(fields); return this;
+    }
+
     public long count() {
         return count("this");
     }
@@ -140,7 +147,7 @@ public class Relation<T> {
     }
 
     public List pluck(String... fields) {
-        this.fields = join(", ", fields); return this.fetchGeneric();
+        this.fields = comma_separated(fields); return this.fetchGeneric();
     }
 
     public List ids() {
@@ -155,6 +162,7 @@ public class Relation<T> {
         StringBuilder qlString = new StringBuilder(formattedSelect());
         if (joins != null) qlString.append(" ").append(joins);
         if (where != null) qlString.append(" ").append(formattedWhere());
+        if (group != null) qlString.append(" ").append(formattedGroup());
         if (order != null) qlString.append(" ").append(formattedOrder());
         return qlString.toString();
     }
@@ -165,6 +173,10 @@ public class Relation<T> {
 
     private String formattedWhere() {
         return format(WHERE_FRAGMENT, where);
+    }
+
+    private String formattedGroup() {
+        return format(GROUP_FRAGMENT, group);
     }
 
     private String formattedOrder() {
@@ -223,8 +235,12 @@ public class Relation<T> {
         return ofNullable(this.order).orElse("this.id DESC");
     }
 
-    private String constructor(String... fields) {
-        return format("new %s(%s)", entityClass.getName(), join(", ", fields));
+    private String constructor(String[] fields) {
+        return format("new %s(%s)", entityClass.getName(), comma_separated(fields));
+    }
+
+    private String comma_separated(String[] values) {
+        return join(", ", values);
     }
 
     private <R> TypedQuery<R> parametize(TypedQuery<R> query) {
