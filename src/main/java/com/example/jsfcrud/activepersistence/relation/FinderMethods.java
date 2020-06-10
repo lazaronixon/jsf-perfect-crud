@@ -1,20 +1,13 @@
 package com.example.jsfcrud.activepersistence.relation;
 
-import com.example.jsfcrud.activepersistence.Relation;
 import java.util.List;
 import static java.util.Optional.ofNullable;
 
-public interface FinderMethods<T> {        
+public interface FinderMethods<T> extends QueryMethods<T> {       
     
     public boolean fetchExists();     
     
     public String getOrder();
-
-    public Relation<T> limit(int value);
-    
-    public Relation<T> order(String value);
-    
-    public Relation<T> where(String conditions, Object... params);
     
     public String buildQlString();
     

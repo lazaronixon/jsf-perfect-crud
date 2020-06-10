@@ -41,48 +41,37 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     public Relation(ApplicationService service) {
         this.entityManager = service.getEntityManager();
         this.entityClass = service.getEntityClass();
-    }    
+    }
+
+    public T find(Object id) {
+        return getEntityManager().find(getEntityClass(), id);
+    }
     
     public T fetchOne() {
-        return createParameterizedQuery(buildQlString()).getResultStream().findFirst().orElse(null);
+        return buildParameterizedQuery(buildQlString()).getResultStream().findFirst().orElse(null);
     }    
     
     public T fetchOneAlt() {
-        return createParameterizedQuery(buildQlString()).getSingleResult();
-    }       
+        return buildParameterizedQuery(buildQlString()).getSingleResult();
+    }
+    
+    public List<T> fetch() {
+        return buildParameterizedQuery(buildQlString()).getResultList();
+    }    
     
     @Override
     public <R> R fetchOneAs(Class<R> resultClass) {
-        return createParameterizedQuery(buildQlString(), resultClass).getSingleResult();
-    }      
-    
-    public List<T> fetch() {
-        return createParameterizedQuery(buildQlString()).getResultList();
-    }   
+        return buildParameterizedQuery(buildQlString(), resultClass).getSingleResult();
+    }    
     
     @Override
     public List fetchAlt() {
-        return createParameterizedQueryAlt(buildQlString()).getResultList();
+        return buildParameterizedQueryAlt(buildQlString()).getResultList();
     }     
     
     @Override
     public boolean fetchExists() {
-        return createParameterizedQuery(buildQlString()).getResultStream().findAny().isPresent();
-    }
-
-    @Override
-    public Relation<T> limit(int value) {
-        this.limit = value; return this;
-    }
-
-    @Override
-    public Relation<T> order(String order) {
-        this.order = order; return this;
-    }
-
-    @Override
-    public Relation<T> where(String conditions, Object... params) {
-        this.where = conditions; this.params = params; return this;
+        return buildParameterizedQuery(buildQlString()).getResultStream().findAny().isPresent();
     }
 
     @Override
@@ -111,15 +100,15 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
         return format(ORDER_FRAGMENT, order);
     }    
     
-    private TypedQuery<T> createParameterizedQuery(String qlString) {
+    private TypedQuery<T> buildParameterizedQuery(String qlString) {
         return parametize(buildQuery(qlString)).setMaxResults(limit).setFirstResult(offset);
     }
     
-    private <R> TypedQuery<R> createParameterizedQuery(String qlString, Class<R> resultClass) {
+    private <R> TypedQuery<R> buildParameterizedQuery(String qlString, Class<R> resultClass) {
         return parametize(buildQuery(qlString, resultClass)).setMaxResults(limit).setFirstResult(offset);
     }        
     
-    private Query createParameterizedQueryAlt(String qlString) {
+    private Query buildParameterizedQueryAlt(String qlString) {
         return parametize(buildQueryAlt(qlString)).setMaxResults(limit).setFirstResult(offset);
     }
 
@@ -166,6 +155,26 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     public void setGroup(String group) {
         this.group = group;
     }
+    
+    @Override
+    public void setParams(Object[] params) {
+        this.params = params;
+    }
+
+    @Override
+    public void setWhere(String where) {
+        this.where = where;
+    }
+
+    @Override
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
+    @Override
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }    
     //</editor-fold>
 
 }

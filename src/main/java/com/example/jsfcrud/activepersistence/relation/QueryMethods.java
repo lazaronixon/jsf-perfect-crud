@@ -12,19 +12,33 @@ public interface QueryMethods<T> {
     
     public void setJoins(String value);       
     
-    public void setGroup(String group);       
+    public void setGroup(String group);
     
-    public Relation<T> where(String conditions, Object... params);
+    public void setLimit(int value);
     
-    public Relation<T> order(String args);
+    public void setOrder(String order);
     
-    public Relation<T> limit(int value);
+    public void setParams(Object[] params);
+    
+    public void setWhere(String where);
 
     public Class<T> getEntityClass();     
     
     public default Relation<T> all() {
         return (Relation<T>) this;
     }
+    
+    public default Relation<T> limit(int value) {
+        setLimit(value); return (Relation<T>) this;
+    }
+
+    public default Relation<T> order(String order) {
+        setOrder(order); return (Relation<T>) this;
+    }
+
+    public default Relation<T> where(String conditions, Object... params) {
+        setWhere(conditions); setParams(params); return (Relation<T>) this;
+    }    
 
     public default Relation<T> offset(int value) {
         setOffset(value); return (Relation<T>) this;
@@ -43,11 +57,15 @@ public interface QueryMethods<T> {
     }
     
     private String constructor(String[] fields) {
-        return format("new %s(%s)", getEntityClass().getName(), commaSeparated(fields));
+        return format("new %s(%s)", entityName(), commaSeparated(fields));
     }
 
     private String commaSeparated(String[] values) {
         return join(", ", values);
     }      
+    
+    private String entityName() {
+        return getEntityClass().getName();
+    }
 
 }

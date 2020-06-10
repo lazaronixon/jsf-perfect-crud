@@ -5,11 +5,11 @@ import java.util.List;
 
 public interface Calculation<T> {
     
-    public void setFields(String fields);    
-    
-    public List fetchAlt();
+    public void setFields(String fields);        
     
     public <R> R fetchOneAs(Class<R> resultClass);         
+    
+    public List fetchAlt();    
 
     public default long count() {
         return count("this");

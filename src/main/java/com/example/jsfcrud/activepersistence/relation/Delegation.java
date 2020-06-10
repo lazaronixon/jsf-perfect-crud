@@ -3,13 +3,8 @@ package com.example.jsfcrud.activepersistence.relation;
 import com.example.jsfcrud.activepersistence.Relation;
 import com.example.jsfcrud.services.ApplicationService;
 import java.util.List;
-import javax.persistence.EntityManager;
 
 public interface Delegation<T> {
-
-    public EntityManager getEntityManager();
-
-    public Class<T> getEntityClass();   
 
     public default long count() {
         return buildRelation().count();
@@ -41,10 +36,6 @@ public interface Delegation<T> {
 
     public default List ids() {
         return buildRelation().ids();
-    }
-
-    public default T find(Object id) {
-        return getEntityManager().find(getEntityClass(), id);
     }
 
     public default T take() {
