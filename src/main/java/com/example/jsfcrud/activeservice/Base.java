@@ -1,8 +1,9 @@
-package com.example.jsfcrud.services.support;
+package com.example.jsfcrud.activeservice;
 
+import com.example.jsfcrud.activeservice.relation.Delegation;
 import javax.persistence.EntityManager;
 
-public abstract class Base<T> implements Persistence<T>, FinderMethods<T>, QueryMethods<T>, Calculations<T> {
+public abstract class Base<T> implements Persistence<T>, QueryBuilders<T>, Delegation<T>  {
 
     @Override
     public abstract EntityManager getEntityManager();
