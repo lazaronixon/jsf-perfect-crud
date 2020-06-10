@@ -20,16 +20,16 @@ public interface Delegation<T> {
         return buildRelation().count(field);
     }
 
-    public default <R> R min(String field, Class<R> resultClass) {
-       return buildRelation().min(field, resultClass);
+    public default <R> R minimum(String field, Class<R> resultClass) {
+       return buildRelation().minimum(field, resultClass);
     }
 
-    public default <R> R max(String field, Class<R> resultClass) {
-        return buildRelation().max(field, resultClass);
+    public default <R> R maximum(String field, Class<R> resultClass) {
+        return buildRelation().maximum(field, resultClass);
     }
 
-    public default <R> R avg(String field, Class<R> resultClass) {
-        return buildRelation().avg(field, resultClass);
+    public default <R> R average(String field, Class<R> resultClass) {
+        return buildRelation().average(field, resultClass);
     }
 
     public default <R> R sum(String field, Class<R> resultClass) {

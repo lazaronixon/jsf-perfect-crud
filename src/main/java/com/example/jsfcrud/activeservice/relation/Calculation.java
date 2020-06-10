@@ -19,15 +19,15 @@ public interface Calculation<T> {
         setFields("COUNT(" + field + ")"); return this.fetchOneAs(Long.class);
     }
 
-    public default <R> R min(String field, Class<R> resultClass) {
+    public default <R> R minimum(String field, Class<R> resultClass) {
         setFields("MIN(" + field + ")"); return this.fetchOneAs(resultClass);
     }
 
-    public default <R> R max(String field, Class<R> resultClass) {
+    public default <R> R maximum(String field, Class<R> resultClass) {
         setFields("MAX(" + field + ")"); return this.fetchOneAs(resultClass);
     }
 
-    public default <R> R avg(String field, Class<R> resultClass) {
+    public default <R> R average(String field, Class<R> resultClass) {
         setFields("AVG(" + field + ")"); return this.fetchOneAs(resultClass);
     }
 
