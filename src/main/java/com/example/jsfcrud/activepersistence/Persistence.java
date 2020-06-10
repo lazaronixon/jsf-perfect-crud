@@ -1,4 +1,4 @@
-package com.example.jsfcrud.activeservice;
+package com.example.jsfcrud.activepersistence;
 
 import com.example.jsfcrud.models.ApplicationRecord;
 import javax.persistence.EntityManager;

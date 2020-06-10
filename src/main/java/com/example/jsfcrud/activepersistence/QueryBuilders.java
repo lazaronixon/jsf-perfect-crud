@@ -1,4 +1,4 @@
-package com.example.jsfcrud.activeservice;
+package com.example.jsfcrud.activepersistence;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

@@ -1,6 +1,6 @@
-package com.example.jsfcrud.activeservice;
+package com.example.jsfcrud.activepersistence;
 
-import com.example.jsfcrud.activeservice.relation.Delegation;
+import com.example.jsfcrud.activepersistence.relation.Delegation;
 import javax.persistence.EntityManager;
 
 public abstract class Base<T> implements Persistence<T>, QueryBuilders<T>, Delegation<T>  {

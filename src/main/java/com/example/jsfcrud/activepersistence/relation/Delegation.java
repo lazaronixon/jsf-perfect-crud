@@ -1,6 +1,6 @@
-package com.example.jsfcrud.activeservice.relation;
+package com.example.jsfcrud.activepersistence.relation;
 
-import com.example.jsfcrud.activeservice.Relation;
+import com.example.jsfcrud.activepersistence.Relation;
 import com.example.jsfcrud.services.ApplicationService;
 import java.util.List;
 import javax.persistence.EntityManager;

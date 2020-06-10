@@ -1,4 +1,4 @@
-package com.example.jsfcrud.activeservice.relation;
+package com.example.jsfcrud.activepersistence.relation;
 
 import static java.lang.String.join;
 import java.util.List;

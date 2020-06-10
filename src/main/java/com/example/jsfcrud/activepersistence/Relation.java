@@ -1,8 +1,8 @@
-package com.example.jsfcrud.activeservice;
+package com.example.jsfcrud.activepersistence;
 
-import com.example.jsfcrud.activeservice.relation.Calculation;
-import com.example.jsfcrud.activeservice.relation.FinderMethods;
-import com.example.jsfcrud.activeservice.relation.QueryMethods;
+import com.example.jsfcrud.activepersistence.relation.Calculation;
+import com.example.jsfcrud.activepersistence.relation.FinderMethods;
+import com.example.jsfcrud.activepersistence.relation.QueryMethods;
 import com.example.jsfcrud.services.ApplicationService;
 import static java.lang.String.format;
 import java.util.List;

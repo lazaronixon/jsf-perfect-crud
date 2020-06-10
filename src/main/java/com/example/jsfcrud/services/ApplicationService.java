@@ -1,6 +1,6 @@
 package com.example.jsfcrud.services;
 
-import com.example.jsfcrud.activeservice.Base;
+import com.example.jsfcrud.activepersistence.Base;
 
 public abstract class ApplicationService<T> extends Base<T> {
 
