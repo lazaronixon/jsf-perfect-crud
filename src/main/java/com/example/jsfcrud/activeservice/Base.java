@@ -11,7 +11,4 @@ public abstract class Base<T> implements Persistence<T>, QueryBuilders<T>, Deleg
     @Override
     public abstract Class<T> getEntityClass();
 
-    @Override
-    public abstract Relation<T> buildRelation();
-
 }

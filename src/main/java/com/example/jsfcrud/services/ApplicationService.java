@@ -1,7 +1,6 @@
 package com.example.jsfcrud.services;
 
 import com.example.jsfcrud.activeservice.Base;
-import com.example.jsfcrud.activeservice.Relation;
 
 public abstract class ApplicationService<T> extends Base<T> {
 
@@ -16,11 +15,6 @@ public abstract class ApplicationService<T> extends Base<T> {
     @Override
     public Class<T> getEntityClass() {
         return entityClass;
-    }
-
-    @Override
-    public Relation<T> buildRelation() {
-        return new Relation(this);
     }
 
 }

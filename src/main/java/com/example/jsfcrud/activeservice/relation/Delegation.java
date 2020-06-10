@@ -1,6 +1,7 @@
 package com.example.jsfcrud.activeservice.relation;
 
 import com.example.jsfcrud.activeservice.Relation;
+import com.example.jsfcrud.services.ApplicationService;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -8,9 +9,7 @@ public interface Delegation<T> {
 
     public EntityManager getEntityManager();
 
-    public Class<T> getEntityClass();
-
-    public Relation<T> buildRelation();
+    public Class<T> getEntityClass();   
 
     public default long count() {
         return buildRelation().count();
@@ -126,6 +125,10 @@ public interface Delegation<T> {
 
     public default Relation<T> group(String group) {
         return buildRelation().joins(group);
+    }
+    
+    private Relation<T> buildRelation() {
+        return new Relation((ApplicationService) this);
     }
 
 }
