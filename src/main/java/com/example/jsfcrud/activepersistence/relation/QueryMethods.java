@@ -9,11 +9,15 @@ public interface QueryMethods<T> {
     
     public void setJoins(String joins);     
     
-    public void setWhere(String where);    
+    public void setWhere(String where);
+
+    public void setWhereParams(Object[] params);   
     
     public void setGroup(String group);  
     
-    public void setParams(Object[] params);    
+    public void setHaving(String having);     
+    
+    public void setHavingParams(Object[] params);         
     
     public void setOrder(String order);    
     
@@ -40,12 +44,16 @@ public interface QueryMethods<T> {
     }    
     
     public default Relation<T> where(String conditions, Object... params) {
-        setWhere(conditions); setParams(params); return (Relation<T>) this;
+        setWhere(conditions); setWhereParams(params); return (Relation<T>) this;
     }     
     
     public default Relation<T> group(String values) {
         setGroup(values); return (Relation<T>) this;
     }    
+    
+    public default Relation<T> having(String conditions, Object... params) {
+        setHaving(conditions); setHavingParams(params); return (Relation<T>) this;
+    }       
     
     public default Relation<T> order(String order) {
         setOrder(order); return (Relation<T>) this;

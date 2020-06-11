@@ -7,6 +7,7 @@ import com.example.jsfcrud.services.ApplicationService;
 import static java.lang.String.format;
 import java.util.List;
 import static java.util.stream.IntStream.range;
+import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -16,19 +17,20 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     private final static String SELECT_FRAGMENT = "SELECT %s FROM %s this";
     private final static String WHERE_FRAGMENT  = "WHERE %s";
     private final static String GROUP_FRAGMENT  = "GROUP BY %s";
+    private final static String HAVING_FRAGMENT = "HAVING %s";
     private final static String ORDER_FRAGMENT  = "ORDER BY %s";       
 
     private final EntityManager entityManager;
 
     private final Class entityClass;
 
-    private String select = "this";
-    
-    private Object[] params = new Object[0];      
+    private String select = "this";      
 
     private String where;
 
     private String group;
+    
+    private String having;
 
     private String order;
 
@@ -39,6 +41,10 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     private int offset = 0;
     
     private boolean distinct = false;
+    
+    private Object[] whereParams  = new Object[0];
+    
+    private Object[] havingParams = new Object[0];
 
     public Relation(ApplicationService service) {
         this.entityManager = service.getEntityManager();
@@ -79,10 +85,11 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     @Override
     public String buildQlString() {
         StringBuilder qlString = new StringBuilder(formattedSelect());
-        if (joins != null) qlString.append(" ").append(joins);
-        if (where != null) qlString.append(" ").append(formattedWhere());
-        if (group != null) qlString.append(" ").append(formattedGroup());
-        if (order != null) qlString.append(" ").append(formattedOrder());
+        if (joins != null)  qlString.append(" ").append(joins);
+        if (where != null)  qlString.append(" ").append(formattedWhere());
+        if (group != null)  qlString.append(" ").append(formattedGroup());
+        if (having != null) qlString.append(" ").append(formattedHaving());
+        if (order != null)  qlString.append(" ").append(formattedOrder());
         return qlString.toString();
     }
     
@@ -97,6 +104,10 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     private String formattedGroup() {
         return format(GROUP_FRAGMENT, group);
     }
+    
+    private String formattedHaving() {
+        return format(HAVING_FRAGMENT, having);
+    }    
 
     private String formattedOrder() {
         return format(ORDER_FRAGMENT, order);
@@ -115,12 +126,16 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     }
 
     private <R> TypedQuery<R> parametize(TypedQuery<R> query) {
-        range(0, params.length).forEach(i -> query.setParameter(i + 1, params[i])); return query;
+        range(0, params().length).forEach(i -> query.setParameter(i + 1, params()[i])); return query;
     }
     
     private Query parametize(Query query) {
-        range(0, params.length).forEach(i -> query.setParameter(i + 1, params[i])); return query;
+        range(0, params().length).forEach(i -> query.setParameter(i + 1, params()[i])); return query;
     }   
+    
+    private Object[] params() {
+        return Stream.of(whereParams, havingParams).flatMap(Stream::of).toArray(String[]::new);
+    }    
     
     //<editor-fold defaultstate="collapsed" desc="Get/Set">
     @Override
@@ -131,6 +146,41 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     @Override
     public Class<T> getEntityClass() {
         return entityClass;
+    }    
+    
+    @Override
+    public void setSelect(String select) {
+        this.select = select;
+    }   
+    
+    @Override
+    public void setJoins(String joins) {
+        this.joins = joins;
+    }
+    
+    @Override
+    public void setWhere(String where) {
+        this.where = where;
+    }
+    
+    @Override
+    public void setWhereParams(Object[] params) {
+        this.whereParams = params;
+    }      
+    
+    @Override
+    public void setGroup(String group) {
+        this.group = group;
+    }
+    
+    @Override
+    public void setHaving(String having) {
+        this.having = having;
+    }    
+
+    @Override
+    public void setHavingParams(Object[] params) {
+        this.havingParams = params;
     }
     
     @Override
@@ -139,39 +189,14 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     }
     
     @Override
-    public void setSelect(String select) {
-        this.select = select;
-    }
+    public void setOrder(String order) {
+        this.order = order;
+    }    
     
     @Override
     public void setOffset(int offset) {
         this.offset = offset;
-    }
-    
-    @Override
-    public void setJoins(String joins) {
-        this.joins = joins;
-    }
-    
-    @Override
-    public void setGroup(String group) {
-        this.group = group;
-    }
-    
-    @Override
-    public void setParams(Object[] params) {
-        this.params = params;
-    }
-
-    @Override
-    public void setWhere(String where) {
-        this.where = where;
-    }
-
-    @Override
-    public void setOrder(String order) {
-        this.order = order;
-    }
+    }    
 
     @Override
     public void setLimit(int limit) {
@@ -186,8 +211,8 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     @Override
     public boolean isDistinct() {
         return distinct;
-    }    
-    
+    }
+        
     //</editor-fold>
 
 }
