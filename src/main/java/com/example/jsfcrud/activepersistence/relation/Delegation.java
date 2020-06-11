@@ -119,7 +119,11 @@ public interface Delegation<T> {
     }
 
     public default Relation<T> group(String values) {
-        return buildRelation().joins(values);
+        return buildRelation().group(values);
+    }
+    
+    public default Relation<T> having(String conditions, Object... params) {
+        return buildRelation().having(conditions, params);
     }
     
     public default Relation<T> distinct() {

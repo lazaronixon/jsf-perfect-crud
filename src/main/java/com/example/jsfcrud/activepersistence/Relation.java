@@ -5,9 +5,10 @@ import com.example.jsfcrud.activepersistence.relation.FinderMethods;
 import com.example.jsfcrud.activepersistence.relation.QueryMethods;
 import com.example.jsfcrud.services.ApplicationService;
 import static java.lang.String.format;
+import static java.util.Arrays.stream;
 import java.util.List;
 import static java.util.stream.IntStream.range;
-import java.util.stream.Stream;
+import static java.util.stream.Stream.concat;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -134,8 +135,8 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     }   
     
     private Object[] params() {
-        return Stream.of(whereParams, havingParams).flatMap(Stream::of).toArray(String[]::new);
-    }    
+        return concat(stream(whereParams), stream(havingParams)).toArray();
+    }
     
     //<editor-fold defaultstate="collapsed" desc="Get/Set">
     @Override

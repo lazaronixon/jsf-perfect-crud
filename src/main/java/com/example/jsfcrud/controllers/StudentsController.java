@@ -28,7 +28,7 @@ public class StudentsController extends ApplicationController implements Seriali
         students = studentsService.all().fetch();
     }
 
-    public void neww() {
+    public void new_() {
         student = new Student();
     }
 
