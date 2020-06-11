@@ -17,7 +17,7 @@ public interface Calculation<T> {
     }
     
     public default long count(String field) {
-        setSelect("COUNT(" + distinctMod() + field + ")"); return this.fetchOneAs(Long.class);
+        setSelect("COUNT(" + distinct() + field + ")"); return this.fetchOneAs(Long.class);
     }
 
     public default <R> R minimum(String field, Class<R> resultClass) {
@@ -44,7 +44,7 @@ public interface Calculation<T> {
         return pluck("this.id");
     }
     
-    private String distinctMod() {
+    private String distinct() {
         return isDistinct() ? "DISTINCT " : "";
     }        
     

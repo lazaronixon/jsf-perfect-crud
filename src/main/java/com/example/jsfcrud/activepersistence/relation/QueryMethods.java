@@ -36,7 +36,7 @@ public interface QueryMethods<T> {
     }
     
     public default Relation<T> select(String values) {        
-        setSelect(distinctMod() + constructor(values)); return (Relation<T>) this;
+        setSelect(distinctExp() + constructor(values)); return (Relation<T>) this;
     }    
     
     public default Relation<T> joins(String values) {
@@ -83,7 +83,7 @@ public interface QueryMethods<T> {
         return format("new %s(%s)", entityName(), values);
     }    
     
-    private String distinctMod() {
+    private String distinctExp() {
         return isDistinct() ? "DISTINCT " : "";
     }    
     
