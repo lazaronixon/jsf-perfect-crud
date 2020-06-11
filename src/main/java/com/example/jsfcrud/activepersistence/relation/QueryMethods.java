@@ -19,7 +19,11 @@ public interface QueryMethods<T> {
     
     public void setOffset(int offset);             
     
-    public void setLimit(int limit);          
+    public void setLimit(int limit);   
+    
+    public void setDistinct(boolean value);
+    
+    public boolean isDistinct();    
 
     public Class<T> getEntityClass();     
     
@@ -27,8 +31,8 @@ public interface QueryMethods<T> {
         return (Relation<T>) this;
     }
     
-    public default Relation<T> select(String values) {
-        setSelect(constructor(values)); return (Relation<T>) this;
+    public default Relation<T> select(String values) {        
+        setSelect(distinctMod() + constructor(values)); return (Relation<T>) this;
     }    
     
     public default Relation<T> joins(String values) {
@@ -55,9 +59,17 @@ public interface QueryMethods<T> {
         setOffset(offset); return (Relation<T>) this;
     }
     
+    public default Relation<T> distinct() {
+        setDistinct(true); return (Relation<T>) this;
+    }
+    
     private String constructor(String values) {
         return format("new %s(%s)", entityName(), values);
-    }
+    }    
+    
+    private String distinctMod() {
+        return isDistinct() ? "DISTINCT " : "";
+    }    
     
     private String entityName() {
         return getEntityClass().getName();

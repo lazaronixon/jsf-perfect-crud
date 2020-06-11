@@ -118,6 +118,10 @@ public interface Delegation<T> {
         return buildRelation().joins(values);
     }
     
+    public default Relation<T> distinct() {
+        return buildRelation().distinct();
+    }
+    
     private Relation<T> buildRelation() {
         return new Relation((ApplicationService) this);
     }

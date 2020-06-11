@@ -9,13 +9,15 @@ public interface Calculation<T> {
     public <R> R fetchOneAs(Class<R> resultClass);      
     
     public void setSelect(String select);      
+    
+    public boolean isDistinct();
 
     public default long count() {
         return count("this");
     }
-
+    
     public default long count(String field) {
-        setSelect("COUNT(" + field + ")"); return this.fetchOneAs(Long.class);
+        setSelect("COUNT(" + distinctMod() + field + ")"); return this.fetchOneAs(Long.class);
     }
 
     public default <R> R minimum(String field, Class<R> resultClass) {
@@ -41,5 +43,9 @@ public interface Calculation<T> {
     public default List ids() {
         return pluck("this.id");
     }
+    
+    private String distinctMod() {
+        return isDistinct() ? "DISTINCT " : "";
+    }        
     
 }

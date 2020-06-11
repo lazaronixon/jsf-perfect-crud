@@ -37,6 +37,8 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     private int limit  = 0;
 
     private int offset = 0;
+    
+    private boolean distinct = false;
 
     public Relation(ApplicationService service) {
         this.entityManager = service.getEntityManager();
@@ -175,6 +177,17 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     public void setLimit(int limit) {
         this.limit = limit;
     }    
+    
+    @Override
+    public void setDistinct(boolean distinct) {
+        this.distinct = distinct;
+    }    
+    
+    @Override
+    public boolean isDistinct() {
+        return distinct;
+    }    
+    
     //</editor-fold>
 
 }
