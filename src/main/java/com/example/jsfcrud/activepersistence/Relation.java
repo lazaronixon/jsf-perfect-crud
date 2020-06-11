@@ -19,7 +19,7 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     private final static String WHERE_FRAGMENT  = "WHERE %s";
     private final static String GROUP_FRAGMENT  = "GROUP BY %s";
     private final static String HAVING_FRAGMENT = "HAVING %s";
-    private final static String ORDER_FRAGMENT  = "ORDER BY %s";       
+    private final static String ORDER_FRAGMENT  = "ORDER BY %s";    
 
     private final EntityManager entityManager;
 
@@ -46,6 +46,10 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     private Object[] whereParams  = new Object[0];
     
     private Object[] havingParams = new Object[0];
+    
+    private String[] includes = new String[0];
+    
+    private String[] eagerLoads = new String[0];
 
     public Relation(ApplicationService service) {
         this.entityManager = service.getEntityManager();
@@ -127,16 +131,23 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     }
 
     private <R> TypedQuery<R> parametize(TypedQuery<R> query) {
-        range(0, params().length).forEach(i -> query.setParameter(i + 1, params()[i])); return query;
+        applyParams(query); return query;
     }
     
-    private Query parametize(Query query) {
-        range(0, params().length).forEach(i -> query.setParameter(i + 1, params()[i])); return query;
-    }   
+    private Query parametize(Query query) {       
+        applyParams(query); return query;
+    }
+    
+    private void applyParams(Query query) {
+        query.setHint("eclipselink.batch.type", "IN");
+        range(0, params().length).forEach(i -> query.setParameter(i + 1, params()[i])); 
+        range(0, includes.length).forEach(i -> query.setHint("eclipselink.batch", includes[i]));
+        range(0, eagerLoads.length).forEach(i -> query.setHint("eclipselink.left-join-fetch", eagerLoads[i]));        
+    }
     
     private Object[] params() {
         return concat(stream(whereParams), stream(havingParams)).toArray();
-    }
+    }    
     
     //<editor-fold defaultstate="collapsed" desc="Get/Set">
     @Override
@@ -213,6 +224,16 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     public boolean isDistinct() {
         return distinct;
     }
+    
+    @Override
+    public void setIncludes(String[] includes) {
+        this.includes = includes;
+    }
+
+    @Override
+    public void setEagerLoads(String[] eagerLoads) {
+        this.eagerLoads = eagerLoads;
+    }    
         
     //</editor-fold>
 

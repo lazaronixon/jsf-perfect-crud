@@ -28,6 +28,10 @@ public interface QueryMethods<T> {
     public void setDistinct(boolean value);
     
     public boolean isDistinct();    
+    
+    public void setIncludes(String[] values);
+    
+    public void setEagerLoads(String[] values);
 
     public Class<T> getEntityClass();     
     
@@ -77,7 +81,15 @@ public interface QueryMethods<T> {
     
     public default Relation<T> none() {
         setWhere("1 = 0"); return (Relation<T>) this;
-    }  
+    }
+    
+    public default Relation<T> includes(String... values) {
+        setIncludes(values); return (Relation<T>) this; 
+    }
+    
+    public default Relation<T> eagerLoads(String... values) {
+        setEagerLoads(values); return (Relation<T>) this; 
+    }
     
     private String constructor(String values) {
         return format("new %s(%s)", entityName(), values);

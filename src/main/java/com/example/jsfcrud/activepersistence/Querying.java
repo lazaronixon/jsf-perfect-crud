@@ -5,7 +5,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 public interface Querying<T> {
-
+    
     public EntityManager getEntityManager();
 
     public Class<T> getEntityClass();
@@ -32,6 +32,6 @@ public interface Querying<T> {
     
     public default Query buildQueryAlt(String qlString) {
         return getEntityManager().createQuery(qlString);
-    }    
+    }
 
 }

@@ -138,6 +138,14 @@ public interface Delegation<T> {
         return buildRelation().none();
     }       
     
+    public default Relation<T> includes(String... values) {
+        return buildRelation().includes(values);
+    }
+    
+    public default Relation<T> eagerLoads(String... values) {
+        return buildRelation().eagerLoads(values);
+    }
+    
     private Relation<T> buildRelation() {
         return new Relation((ApplicationService) this);
     }
