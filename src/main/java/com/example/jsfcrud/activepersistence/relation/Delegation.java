@@ -94,8 +94,8 @@ public interface Delegation<T> {
         return buildRelation().where(conditions, params);
     }
 
-    public default Relation<T> order(String arg) {
-        return buildRelation().order(arg);
+    public default Relation<T> order(String values) {
+        return buildRelation().order(values);
     }
 
     public default Relation<T> limit(int value) {
@@ -106,16 +106,16 @@ public interface Delegation<T> {
         return buildRelation().offset(value);
     }
 
-    public default Relation<T> select(String... fields) {
-        return buildRelation().select(fields);
+    public default Relation<T> select(String values) {
+        return buildRelation().select(values);
     }
 
-    public default Relation<T> joins(String joins) {
-        return buildRelation().joins(joins);
+    public default Relation<T> joins(String values) {
+        return buildRelation().joins(values);
     }
 
-    public default Relation<T> group(String group) {
-        return buildRelation().joins(group);
+    public default Relation<T> group(String values) {
+        return buildRelation().joins(values);
     }
     
     private Relation<T> buildRelation() {

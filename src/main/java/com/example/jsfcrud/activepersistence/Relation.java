@@ -22,9 +22,9 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
 
     private final Class entityClass;
 
-    private Object[] params = new Object[0];
-
-    private String fields = "this";
+    private String select = "this";
+    
+    private Object[] params = new Object[0];      
 
     private String where;
 
@@ -32,11 +32,11 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
 
     private String order;
 
-    private String joins;
+    private String joins;      
 
-    private int limit;
+    private int limit  = 0;
 
-    private int offset;
+    private int offset = 0;
 
     public Relation(ApplicationService service) {
         this.entityManager = service.getEntityManager();
@@ -85,7 +85,7 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     }
     
     private String formattedSelect() {
-        return format(SELECT_FRAGMENT, fields, entityClass.getSimpleName());
+        return format(SELECT_FRAGMENT, select, entityClass.getSimpleName());
     }
 
     private String formattedWhere() {
@@ -137,18 +137,18 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuil
     }
     
     @Override
-    public void setFields(String fields) {
-        this.fields = fields;
+    public void setSelect(String select) {
+        this.select = select;
     }
     
     @Override
-    public void setOffset(int value) {
-        this.offset = value;
+    public void setOffset(int offset) {
+        this.offset = offset;
     }
     
     @Override
-    public void setJoins(String value) {
-        this.joins = value;
+    public void setJoins(String joins) {
+        this.joins = joins;
     }
     
     @Override

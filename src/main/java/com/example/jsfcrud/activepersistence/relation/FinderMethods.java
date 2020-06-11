@@ -3,13 +3,13 @@ package com.example.jsfcrud.activepersistence.relation;
 import java.util.List;
 import static java.util.Optional.ofNullable;
 
-public interface FinderMethods<T> extends QueryMethods<T> {       
-    
-    public boolean fetchExists();     
+public interface FinderMethods<T> extends QueryMethods<T> {             
     
     public String getOrder();
     
-    public String buildQlString();
+    public boolean fetchExists();      
+    
+    public String buildQlString();       
     
     public default T take() {
         return limit(1).fetchOne();
