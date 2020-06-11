@@ -42,6 +42,10 @@ public interface FinderMethods<T> extends QueryMethods<T> {
     public default T findByAlt(String conditions, Object... params) {
         return where(conditions, params).takeAlt();
     }
+    
+    public default boolean exists(String conditions, Object... params) {
+        return where(conditions, params).exists();
+    }
 
     public default boolean exists() {
         return limit(1).fetchExists();

@@ -85,6 +85,10 @@ public interface Delegation<T> {
     public default boolean exists() {
         return buildRelation().exists();
     }
+    
+    public default boolean exists(String conditions, Object... params) {
+        return buildRelation().exists(conditions, params);
+    }  
 
     public default Relation<T> all() {
         return buildRelation().all();
