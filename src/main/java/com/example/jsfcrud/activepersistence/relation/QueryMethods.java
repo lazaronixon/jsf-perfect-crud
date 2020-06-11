@@ -45,7 +45,7 @@ public interface QueryMethods<T> {
     
     public default Relation<T> where(String conditions, Object... params) {
         setWhere(conditions); setWhereParams(params); return (Relation<T>) this;
-    }     
+    }      
     
     public default Relation<T> group(String values) {
         setGroup(values); return (Relation<T>) this;
@@ -74,6 +74,10 @@ public interface QueryMethods<T> {
     public default Relation<T> distinct(boolean value) {
         setDistinct(value); return (Relation<T>) this;
     }    
+    
+    public default Relation<T> none() {
+        setWhere("1 = 0"); return (Relation<T>) this;
+    }  
     
     private String constructor(String values) {
         return format("new %s(%s)", entityName(), values);
