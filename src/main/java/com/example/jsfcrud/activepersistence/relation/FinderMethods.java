@@ -1,15 +1,15 @@
 package com.example.jsfcrud.activepersistence.relation;
 
+import static java.lang.String.join;
 import java.util.List;
-import static java.util.Optional.ofNullable;
 
-public interface FinderMethods<T> extends QueryMethods<T> {             
-    
-    public String getOrder();
+public interface FinderMethods<T> extends QueryMethods<T> {                 
     
     public boolean fetchExists();      
     
     public String buildQlString();       
+    
+    public List<String> getOrderValues();    
     
     public default T take() {
         return limit(1).fetchOne();
@@ -64,11 +64,11 @@ public interface FinderMethods<T> extends QueryMethods<T> {
     }    
     
     private String firstOrder() {
-        return ofNullable(getOrder()).orElse("this.id");
+        return getOrderValues().isEmpty() ? "this.id" : join(", ", getOrderValues());
     }
 
     private String lastOrder() {
-        return ofNullable(getOrder()).orElse("this.id DESC");
-    }    
+        return getOrderValues().isEmpty() ? "this.id DESC" : join(", ", getOrderValues());
+    }
     
 }

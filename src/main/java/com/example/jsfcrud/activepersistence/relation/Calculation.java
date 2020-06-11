@@ -8,7 +8,7 @@ public interface Calculation<T> {
     
     public <R> R fetchOneAs(Class<R> resultClass);      
     
-    public void setSelect(String select);      
+    public void setSelectString(String select);      
     
     public boolean isDistinct();
 
@@ -17,27 +17,27 @@ public interface Calculation<T> {
     }
     
     public default long count(String field) {
-        setSelect("COUNT(" + distinct() + field + ")"); return this.fetchOneAs(Long.class);
+        setSelectString("COUNT(" + distinct() + field + ")"); return this.fetchOneAs(Long.class);
     }
 
     public default <R> R minimum(String field, Class<R> resultClass) {
-        setSelect("MIN(" + field + ")"); return this.fetchOneAs(resultClass);
+        setSelectString("MIN(" + field + ")"); return this.fetchOneAs(resultClass);
     }
 
     public default <R> R maximum(String field, Class<R> resultClass) {
-        setSelect("MAX(" + field + ")"); return this.fetchOneAs(resultClass);
+        setSelectString("MAX(" + field + ")"); return this.fetchOneAs(resultClass);
     }
 
     public default <R> R average(String field, Class<R> resultClass) {
-        setSelect("AVG(" + field + ")"); return this.fetchOneAs(resultClass);
+        setSelectString("AVG(" + field + ")"); return this.fetchOneAs(resultClass);
     }
 
     public default <R> R sum(String field, Class<R> resultClass) {
-        setSelect("SUM(" + field + ")"); return this.fetchOneAs(resultClass);
+        setSelectString("SUM(" + field + ")"); return this.fetchOneAs(resultClass);
     }
 
     public default List pluck(String fields) {
-        setSelect(fields); return this.fetchAlt();
+        setSelectString(fields); return this.fetchAlt();
     }
 
     public default List ids() {

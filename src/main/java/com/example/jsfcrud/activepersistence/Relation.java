@@ -5,10 +5,11 @@ import com.example.jsfcrud.activepersistence.relation.FinderMethods;
 import com.example.jsfcrud.activepersistence.relation.QueryMethods;
 import com.example.jsfcrud.services.ApplicationService;
 import static java.lang.String.format;
-import static java.util.Arrays.stream;
+import static java.lang.String.join;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import static java.util.stream.IntStream.range;
-import static java.util.stream.Stream.concat;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -25,31 +26,29 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
 
     private final Class entityClass;
 
-    private String select = "this";      
+    private final List<String> selectValues = Arrays.asList("this");      
 
-    private String where;
+    private final List<String> whereValues  = new ArrayList();
 
-    private String group;
+    private final List<String> groupValues  = new ArrayList();
     
-    private String having;
+    private final List<String> havingValues = new ArrayList();
 
-    private String order;
+    private final List<String> orderValues  = new ArrayList();
 
-    private String joins;      
+    private final List<String> joinsValues  = new ArrayList();
+    
+    private final List<Object> params = new ArrayList();    
+    
+    private final List<String> includesValues = new ArrayList();
+    
+    private final List<String> eagerLoadsValues = new ArrayList();    
 
     private int limit  = 0;
 
     private int offset = 0;
     
-    private boolean distinct = false;
-    
-    private Object[] whereParams  = new Object[0];
-    
-    private Object[] havingParams = new Object[0];
-    
-    private String[] includes = new String[0];
-    
-    private String[] eagerLoads = new String[0];
+    private boolean distinct = false;    
 
     public Relation(ApplicationService service) {
         this.entityManager = service.getEntityManager();
@@ -90,32 +89,32 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     @Override
     public String buildQlString() {
         StringBuilder qlString = new StringBuilder(formattedSelect());
-        if (joins != null)  qlString.append(" ").append(joins);
-        if (where != null)  qlString.append(" ").append(formattedWhere());
-        if (group != null)  qlString.append(" ").append(formattedGroup());
-        if (having != null) qlString.append(" ").append(formattedHaving());
-        if (order != null)  qlString.append(" ").append(formattedOrder());
+        if (!joinsValues.isEmpty())  qlString.append(" ").append(separatedBySpace(joinsValues));
+        if (!whereValues.isEmpty())  qlString.append(" ").append(formattedWhere());
+        if (!groupValues.isEmpty())  qlString.append(" ").append(formattedGroup());
+        if (!havingValues.isEmpty()) qlString.append(" ").append(formattedHaving());
+        if (!orderValues.isEmpty())  qlString.append(" ").append(formattedOrder());
         return qlString.toString();
     }
     
     private String formattedSelect() {
-        return format(SELECT_FRAGMENT, select, entityClass.getSimpleName());
+        return format(SELECT_FRAGMENT, separatedByComma(selectValues), entityClass.getSimpleName());
     }
 
     private String formattedWhere() {
-        return format(WHERE_FRAGMENT, where);
+        return format(WHERE_FRAGMENT, separatedByAnd(whereValues));
     }
 
     private String formattedGroup() {
-        return format(GROUP_FRAGMENT, group);
+        return format(GROUP_FRAGMENT, separatedByComma(groupValues));
     }
     
     private String formattedHaving() {
-        return format(HAVING_FRAGMENT, having);
-    }    
+        return format(HAVING_FRAGMENT, separatedByAnd(havingValues));
+    }
 
     private String formattedOrder() {
-        return format(ORDER_FRAGMENT, order);
+        return format(ORDER_FRAGMENT, separatedByComma(orderValues));
     }    
     
     private TypedQuery<T> buildParameterizedQuery(String qlString) {
@@ -130,26 +129,36 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
         return parametize(buildQueryAlt(qlString)).setMaxResults(limit).setFirstResult(offset);
     }
 
-    private <R> TypedQuery<R> parametize(TypedQuery<R> query) {
-        applyParams(query); return query;
+    private <R> TypedQuery<R> parametize(TypedQuery<R> query) {        
+        applyParams(query); applyHints(query); return query;
     }
     
     private Query parametize(Query query) {       
-        applyParams(query); return query;
+        applyParams(query); applyHints(query); return query;
     }
     
-    private void applyParams(Query query) {
+    private void applyParams(Query query) {      
+        range(0, params.size()).forEach(i -> query.setParameter(i + 1, params.get(i)));                 
+    }
+    
+    private void applyHints(Query query) {
+        includesValues.forEach(i -> query.setHint("eclipselink.batch", i));
+        eagerLoadsValues.forEach(i -> query.setHint("eclipselink.left-join-fetch", i));
         query.setHint("eclipselink.batch.type", "IN");
-        range(0, params().length).forEach(i -> query.setParameter(i + 1, params()[i])); 
-        range(0, includes.length).forEach(i -> query.setHint("eclipselink.batch", includes[i]));
-        range(0, eagerLoads.length).forEach(i -> query.setHint("eclipselink.left-join-fetch", eagerLoads[i]));        
     }
     
-    private Object[] params() {
-        return concat(stream(whereParams), stream(havingParams)).toArray();
-    }    
+    private String separatedBySpace(List<String> values) {
+        return join(" ", values);
+    }
     
-    //<editor-fold defaultstate="collapsed" desc="Get/Set">
+    private String separatedByAnd(List<String> values) {
+        return join("AND ", values);
+    }  
+    
+    private String separatedByComma(List<String> values) {
+        return join(", ", values);
+    }   
+    
     @Override
     public EntityManager getEntityManager() {
         return entityManager;
@@ -161,48 +170,59 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     }    
     
     @Override
-    public void setSelect(String select) {
-        this.select = select;
-    }   
-    
-    @Override
-    public void setJoins(String joins) {
-        this.joins = joins;
+    public void addSelect(String select) {
+        this.selectValues.add(select);
     }
     
     @Override
-    public void setWhere(String where) {
-        this.where = where;
+    public void setSelectString(String select) {
+        this.selectValues.clear();
+        this.addSelect(select);
     }
     
     @Override
-    public void setWhereParams(Object[] params) {
-        this.whereParams = params;
+    public void addJoins(String joins) {
+        this.joinsValues.add(joins);
+    }
+    
+    @Override
+    public void addWhere(String where) {
+        this.whereValues.add(where);
+    }
+    
+    @Override
+    public void addParams(Object[] params) {
+        this.params.add(params);
     }      
     
     @Override
-    public void setGroup(String group) {
-        this.group = group;
+    public void addGroup(String group) {
+        this.groupValues.add(group);
     }
     
     @Override
-    public void setHaving(String having) {
-        this.having = having;
+    public void addHaving(String having) {
+        this.havingValues.add(having);
+    }
+    
+    @Override
+    public List<String> getOrderValues() {
+        return orderValues;
+    }
+    
+    @Override
+    public void addOrder(String order) {
+        this.orderValues.add(order);
     }    
+    
+    @Override
+    public void addIncludes(String[] includes) {
+        range(0, includesValues.size()).forEach(i -> includesValues.add(includes[i]));
+    }
 
     @Override
-    public void setHavingParams(Object[] params) {
-        this.havingParams = params;
-    }
-    
-    @Override
-    public String getOrder() {
-        return order;
-    }
-    
-    @Override
-    public void setOrder(String order) {
-        this.order = order;
+    public void addEagerLoads(String[] eagerLoads) {
+        range(0, includesValues.size()).forEach(i -> includesValues.add(eagerLoads[i]));
     }    
     
     @Override
@@ -226,15 +246,18 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     }
     
     @Override
-    public void setIncludes(String[] includes) {
-        this.includes = includes;
+    public void clearSelect() {
+        this.selectValues.clear();
     }
 
     @Override
-    public void setEagerLoads(String[] eagerLoads) {
-        this.eagerLoads = eagerLoads;
-    }    
-        
-    //</editor-fold>
+    public void clearWhere() {
+        this.whereValues.clear();
+        this.params.clear();
+    }
 
+    @Override
+    public void clearOrder() {
+        this.orderValues.clear();
+    }    
 }

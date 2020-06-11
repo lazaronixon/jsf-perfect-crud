@@ -5,21 +5,19 @@ import static java.lang.String.format;
 
 public interface QueryMethods<T> { 
     
-    public void setSelect(String select);    
+    public void addSelect(String select);    
     
-    public void setJoins(String joins);     
+    public void addJoins(String joins);     
     
-    public void setWhere(String where);
+    public void addWhere(String where);
 
-    public void setWhereParams(Object[] params);   
+    public void addParams(Object[] params);   
     
-    public void setGroup(String group);  
+    public void addGroup(String group);  
     
-    public void setHaving(String having);     
+    public void addHaving(String having);
     
-    public void setHavingParams(Object[] params);         
-    
-    public void setOrder(String order);    
+    public void addOrder(String order);    
     
     public void setOffset(int offset);             
     
@@ -29,9 +27,15 @@ public interface QueryMethods<T> {
     
     public boolean isDistinct();    
     
-    public void setIncludes(String[] values);
+    public void addIncludes(String[] includes);
     
-    public void setEagerLoads(String[] values);
+    public void addEagerLoads(String[] eagerLoads);
+    
+    public void clearSelect();
+    
+    public void clearWhere();
+    
+    public void clearOrder();
 
     public Class<T> getEntityClass();     
     
@@ -40,27 +44,27 @@ public interface QueryMethods<T> {
     }
     
     public default Relation<T> select(String values) {        
-        setSelect(distinctExp() + constructor(values)); return (Relation<T>) this;
+        addSelect(distinctExp() + constructor(values)); return (Relation<T>) this;
     }    
     
     public default Relation<T> joins(String values) {
-        setJoins(values); return (Relation<T>) this;
+        addJoins(values); return (Relation<T>) this;
     }    
     
     public default Relation<T> where(String conditions, Object... params) {
-        setWhere(conditions); setWhereParams(params); return (Relation<T>) this;
-    }      
+        addWhere(conditions); addParams(params); return (Relation<T>) this;
+    }
     
     public default Relation<T> group(String values) {
-        setGroup(values); return (Relation<T>) this;
+        addGroup(values); return (Relation<T>) this;
     }    
     
     public default Relation<T> having(String conditions, Object... params) {
-        setHaving(conditions); setHavingParams(params); return (Relation<T>) this;
-    }       
+        addHaving(conditions); addParams(params); return (Relation<T>) this;
+    }     
     
     public default Relation<T> order(String order) {
-        setOrder(order); return (Relation<T>) this;
+        addOrder(order); return (Relation<T>) this;
     }     
     
     public default Relation<T> limit(int limit) {
@@ -80,16 +84,28 @@ public interface QueryMethods<T> {
     }    
     
     public default Relation<T> none() {
-        setWhere("1 = 0"); return (Relation<T>) this;
+        addWhere("1 = 0"); return (Relation<T>) this;
     }
     
-    public default Relation<T> includes(String... values) {
-        setIncludes(values); return (Relation<T>) this; 
+    public default Relation<T> includes(String... includes) {
+        addIncludes(includes); return (Relation<T>) this; 
     }
     
-    public default Relation<T> eagerLoads(String... values) {
-        setEagerLoads(values); return (Relation<T>) this; 
+    public default Relation<T> eagerLoads(String... eagerLoads) {
+        addEagerLoads(eagerLoads); return (Relation<T>) this; 
     }
+    
+    public default Relation<T> reselect(String values) {
+        clearSelect(); return select(values);
+    }
+    
+    public default Relation<T> rewhere(String conditions, Object... params) {
+        clearWhere(); return where(conditions, params);
+    }   
+    
+    public default Relation<T> reorder(String fields) {
+        clearOrder(); return order(fields);
+    }     
     
     private String constructor(String values) {
         return format("new %s(%s)", entityName(), values);
