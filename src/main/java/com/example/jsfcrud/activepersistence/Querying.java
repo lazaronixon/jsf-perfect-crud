@@ -4,7 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-public interface QueryBuilders<T> {
+public interface Querying<T> {
 
     public EntityManager getEntityManager();
 

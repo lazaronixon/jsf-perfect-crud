@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, QueryBuilders<T>, Calculation<T> {
+public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<T>, Calculation<T> {
     
     private final static String SELECT_FRAGMENT = "SELECT %s FROM %s this";
     private final static String WHERE_FRAGMENT  = "WHERE %s";
