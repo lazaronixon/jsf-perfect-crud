@@ -71,6 +71,10 @@ public interface QueryMethods<T> {
         setDistinct(true); return (Relation<T>) this;
     }
     
+    public default Relation<T> distinct(boolean value) {
+        setDistinct(value); return (Relation<T>) this;
+    }    
+    
     private String constructor(String values) {
         return format("new %s(%s)", entityName(), values);
     }    
