@@ -65,11 +65,15 @@ public class FinderMethods<T> {
     }    
     
     private String firstOrder() {
-        return relation.getOrderValues().isEmpty() ? "this.id" : join(", ", relation.getOrderValues());
+        return relation.getOrderValues().isEmpty() ? "this.id" : separatedByComma(relation.getOrderValues());
     }
 
     private String lastOrder() {
-        return relation.getOrderValues().isEmpty() ? "this.id DESC" : join(", ", relation.getOrderValues());
+        return relation.getOrderValues().isEmpty() ? "this.id DESC" : separatedByComma(relation.getOrderValues());
+    }
+    
+    private String separatedByComma(List<String> values) {
+        return join(", ", values);
     }
     
 }

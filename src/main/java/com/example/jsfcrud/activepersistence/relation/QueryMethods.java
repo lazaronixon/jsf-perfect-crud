@@ -2,6 +2,7 @@ package com.example.jsfcrud.activepersistence.relation;
 
 import com.example.jsfcrud.activepersistence.Relation;
 import static java.lang.String.format;
+import static java.lang.String.join;
 
 public class QueryMethods<T> {
     
@@ -15,28 +16,28 @@ public class QueryMethods<T> {
         return relation;
     }
     
-    public Relation<T> select(String values) {        
-        relation.addSelect(constructor(values)); return relation;
+    public Relation<T> select(String... fields) {    
+        relation.addSelect(constructor(fields)); return relation;
     }    
     
-    public Relation<T> joins(String values) {
-        relation.addJoins(values); return relation;
+    public Relation<T> joins(String... values) {
+        relation.addJoins(separatedBySpace(values)); return relation;
     }    
     
     public Relation<T> where(String conditions, Object... params) {
         relation.addWhere(conditions); relation.addParams(params); return relation;
     }
     
-    public Relation<T> group(String values) {
-        relation.addGroup(values); return relation;
+    public Relation<T> group(String... fields) {
+        relation.addGroup(separatedByComma(fields)); return relation;
     }    
     
     public Relation<T> having(String conditions, Object... params) {
         relation.addHaving(conditions); relation.addParams(params); return relation;
     }     
     
-    public Relation<T> order(String order) {
-        relation.addOrder(order); return relation;
+    public Relation<T> order(String... fields) {
+        relation.addOrder(separatedByComma(fields)); return relation;
     }     
     
     public Relation<T> limit(int limit) {
@@ -67,24 +68,32 @@ public class QueryMethods<T> {
         relation.addEagerLoads(eagerLoads); return relation; 
     }
     
-    public Relation<T> reselect(String values) {
-        relation.clearSelect(); return select(values);
+    public Relation<T> reselect(String... fields) {
+        relation.clearSelect(); return select(fields);
     }
     
     public Relation<T> rewhere(String conditions, Object... params) {
         relation.clearWhere(); return where(conditions, params);
     }   
     
-    public Relation<T> reorder(String fields) {
+    public Relation<T> reorder(String... fields) {
         relation.clearOrder(); return order(fields);
     }     
     
-    private String constructor(String values) {
-        return format("new %s(%s)", entityName(), values);
+    private String constructor(String[] fields) {
+        return format("new %s(%s)", entityName(), separatedByComma(fields));
     }
     
     private String entityName() {
         return relation.getEntityClass().getName();
+    }
+    
+    private String separatedByComma(String[] values) {
+        return join(", ", values);
+    }
+
+    private String separatedBySpace(String[] values) {
+        return join(" ", values);
     }
 
 }

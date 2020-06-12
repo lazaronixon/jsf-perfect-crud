@@ -102,109 +102,46 @@ public class Relation<T> implements Querying<T> {
     
     public boolean fetchExists() {
         return buildParameterizedQuery(toJpql()).getResultStream().findAny().isPresent();
-    }       
-    
-    public void addSelect(String select) {
-        this.selectValues.add(select);
     }
     
-    public void setSelectString(String select) {
-        this.selectValues.clear();
-        this.addSelect(select);
-    }
-    
-    public void addJoins(String joins) {
-        this.joinsValues.add(joins);
-    }
-    
-    public void addWhere(String where) {
-        this.whereValues.add(where);
-    }
-    
-    public void addParams(Object[] params) {
-        this.params.add(params);
-    }      
-    
-    public void addGroup(String group) {
-        this.groupValues.add(group);
-    }
-    
-    public void addHaving(String having) {
-        this.havingValues.add(having);
-    }
-    
-    public List<String> getOrderValues() {
-        return orderValues;
-    }
-    
-    public void addOrder(String order) {
-        this.orderValues.add(order);
+    public String toJpql() {
+        StringBuilder qlString = new StringBuilder(formattedSelect());
+        if (!joinsValues.isEmpty())  qlString.append(" ").append(separatedBySpace(joinsValues));
+        if (!whereValues.isEmpty())  qlString.append(" ").append(formattedWhere());
+        if (!groupValues.isEmpty())  qlString.append(" ").append(formattedGroup());
+        if (!havingValues.isEmpty()) qlString.append(" ").append(formattedHaving());
+        if (!orderValues.isEmpty())  qlString.append(" ").append(formattedOrder());
+        return qlString.toString();
     }    
     
-    public void addIncludes(String[] includes) {
-        includesValues.addAll(List.of(includes));
-    }
-
-    public void addEagerLoads(String[] eagerLoads) {
-        eagerLoadsValues.addAll(List.of(eagerLoads));
-    }    
-    
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }    
-
-    public void setLimit(int limit) {
-        this.limit = limit;
-    }    
-    
-    public void setDistinct(boolean distinct) {
-        this.distinct = distinct;
-    }    
-    
-    public void setCalculating(boolean calculating) {
-        this.calculating = calculating;
-    }
-    
-    public void clearSelect() {
-        this.selectValues.clear();
-    }
-
-    public void clearWhere() {
-        this.whereValues.clear();
-        this.params.clear();
-    }
-
-    public void clearOrder() {
-        this.orderValues.clear();
-    }
-    
+    //<editor-fold defaultstate="collapsed" desc="query methods">
     public Relation<T> all() {
         return queryMethods.all();
     }
     
-    public Relation<T> select(String values) {        
-        return queryMethods.select(values);
-    }    
+    public Relation<T> select(String... fields) {
+        return queryMethods.select(fields);
+    }
     
-    public Relation<T> joins(String values) {
+    public Relation<T> joins(String... values) {
         return queryMethods.joins(values);
-    }    
+    }
     
     public Relation<T> where(String conditions, Object... params) {
         return queryMethods.where(conditions, params);
     }
     
-    public Relation<T> group(String values) {
-        return queryMethods.group(values);
-    }    
+    public Relation<T> group(String... fields) {
+        return queryMethods.group(fields);
+    }
     
     public Relation<T> having(String conditions, Object... params) {
         return queryMethods.having(conditions, params);
-    }     
+    }
     
-    public Relation<T> order(String order) {
+    public Relation<T> order(String... order) {
         return queryMethods.order(order);
-    }     
+    }
     
     public Relation<T> limit(int limit) {
         return queryMethods.limit(limit);
@@ -234,46 +171,48 @@ public class Relation<T> implements Querying<T> {
         return queryMethods.eagerLoads(eagerLoads);
     }
     
-    public Relation<T> reselect(String values) {
-        return queryMethods.reselect(values);
+    public Relation<T> reselect(String... fields) {
+        return queryMethods.reselect(fields);
     }
     
     public Relation<T> rewhere(String conditions, Object... params) {
         return queryMethods.rewhere(conditions, params);
-    }   
-    
-    public Relation<T> reorder(String fields) {
-        return queryMethods.reorder(fields);
     }
     
+    public Relation<T> reorder(String... fields) {
+        return queryMethods.reorder(fields);
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="finder methods">
     public T take() {
         return finderMethods.take();
     }
-
+    
     public T takeAlt() {
         return finderMethods.takeAlt();
     }
-
+    
     public T first() {
         return finderMethods.first();
     }
-
+    
     public T firstAlt() {
         return finderMethods.firstAlt();
     }
-
+    
     public T last() {
         return finderMethods.last();
     }
-
+    
     public T lastAlt() {
         return finderMethods.lastAlt();
     }
-
+    
     public T findBy(String conditions, Object... params) {
         return finderMethods.findBy(conditions, params);
     }
-
+    
     public T findByAlt(String conditions, Object... params) {
         return finderMethods.findByAlt(conditions, params);
     }
@@ -281,73 +220,143 @@ public class Relation<T> implements Querying<T> {
     public boolean exists(String conditions, Object... params) {
         return finderMethods.exists(conditions, params);
     }
-
+    
     public boolean exists() {
         return finderMethods.exists();
     }
-
+    
     public List<T> take(int limit) {
         return finderMethods.take(limit);
     }
-
+    
     public List<T> first(int limit) {
         return finderMethods.first(limit);
     }
-
+    
     public List<T> last(int limit) {
         return finderMethods.last(limit);
     }
+    //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="calculation">
     public long count() {
         return calculation.count();
     }
     
-    public long count(String field) {        
+    public long count(String field) {
         return calculation.count(field);
     }
-
+    
     public <R> R minimum(String field, Class<R> resultClass) {
         return (R) calculation.minimum(field, entityClass);
     }
-
+    
     public <R> R maximum(String field, Class<R> resultClass) {
         return (R) calculation.maximum(field, entityClass);
     }
-
+    
     public <R> R average(String field, Class<R> resultClass) {
         return (R) calculation.average(field, entityClass);
     }
-
+    
     public <R> R sum(String field, Class<R> resultClass) {
         return (R) calculation.sum(field, entityClass);
     }
-
-    public List pluck(String fields) {
+    
+    public List pluck(String... fields) {
         return calculation.pluck(fields);
     }
-
+    
     public List ids() {
         return calculation.ids();
-    }      
+    }
+    //</editor-fold>     
+
+    //<editor-fold defaultstate="collapsed" desc="relation methods">
+    public void addSelect(String select) {
+        this.selectValues.add(select);
+    }
     
-    public String toJpql() {
-        StringBuilder qlString = new StringBuilder(formattedSelect());
-        if (!joinsValues.isEmpty())  qlString.append(" ").append(separatedBySpace(joinsValues));
-        if (!whereValues.isEmpty())  qlString.append(" ").append(formattedWhere());
-        if (!groupValues.isEmpty())  qlString.append(" ").append(formattedGroup());
-        if (!havingValues.isEmpty()) qlString.append(" ").append(formattedHaving());
-        if (!orderValues.isEmpty())  qlString.append(" ").append(formattedOrder());
-        return qlString.toString();
-    }    
+    public void setSelect(String select) {
+        this.selectValues.clear();
+        this.addSelect(select);
+    }
     
+    public void addJoins(String joins) {
+        this.joinsValues.add(joins);
+    }
+    
+    public void addWhere(String where) {
+        this.whereValues.add(where);
+    }
+    
+    public void addParams(Object[] params) {
+        this.params.add(params);
+    }
+    
+    public void addGroup(String group) {
+        this.groupValues.add(group);
+    }
+    
+    public void addHaving(String having) {
+        this.havingValues.add(having);
+    }
+    
+    public List<String> getOrderValues() {
+        return orderValues;
+    }
+    
+    public void addOrder(String order) {
+        this.orderValues.add(order);
+    }
+    
+    public void addIncludes(String[] includes) {
+        includesValues.addAll(List.of(includes));
+    }
+    
+    public void addEagerLoads(String[] eagerLoads) {
+        eagerLoadsValues.addAll(List.of(eagerLoads));
+    }
+    
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+    
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
+    
+    public void setDistinct(boolean distinct) {
+        this.distinct = distinct;
+    }
+    
+    public void setCalculating(boolean calculating) {
+        this.calculating = calculating;
+    }
+    
+    public void clearSelect() {
+        this.selectValues.clear();
+    }
+    
+    public void clearWhere() {
+        this.whereValues.clear();
+        this.params.clear();
+    }
+    
+    public void clearOrder() {
+        this.orderValues.clear();
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="private methods">
     private String formattedSelect() {
         return format(SELECT_FRAGMENT, distinctExp() + separatedByComma(selectValues), entityClass.getSimpleName());
     }
-
+    
     private String formattedWhere() {
         return format(WHERE_FRAGMENT, separatedByAnd(whereValues));
     }
-
+    
     private String formattedGroup() {
         return format(GROUP_FRAGMENT, separatedByComma(groupValues));
     }
@@ -355,10 +364,10 @@ public class Relation<T> implements Querying<T> {
     private String formattedHaving() {
         return format(HAVING_FRAGMENT, separatedByAnd(havingValues));
     }
-
+    
     private String formattedOrder() {
         return format(ORDER_FRAGMENT, separatedByComma(orderValues));
-    }    
+    }
     
     private TypedQuery<T> buildParameterizedQuery(String qlString) {
         return parametize(buildQuery(qlString)).setMaxResults(limit).setFirstResult(offset);
@@ -366,22 +375,22 @@ public class Relation<T> implements Querying<T> {
     
     private <R> TypedQuery<R> buildParameterizedQuery(String qlString, Class<R> resultClass) {
         return parametize(buildQuery(qlString, resultClass)).setMaxResults(limit).setFirstResult(offset);
-    }        
+    }
     
     private Query buildParameterizedQueryAlt(String qlString) {
         return parametize(buildQueryAlt(qlString)).setMaxResults(limit).setFirstResult(offset);
     }
-
-    private <R> TypedQuery<R> parametize(TypedQuery<R> query) {        
+    
+    private <R> TypedQuery<R> parametize(TypedQuery<R> query) {
         applyParams(query); applyHints(query); return query;
     }
     
-    private Query parametize(Query query) {       
+    private Query parametize(Query query) {
         applyParams(query); applyHints(query); return query;
     }
     
-    private void applyParams(Query query) {      
-        range(0, params.size()).forEach(i -> query.setParameter(i + 1, params.get(i)));                 
+    private void applyParams(Query query) {
+        range(0, params.size()).forEach(i -> query.setParameter(i + 1, params.get(i)));
     }
     
     private void applyHints(Query query) {
@@ -396,7 +405,7 @@ public class Relation<T> implements Querying<T> {
     
     private String separatedByAnd(List<String> values) {
         return join("AND ", values);
-    }  
+    }
     
     private String separatedByComma(List<String> values) {
         return join(", ", values);
@@ -405,5 +414,6 @@ public class Relation<T> implements Querying<T> {
     private String distinctExp() {
         return distinct && !calculating ? "DISTINCT " : "";
     }
+    //</editor-fold>
     
 }
