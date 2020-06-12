@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import static java.util.stream.IntStream.range;
 import javax.persistence.EntityManager;
+import static javax.persistence.LockModeType.NONE;
+import static javax.persistence.LockModeType.PESSIMISTIC_READ;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -57,6 +59,8 @@ public class Relation<T> implements Querying<T> {
     private boolean distinct = false;    
     
     private boolean calculating = false;
+    
+    private boolean lock = false;
 
     public Relation(ApplicationService service) {
         this.entityManager = service.getEntityManager();
@@ -75,34 +79,6 @@ public class Relation<T> implements Querying<T> {
     public Class<T> getEntityClass() {
         return entityClass;
     }     
-
-    public T find(Object id) {
-        return getEntityManager().find(getEntityClass(), id);
-    }
-    
-    public T fetchOne() {
-        return buildParameterizedQuery(toJpql()).getResultStream().findFirst().orElse(null);
-    }    
-    
-    public T fetchOneAlt() {
-        return buildParameterizedQuery(toJpql()).getSingleResult();
-    }
-    
-    public List<T> fetch() {
-        return buildParameterizedQuery(toJpql()).getResultList();
-    }    
-    
-    public <R> R fetchOneAs(Class<R> resultClass) {
-        return buildParameterizedQuery(toJpql(), resultClass).getSingleResult();
-    }    
-    
-    public List fetchAlt() {
-        return buildParameterizedQueryAlt(toJpql()).getResultList();
-    }     
-    
-    public boolean fetchExists() {
-        return buildParameterizedQuery(toJpql()).getResultStream().findAny().isPresent();
-    }
     
     public String toJpql() {
         StringBuilder qlString = new StringBuilder(formattedSelect());
@@ -112,77 +88,37 @@ public class Relation<T> implements Querying<T> {
         if (!havingValues.isEmpty()) qlString.append(" ").append(formattedHaving());
         if (!orderValues.isEmpty())  qlString.append(" ").append(formattedOrder());
         return qlString.toString();
+    }
+    
+    public T find(Object id) {
+        return getEntityManager().find(getEntityClass(), id, (lock ? PESSIMISTIC_READ : NONE));
     }    
     
-    //<editor-fold defaultstate="collapsed" desc="query methods">
-    public Relation<T> all() {
-        return queryMethods.all();
+    //<editor-fold defaultstate="collapsed" desc="fetch methods">
+    public T fetchOne() {
+        return buildParameterizedQuery(toJpql()).getResultStream().findFirst().orElse(null);
     }
     
-    public Relation<T> select(String... fields) {
-        return queryMethods.select(fields);
+    public T fetchOneAlt() {
+        return buildParameterizedQuery(toJpql()).getSingleResult();
     }
     
-    public Relation<T> joins(String... values) {
-        return queryMethods.joins(values);
+    public List<T> fetch() {
+        return buildParameterizedQuery(toJpql()).getResultList();
     }
     
-    public Relation<T> where(String conditions, Object... params) {
-        return queryMethods.where(conditions, params);
+    public <R> R fetchOneAs(Class<R> resultClass) {
+        return buildParameterizedQuery(toJpql(), resultClass).getSingleResult();
     }
     
-    public Relation<T> group(String... fields) {
-        return queryMethods.group(fields);
+    public List fetchAlt() {
+        return buildParameterizedQueryAlt(toJpql()).getResultList();
     }
     
-    public Relation<T> having(String conditions, Object... params) {
-        return queryMethods.having(conditions, params);
+    public boolean fetchExists() {
+        return buildParameterizedQuery(toJpql()).getResultStream().findAny().isPresent();
     }
-    
-    public Relation<T> order(String... order) {
-        return queryMethods.order(order);
-    }
-    
-    public Relation<T> limit(int limit) {
-        return queryMethods.limit(limit);
-    }
-    
-    public Relation<T> offset(int offset) {
-        return queryMethods.offset(offset);
-    }
-    
-    public Relation<T> distinct() {
-        return queryMethods.distinct();
-    }
-    
-    public Relation<T> distinct(boolean value) {
-        return queryMethods.distinct(value);
-    }
-    
-    public Relation<T> none() {
-        return queryMethods.none();
-    }
-    
-    public Relation<T> includes(String... includes) {
-        return queryMethods.includes(includes);
-    }
-    
-    public Relation<T> eagerLoads(String... eagerLoads) {
-        return queryMethods.eagerLoads(eagerLoads);
-    }
-    
-    public Relation<T> reselect(String... fields) {
-        return queryMethods.reselect(fields);
-    }
-    
-    public Relation<T> rewhere(String conditions, Object... params) {
-        return queryMethods.rewhere(conditions, params);
-    }
-    
-    public Relation<T> reorder(String... fields) {
-        return queryMethods.reorder(fields);
-    }
-    //</editor-fold>
+    //</editor-fold>      
     
     //<editor-fold defaultstate="collapsed" desc="finder methods">
     public T take() {
@@ -236,7 +172,77 @@ public class Relation<T> implements Querying<T> {
     public List<T> last(int limit) {
         return finderMethods.last(limit);
     }
-    //</editor-fold>
+    //</editor-fold>    
+    
+    //<editor-fold defaultstate="collapsed" desc="query methods">
+    public Relation<T> all() {
+        return queryMethods.all();
+    }
+    
+    public Relation<T> select(String... fields) {
+        return queryMethods.select(fields);
+    }
+    
+    public Relation<T> joins(String... values) {
+        return queryMethods.joins(values);
+    }
+    
+    public Relation<T> where(String conditions, Object... params) {
+        return queryMethods.where(conditions, params);
+    }
+    
+    public Relation<T> group(String... fields) {
+        return queryMethods.group(fields);
+    }
+    
+    public Relation<T> having(String conditions, Object... params) {
+        return queryMethods.having(conditions, params);
+    }
+    
+    public Relation<T> order(String... order) {
+        return queryMethods.order(order);
+    }
+    
+    public Relation<T> limit(int limit) {
+        return queryMethods.limit(limit);
+    }
+    
+    public Relation<T> offset(int offset) {
+        return queryMethods.offset(offset);
+    }
+    
+    public Relation<T> distinct() {
+        return queryMethods.distinct();
+    }
+    
+    public Relation<T> none() {
+        return queryMethods.none();
+    }
+    
+    public Relation<T> includes(String... includes) {
+        return queryMethods.includes(includes);
+    }
+    
+    public Relation<T> eagerLoads(String... eagerLoads) {
+        return queryMethods.eagerLoads(eagerLoads);
+    }
+    
+    public Relation<T> reselect(String... fields) {
+        return queryMethods.reselect(fields);
+    }
+    
+    public Relation<T> rewhere(String conditions, Object... params) {
+        return queryMethods.rewhere(conditions, params);
+    }
+    
+    public Relation<T> reorder(String... fields) {
+        return queryMethods.reorder(fields);
+    }
+    
+    public Relation<T> lock() {
+        return queryMethods.lock();
+    }
+    //</editor-fold>   
     
     //<editor-fold defaultstate="collapsed" desc="calculation">
     public long count() {
@@ -270,7 +276,7 @@ public class Relation<T> implements Querying<T> {
     public List ids() {
         return calculation.ids();
     }
-    //</editor-fold>     
+    //</editor-fold>         
 
     //<editor-fold defaultstate="collapsed" desc="relation methods">
     public void addSelect(String select) {
@@ -345,6 +351,10 @@ public class Relation<T> implements Querying<T> {
     
     public void clearOrder() {
         this.orderValues.clear();
+    }
+    
+    public void setLock(boolean lock) {
+        this.lock = lock;
     }
     //</editor-fold>
     

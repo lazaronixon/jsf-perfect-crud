@@ -52,10 +52,6 @@ public class QueryMethods<T> {
         relation.setDistinct(true); return relation;
     }
     
-    public Relation<T> distinct(boolean value) {
-        relation.setDistinct(value); return relation;
-    }
-    
     public Relation<T> none() {
         relation.addWhere("1 = 0"); return relation;
     }
@@ -79,6 +75,10 @@ public class QueryMethods<T> {
     public Relation<T> reorder(String... fields) {
         relation.clearOrder(); return order(fields);
     }     
+    
+    public Relation<T> lock() {
+        relation.setLock(true); return relation;
+    }
     
     private String constructor(String[] fields) {
         return format("new %s(%s)", entityName(), separatedByComma(fields));
