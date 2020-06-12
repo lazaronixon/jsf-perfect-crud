@@ -1,6 +1,5 @@
 package com.example.jsfcrud.services;
 
-import com.example.jsfcrud.activepersistence.Relation;
 import com.example.jsfcrud.models.Student;
 import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
