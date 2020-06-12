@@ -1,46 +1,45 @@
 package com.example.jsfcrud.activepersistence.relation;
 
+import com.example.jsfcrud.activepersistence.Relation;
 import java.util.List;
 
-public interface Calculation<T> {                     
+public class Calculation<T> {    
     
-    public List fetchAlt();    
-    
-    public <R> R fetchOneAs(Class<R> resultClass);      
-    
-    public void setSelectString(String select);      
-    
-    public void setCalculation(boolean value);
+    private final Relation<T> relation;
 
-    public default long count() {
+    public Calculation(Relation relation) {
+        this.relation = relation;
+    }        
+
+    public long count() {
         return count("this");
     }
     
-    public default long count(String field) {        
-        setSelectString("COUNT(" + field + ")"); setCalculation(true); return this.fetchOneAs(Long.class);
+    public long count(String field) {        
+        relation.setSelectString("COUNT(" + field + ")"); relation.setCalculating(true); return relation.fetchOneAs(Long.class);
     }
 
-    public default <R> R minimum(String field, Class<R> resultClass) {
-        setSelectString("MIN(" + field + ")"); setCalculation(true); return this.fetchOneAs(resultClass);
+    public <R> R minimum(String field, Class<R> resultClass) {
+        relation.setSelectString("MIN(" + field + ")"); relation.setCalculating(true); return relation.fetchOneAs(resultClass);
     }
 
-    public default <R> R maximum(String field, Class<R> resultClass) {
-        setSelectString("MAX(" + field + ")"); setCalculation(true); return this.fetchOneAs(resultClass);
+    public <R> R maximum(String field, Class<R> resultClass) {
+        relation.setSelectString("MAX(" + field + ")"); relation.setCalculating(true); return relation.fetchOneAs(resultClass);
     }
 
-    public default <R> R average(String field, Class<R> resultClass) {
-        setSelectString("AVG(" + field + ")"); setCalculation(true); return this.fetchOneAs(resultClass);
+    public <R> R average(String field, Class<R> resultClass) {
+        relation.setSelectString("AVG(" + field + ")"); relation.setCalculating(true); return relation.fetchOneAs(resultClass);
     }
 
-    public default <R> R sum(String field, Class<R> resultClass) {
-        setSelectString("SUM(" + field + ")"); setCalculation(true); return this.fetchOneAs(resultClass);
+    public <R> R sum(String field, Class<R> resultClass) {
+        relation.setSelectString("SUM(" + field + ")"); relation.setCalculating(true); return relation.fetchOneAs(resultClass);
     }
 
-    public default List pluck(String fields) {
-        setSelectString(fields); return this.fetchAlt();
+    public List pluck(String fields) {
+        relation.setSelectString(fields); return relation.fetchAlt();
     }
 
-    public default List ids() {
+    public List ids() {
         return pluck("this.id");
     }   
     

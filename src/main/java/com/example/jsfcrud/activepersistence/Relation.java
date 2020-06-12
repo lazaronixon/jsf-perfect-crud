@@ -14,7 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<T>, Calculation<T> {
+public class Relation<T> implements Querying<T> {
     
     private final static String SELECT_FRAGMENT = "SELECT %s FROM %s this";
     private final static String WHERE_FRAGMENT  = "WHERE %s";
@@ -23,6 +23,12 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     private final static String ORDER_FRAGMENT  = "ORDER BY %s";    
 
     private final EntityManager entityManager;
+    
+    private final FinderMethods<T> finderMethods;
+    
+    private final QueryMethods<T> queryMethods;
+    
+    private final Calculation<T> calculation;
 
     private final Class entityClass;
 
@@ -50,11 +56,14 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     
     private boolean distinct = false;    
     
-    private boolean calculation = false;
+    private boolean calculating = false;
 
     public Relation(ApplicationService service) {
         this.entityManager = service.getEntityManager();
-        this.entityClass = service.getEntityClass();
+        this.entityClass   = service.getEntityClass();
+        this.finderMethods = new FinderMethods(this);
+        this.queryMethods  = new QueryMethods(this);
+        this.calculation   = new Calculation(this);
     }
 
     public T find(Object id) {
@@ -73,30 +82,16 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
         return buildParameterizedQuery(buildQlString()).getResultList();
     }    
     
-    @Override
     public <R> R fetchOneAs(Class<R> resultClass) {
         return buildParameterizedQuery(buildQlString(), resultClass).getSingleResult();
     }    
     
-    @Override
     public List fetchAlt() {
         return buildParameterizedQueryAlt(buildQlString()).getResultList();
     }     
     
-    @Override
     public boolean fetchExists() {
         return buildParameterizedQuery(buildQlString()).getResultStream().findAny().isPresent();
-    }
-
-    @Override
-    public String buildQlString() {
-        StringBuilder qlString = new StringBuilder(formattedSelect());
-        if (!joinsValues.isEmpty())  qlString.append(" ").append(separatedBySpace(joinsValues));
-        if (!whereValues.isEmpty())  qlString.append(" ").append(formattedWhere());
-        if (!groupValues.isEmpty())  qlString.append(" ").append(formattedGroup());
-        if (!havingValues.isEmpty()) qlString.append(" ").append(formattedHaving());
-        if (!orderValues.isEmpty())  qlString.append(" ").append(formattedOrder());
-        return qlString.toString();
     }
     
     @Override
@@ -109,96 +104,240 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
         return entityClass;
     }    
     
-    @Override
     public void addSelect(String select) {
         this.selectValues.add(select);
     }
     
-    @Override
     public void setSelectString(String select) {
         this.selectValues.clear();
         this.addSelect(select);
     }
     
-    @Override
     public void addJoins(String joins) {
         this.joinsValues.add(joins);
     }
     
-    @Override
     public void addWhere(String where) {
         this.whereValues.add(where);
     }
     
-    @Override
     public void addParams(Object[] params) {
         this.params.add(params);
     }      
     
-    @Override
     public void addGroup(String group) {
         this.groupValues.add(group);
     }
     
-    @Override
     public void addHaving(String having) {
         this.havingValues.add(having);
     }
     
-    @Override
     public List<String> getOrderValues() {
         return orderValues;
     }
     
-    @Override
     public void addOrder(String order) {
         this.orderValues.add(order);
     }    
     
-    @Override
     public void addIncludes(String[] includes) {
         includesValues.addAll(List.of(includes));
     }
 
-    @Override
     public void addEagerLoads(String[] eagerLoads) {
         eagerLoadsValues.addAll(List.of(eagerLoads));
     }    
     
-    @Override
     public void setOffset(int offset) {
         this.offset = offset;
     }    
 
-    @Override
     public void setLimit(int limit) {
         this.limit = limit;
     }    
     
-    @Override
     public void setDistinct(boolean distinct) {
         this.distinct = distinct;
     }    
     
-    @Override
-    public void setCalculation(boolean calculation) {
-        this.calculation = calculation;
+    public void setCalculating(boolean calculating) {
+        this.calculating = calculating;
     }
     
-    @Override
     public void clearSelect() {
         this.selectValues.clear();
     }
 
-    @Override
     public void clearWhere() {
         this.whereValues.clear();
         this.params.clear();
     }
 
-    @Override
     public void clearOrder() {
         this.orderValues.clear();
+    }
+    
+    public Relation<T> all() {
+        return queryMethods.all();
+    }
+    
+    public Relation<T> select(String values) {        
+        return queryMethods.select(values);
+    }    
+    
+    public Relation<T> joins(String values) {
+        return queryMethods.joins(values);
+    }    
+    
+    public Relation<T> where(String conditions, Object... params) {
+        return queryMethods.where(conditions, params);
+    }
+    
+    public Relation<T> group(String values) {
+        return queryMethods.group(values);
+    }    
+    
+    public Relation<T> having(String conditions, Object... params) {
+        return queryMethods.having(conditions, params);
+    }     
+    
+    public Relation<T> order(String order) {
+        return queryMethods.order(order);
+    }     
+    
+    public Relation<T> limit(int limit) {
+        return queryMethods.limit(limit);
+    }
+    
+    public Relation<T> offset(int offset) {
+        return queryMethods.offset(offset);
+    }
+    
+    public Relation<T> distinct() {
+        return queryMethods.distinct();
+    }
+    
+    public Relation<T> distinct(boolean value) {
+        return queryMethods.distinct(value);
+    }
+    
+    public Relation<T> none() {
+        return queryMethods.none();
+    }
+    
+    public Relation<T> includes(String... includes) {
+        return queryMethods.includes(includes);
+    }
+    
+    public Relation<T> eagerLoads(String... eagerLoads) {
+        return queryMethods.eagerLoads(eagerLoads);
+    }
+    
+    public Relation<T> reselect(String values) {
+        return queryMethods.reselect(values);
+    }
+    
+    public Relation<T> rewhere(String conditions, Object... params) {
+        return queryMethods.rewhere(conditions, params);
+    }   
+    
+    public Relation<T> reorder(String fields) {
+        return queryMethods.reorder(fields);
+    }
+    
+    public T take() {
+        return finderMethods.take();
+    }
+
+    public T takeAlt() {
+        return finderMethods.takeAlt();
+    }
+
+    public T first() {
+        return finderMethods.first();
+    }
+
+    public T firstAlt() {
+        return finderMethods.firstAlt();
+    }
+
+    public T last() {
+        return finderMethods.last();
+    }
+
+    public T lastAlt() {
+        return finderMethods.lastAlt();
+    }
+
+    public T findBy(String conditions, Object... params) {
+        return finderMethods.findBy(conditions, params);
+    }
+
+    public T findByAlt(String conditions, Object... params) {
+        return finderMethods.findByAlt(conditions, params);
+    }
+    
+    public boolean exists(String conditions, Object... params) {
+        return finderMethods.exists(conditions, params);
+    }
+
+    public boolean exists() {
+        return finderMethods.exists();
+    }
+
+    public List<T> take(int limit) {
+        return finderMethods.take(limit);
+    }
+
+    public List<T> first(int limit) {
+        return finderMethods.first(limit);
+    }
+
+    public List<T> last(int limit) {
+        return finderMethods.last(limit);
+    }
+    
+    public long count() {
+        return calculation.count();
+    }
+    
+    public long count(String field) {        
+        return calculation.count(field);
+    }
+
+    public <R> R minimum(String field, Class<R> resultClass) {
+        return (R) calculation.minimum(field, entityClass);
+    }
+
+    public <R> R maximum(String field, Class<R> resultClass) {
+        return (R) calculation.maximum(field, entityClass);
+    }
+
+    public <R> R average(String field, Class<R> resultClass) {
+        return (R) calculation.average(field, entityClass);
+    }
+
+    public <R> R sum(String field, Class<R> resultClass) {
+        return (R) calculation.sum(field, entityClass);
+    }
+
+    public List pluck(String fields) {
+        return calculation.pluck(fields);
+    }
+
+    public List ids() {
+        return calculation.ids();
+    }      
+    
+    private String buildQlString() {
+        StringBuilder qlString = new StringBuilder(formattedSelect());
+        if (!joinsValues.isEmpty())  qlString.append(" ").append(separatedBySpace(joinsValues));
+        if (!whereValues.isEmpty())  qlString.append(" ").append(formattedWhere());
+        if (!groupValues.isEmpty())  qlString.append(" ").append(formattedGroup());
+        if (!havingValues.isEmpty()) qlString.append(" ").append(formattedHaving());
+        if (!orderValues.isEmpty())  qlString.append(" ").append(formattedOrder());
+        return qlString.toString();
     }    
     
     private String formattedSelect() {
@@ -264,7 +403,7 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     }
     
     private String distinctExp() {
-        return distinct && !calculation ? "DISTINCT " : "";
+        return distinct && !calculating ? "DISTINCT " : "";
     }
     
 }

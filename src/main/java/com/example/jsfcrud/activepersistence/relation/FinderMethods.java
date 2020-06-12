@@ -1,74 +1,75 @@
 package com.example.jsfcrud.activepersistence.relation;
 
+import com.example.jsfcrud.activepersistence.Relation;
 import static java.lang.String.join;
 import java.util.List;
 
-public interface FinderMethods<T> extends QueryMethods<T> {                 
+public class FinderMethods<T> {               
     
-    public boolean fetchExists();      
+    private final Relation<T> relation;
+
+    public FinderMethods(Relation relation) {
+        this.relation = relation;
+    }        
     
-    public String buildQlString();       
-    
-    public List<String> getOrderValues();    
-    
-    public default T take() {
-        return limit(1).fetchOne();
+    public T take() {
+        return relation.limit(1).fetchOne();
     }
 
-    public default T takeAlt() {
-        return limit(1).fetchOneAlt();
+    public T takeAlt() {
+        return relation.limit(1).fetchOneAlt();
     }
 
-    public default T first() {
-        return order(firstOrder()).take();
+    public T first() {
+        return relation.order(firstOrder()).take();
     }
 
-    public default T firstAlt() {
-        return order(firstOrder()).takeAlt();
+    public T firstAlt() {
+        return relation.order(firstOrder()).takeAlt();
     }
 
-    public default T last() {
-        return order(lastOrder()).take();
+    public T last() {
+        return relation.order(lastOrder()).take();
     }
 
-    public default T lastAlt() {
-        return order(lastOrder()).takeAlt();
+    public T lastAlt() {
+        return relation.order(lastOrder()).takeAlt();
     }
 
-    public default T findBy(String conditions, Object... params) {
-        return where(conditions, params).take();
+    public T findBy(String conditions, Object... params) {
+        return relation.where(conditions, params).take();
     }
 
-    public default T findByAlt(String conditions, Object... params) {
-        return where(conditions, params).takeAlt();
+    public T findByAlt(String conditions, Object... params) {
+        return relation.where(conditions, params).takeAlt();
     }
     
-    public default boolean exists(String conditions, Object... params) {
-        return where(conditions, params).exists();
+    public boolean exists(String conditions, Object... params) {
+        return relation.where(conditions, params).exists();
     }
 
-    public default boolean exists() {
-        return limit(1).fetchExists();
+    public boolean exists() {
+        return relation.limit(1).fetchExists();
     }
 
-    public default List<T> take(int limit) {
-        return limit(limit).fetch();
+    public List<T> take(int limit) {
+        return relation.limit(limit).fetch();
     }
 
-    public default List<T> first(int limit) {
-        return order(firstOrder()).take(limit);
+    public List<T> first(int limit) {
+        return relation.order(firstOrder()).take(limit);
     }
 
-    public default List<T> last(int limit) {
-        return order(lastOrder()).take(limit);
+    public List<T> last(int limit) {
+        return relation.order(lastOrder()).take(limit);
     }    
     
     private String firstOrder() {
-        return getOrderValues().isEmpty() ? "this.id" : join(", ", getOrderValues());
+        return relation.getOrderValues().isEmpty() ? "this.id" : join(", ", relation.getOrderValues());
     }
 
     private String lastOrder() {
-        return getOrderValues().isEmpty() ? "this.id DESC" : join(", ", getOrderValues());
+        return relation.getOrderValues().isEmpty() ? "this.id DESC" : join(", ", relation.getOrderValues());
     }
     
 }
