@@ -97,6 +97,108 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
         return qlString.toString();
     }
     
+    @Override
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }    
+    
+    @Override
+    public Class<T> getEntityClass() {
+        return entityClass;
+    }    
+    
+    @Override
+    public void addSelect(String select) {
+        this.selectValues.add(select);
+    }
+    
+    @Override
+    public void setSelectString(String select) {
+        this.selectValues.clear();
+        this.addSelect(select);
+    }
+    
+    @Override
+    public void addJoins(String joins) {
+        this.joinsValues.add(joins);
+    }
+    
+    @Override
+    public void addWhere(String where) {
+        this.whereValues.add(where);
+    }
+    
+    @Override
+    public void addParams(Object[] params) {
+        this.params.add(params);
+    }      
+    
+    @Override
+    public void addGroup(String group) {
+        this.groupValues.add(group);
+    }
+    
+    @Override
+    public void addHaving(String having) {
+        this.havingValues.add(having);
+    }
+    
+    @Override
+    public List<String> getOrderValues() {
+        return orderValues;
+    }
+    
+    @Override
+    public void addOrder(String order) {
+        this.orderValues.add(order);
+    }    
+    
+    @Override
+    public void addIncludes(String[] includes) {
+        includesValues.addAll(List.of(includes));
+    }
+
+    @Override
+    public void addEagerLoads(String[] eagerLoads) {
+        eagerLoadsValues.addAll(List.of(eagerLoads));
+    }    
+    
+    @Override
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }    
+
+    @Override
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }    
+    
+    @Override
+    public void setDistinct(boolean distinct) {
+        this.distinct = distinct;
+    }    
+    
+    @Override
+    public boolean isDistinct() {
+        return distinct;
+    }
+    
+    @Override
+    public void clearSelect() {
+        this.selectValues.clear();
+    }
+
+    @Override
+    public void clearWhere() {
+        this.whereValues.clear();
+        this.params.clear();
+    }
+
+    @Override
+    public void clearOrder() {
+        this.orderValues.clear();
+    }    
+    
     private String formattedSelect() {
         return format(SELECT_FRAGMENT, separatedByComma(selectValues), entityClass.getSimpleName());
     }
@@ -157,107 +259,6 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     
     private String separatedByComma(List<String> values) {
         return join(", ", values);
-    }   
-    
-    @Override
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }    
-    
-    @Override
-    public Class<T> getEntityClass() {
-        return entityClass;
-    }    
-    
-    @Override
-    public void addSelect(String select) {
-        this.selectValues.add(select);
     }
     
-    @Override
-    public void setSelectString(String select) {
-        this.selectValues.clear();
-        this.addSelect(select);
-    }
-    
-    @Override
-    public void addJoins(String joins) {
-        this.joinsValues.add(joins);
-    }
-    
-    @Override
-    public void addWhere(String where) {
-        this.whereValues.add(where);
-    }
-    
-    @Override
-    public void addParams(Object[] params) {
-        this.params.add(params);
-    }      
-    
-    @Override
-    public void addGroup(String group) {
-        this.groupValues.add(group);
-    }
-    
-    @Override
-    public void addHaving(String having) {
-        this.havingValues.add(having);
-    }
-    
-    @Override
-    public List<String> getOrderValues() {
-        return orderValues;
-    }
-    
-    @Override
-    public void addOrder(String order) {
-        this.orderValues.add(order);
-    }    
-    
-    @Override
-    public void addIncludes(String[] includes) {
-        range(0, includesValues.size()).forEach(i -> includesValues.add(includes[i]));
-    }
-
-    @Override
-    public void addEagerLoads(String[] eagerLoads) {
-        range(0, includesValues.size()).forEach(i -> includesValues.add(eagerLoads[i]));
-    }    
-    
-    @Override
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }    
-
-    @Override
-    public void setLimit(int limit) {
-        this.limit = limit;
-    }    
-    
-    @Override
-    public void setDistinct(boolean distinct) {
-        this.distinct = distinct;
-    }    
-    
-    @Override
-    public boolean isDistinct() {
-        return distinct;
-    }
-    
-    @Override
-    public void clearSelect() {
-        this.selectValues.clear();
-    }
-
-    @Override
-    public void clearWhere() {
-        this.whereValues.clear();
-        this.params.clear();
-    }
-
-    @Override
-    public void clearOrder() {
-        this.orderValues.clear();
-    }    
 }
