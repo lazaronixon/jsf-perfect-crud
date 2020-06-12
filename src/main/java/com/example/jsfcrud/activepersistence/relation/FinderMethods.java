@@ -1,7 +1,6 @@
 package com.example.jsfcrud.activepersistence.relation;
 
 import com.example.jsfcrud.activepersistence.Relation;
-import static java.lang.String.join;
 import java.util.List;
 
 public class FinderMethods<T> {               
@@ -21,20 +20,52 @@ public class FinderMethods<T> {
     }
 
     public T first() {
-        return relation.order(firstOrder()).take();
+        if (relation.getOrderValues().isEmpty()) {
+            return relation.order("this.id").take();
+        } else {
+            return relation.take();
+        }
     }
 
     public T firstAlt() {
-        return relation.order(firstOrder()).takeAlt();
+        if (relation.getOrderValues().isEmpty()) {     
+            return relation.order("this.id").takeAlt();
+        } else {
+            return relation.takeAlt();
+        }
     }
+    
+    public List<T> first(int limit) {
+        if (relation.getOrderValues().isEmpty()) {
+            return relation.order("this.id").take(limit); 
+        } else {
+            return relation.take(limit);   
+        }      
+    }    
 
     public T last() {
-        return relation.order(lastOrder()).take();
+        if (relation.getOrderValues().isEmpty()) {        
+            return relation.order("this.id DESC").take();
+        } else {
+            return relation.take();
+        }
     }
 
     public T lastAlt() {
-        return relation.order(lastOrder()).takeAlt();
+        if (relation.getOrderValues().isEmpty()) {        
+            return relation.order("this.id DESC").takeAlt();
+        } else {
+            return relation.takeAlt();
+        }
     }
+    
+    public List<T> last(int limit) {
+        if (relation.getOrderValues().isEmpty()) {
+            return relation.order("this.id DESC").take(limit); 
+        } else {
+            return relation.take(limit);   
+        }    
+    }    
 
     public T findBy(String conditions, Object... params) {
         return relation.where(conditions, params).take();
@@ -54,26 +85,6 @@ public class FinderMethods<T> {
 
     public List<T> take(int limit) {
         return relation.limit(limit).fetch();
-    }
-
-    public List<T> first(int limit) {
-        return relation.order(firstOrder()).take(limit);
-    }
-
-    public List<T> last(int limit) {
-        return relation.order(lastOrder()).take(limit);
     }    
-    
-    private String firstOrder() {
-        return relation.getOrderValues().isEmpty() ? "this.id" : separatedByComma(relation.getOrderValues());
-    }
-
-    private String lastOrder() {
-        return relation.getOrderValues().isEmpty() ? "this.id DESC" : separatedByComma(relation.getOrderValues());
-    }
-    
-    private String separatedByComma(List<String> values) {
-        return join(", ", values);
-    }
     
 }

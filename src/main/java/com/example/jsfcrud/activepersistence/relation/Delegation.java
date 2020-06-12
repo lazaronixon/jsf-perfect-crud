@@ -31,7 +31,7 @@ public interface Delegation<T> {
         return buildRelation().sum(field, resultClass);
     }
 
-    public default List pluck(String field) {
+    public default List pluck(String... field) {
         return buildRelation().pluck(field);
     }
 
@@ -99,7 +99,7 @@ public interface Delegation<T> {
         return buildRelation().where(conditions, params);
     }
 
-    public default Relation<T> order(String values) {
+    public default Relation<T> order(String... values) {
         return buildRelation().order(values);
     }
 
@@ -111,15 +111,15 @@ public interface Delegation<T> {
         return buildRelation().offset(value);
     }
 
-    public default Relation<T> select(String values) {
+    public default Relation<T> select(String... values) {
         return buildRelation().select(values);
     }
 
-    public default Relation<T> joins(String values) {
+    public default Relation<T> joins(String... values) {
         return buildRelation().joins(values);
     }
 
-    public default Relation<T> group(String values) {
+    public default Relation<T> group(String... values) {
         return buildRelation().group(values);
     }
     
@@ -147,15 +147,15 @@ public interface Delegation<T> {
         return buildRelation().eagerLoads(values);
     }
     
-    public default Relation<T> reselect(String values) {
+    public default Relation<T> reselect(String... values) {
         return buildRelation().reselect(values);
     }
     
-    public default Relation<T> rewhere(String values) {
-        return buildRelation().rewhere(values);
+    public default Relation<T> rewhere(String condition, Object[] params) {
+        return buildRelation().rewhere(condition, params);
     }    
     
-    public default Relation<T> reorder(String fields) { 
+    public default Relation<T> reorder(String... fields) { 
         return buildRelation().reorder(fields);
     }
 
