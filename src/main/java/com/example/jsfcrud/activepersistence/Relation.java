@@ -246,9 +246,9 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     }
     
     private void applyHints(Query query) {
+        query.setHint("eclipselink.batch.type", "IN");
         includesValues.forEach(i -> query.setHint("eclipselink.batch", i));
         eagerLoadsValues.forEach(i -> query.setHint("eclipselink.left-join-fetch", i));
-        query.setHint("eclipselink.batch.type", "IN");
     }
     
     private String separatedBySpace(List<String> values) {
