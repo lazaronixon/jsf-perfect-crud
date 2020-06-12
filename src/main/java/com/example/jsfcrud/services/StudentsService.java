@@ -28,9 +28,4 @@ public class StudentsService extends ApplicationService<Student> implements Seri
     public Student find(String id) {
         return getEntityManager().find(Student.class, Integer.parseInt(id));
     }
-
-    @Override
-    public Relation<Student> buildRelation() {
-        return new Relation(this);
-    }
 }
