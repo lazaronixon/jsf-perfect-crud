@@ -1,5 +1,6 @@
 package com.example.jsfcrud.services;
 
+import com.example.jsfcrud.activepersistence.Relation;
 import com.example.jsfcrud.models.Student;
 import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
@@ -26,5 +27,10 @@ public class StudentsService extends ApplicationService<Student> implements Seri
     @Override
     public Student find(String id) {
         return getEntityManager().find(Student.class, Integer.parseInt(id));
+    }
+
+    @Override
+    public Relation<Student> buildRelation() {
+        return new Relation(this);
     }
 }
