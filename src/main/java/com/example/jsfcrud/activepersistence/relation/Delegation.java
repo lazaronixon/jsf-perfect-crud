@@ -74,7 +74,7 @@ public interface Delegation<T> {
     public default List<T> last(int limit) {
         return buildRelation().last(limit);
     }
-
+    
     public default T findBy(String conditions, Object... params) {
         return buildRelation().findBy(conditions, params);
     }
@@ -89,7 +89,7 @@ public interface Delegation<T> {
     
     public default boolean exists(String conditions, Object... params) {
         return buildRelation().exists(conditions, params);
-    }  
+    }      
 
     public default Relation<T> all() {
         return buildRelation().all();
@@ -145,6 +145,18 @@ public interface Delegation<T> {
     
     public default Relation<T> eagerLoads(String... values) {
         return buildRelation().eagerLoads(values);
+    }
+    
+    public default Relation<T> reselect(String values) {
+        return buildRelation().reselect(values);
+    }
+    
+    public default Relation<T> rewhere(String values) {
+        return buildRelation().rewhere(values);
+    }    
+    
+    public default Relation<T> reorder(String fields) { 
+        return buildRelation().reorder(fields);
     }
 
 }

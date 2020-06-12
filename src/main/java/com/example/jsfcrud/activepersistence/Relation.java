@@ -65,34 +65,6 @@ public class Relation<T> implements Querying<T> {
         this.queryMethods  = new QueryMethods(this);
         this.calculation   = new Calculation(this);
     }
-
-    public T find(Object id) {
-        return getEntityManager().find(getEntityClass(), id);
-    }
-    
-    public T fetchOne() {
-        return buildParameterizedQuery(buildQlString()).getResultStream().findFirst().orElse(null);
-    }    
-    
-    public T fetchOneAlt() {
-        return buildParameterizedQuery(buildQlString()).getSingleResult();
-    }
-    
-    public List<T> fetch() {
-        return buildParameterizedQuery(buildQlString()).getResultList();
-    }    
-    
-    public <R> R fetchOneAs(Class<R> resultClass) {
-        return buildParameterizedQuery(buildQlString(), resultClass).getSingleResult();
-    }    
-    
-    public List fetchAlt() {
-        return buildParameterizedQueryAlt(buildQlString()).getResultList();
-    }     
-    
-    public boolean fetchExists() {
-        return buildParameterizedQuery(buildQlString()).getResultStream().findAny().isPresent();
-    }
     
     @Override
     public EntityManager getEntityManager() {
@@ -102,7 +74,35 @@ public class Relation<T> implements Querying<T> {
     @Override
     public Class<T> getEntityClass() {
         return entityClass;
+    }     
+
+    public T find(Object id) {
+        return getEntityManager().find(getEntityClass(), id);
+    }
+    
+    public T fetchOne() {
+        return buildParameterizedQuery(toJpql()).getResultStream().findFirst().orElse(null);
     }    
+    
+    public T fetchOneAlt() {
+        return buildParameterizedQuery(toJpql()).getSingleResult();
+    }
+    
+    public List<T> fetch() {
+        return buildParameterizedQuery(toJpql()).getResultList();
+    }    
+    
+    public <R> R fetchOneAs(Class<R> resultClass) {
+        return buildParameterizedQuery(toJpql(), resultClass).getSingleResult();
+    }    
+    
+    public List fetchAlt() {
+        return buildParameterizedQueryAlt(toJpql()).getResultList();
+    }     
+    
+    public boolean fetchExists() {
+        return buildParameterizedQuery(toJpql()).getResultStream().findAny().isPresent();
+    }       
     
     public void addSelect(String select) {
         this.selectValues.add(select);
@@ -330,7 +330,7 @@ public class Relation<T> implements Querying<T> {
         return calculation.ids();
     }      
     
-    private String buildQlString() {
+    public String toJpql() {
         StringBuilder qlString = new StringBuilder(formattedSelect());
         if (!joinsValues.isEmpty())  qlString.append(" ").append(separatedBySpace(joinsValues));
         if (!whereValues.isEmpty())  qlString.append(" ").append(formattedWhere());
