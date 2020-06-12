@@ -25,8 +25,6 @@ public interface QueryMethods<T> {
     
     public void setDistinct(boolean value);
     
-    public boolean isDistinct();    
-    
     public void addIncludes(String[] includes);
     
     public void addEagerLoads(String[] eagerLoads);
@@ -44,7 +42,7 @@ public interface QueryMethods<T> {
     }
     
     public default Relation<T> select(String values) {        
-        addSelect(distinctExp() + constructor(values)); return (Relation<T>) this;
+        addSelect(constructor(values)); return (Relation<T>) this;
     }    
     
     public default Relation<T> joins(String values) {
@@ -109,11 +107,7 @@ public interface QueryMethods<T> {
     
     private String constructor(String values) {
         return format("new %s(%s)", entityName(), values);
-    }    
-    
-    private String distinctExp() {
-        return isDistinct() ? "DISTINCT " : "";
-    }    
+    }
     
     private String entityName() {
         return getEntityClass().getName();

@@ -49,6 +49,8 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     private int offset = 0;
     
     private boolean distinct = false;    
+    
+    private boolean calculation = false;
 
     public Relation(ApplicationService service) {
         this.entityManager = service.getEntityManager();
@@ -179,8 +181,8 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     }    
     
     @Override
-    public boolean isDistinct() {
-        return distinct;
+    public void setCalculation(boolean calculation) {
+        this.calculation = calculation;
     }
     
     @Override
@@ -200,7 +202,7 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     }    
     
     private String formattedSelect() {
-        return format(SELECT_FRAGMENT, separatedByComma(selectValues), entityClass.getSimpleName());
+        return format(SELECT_FRAGMENT, distinctExp() + separatedByComma(selectValues), entityClass.getSimpleName());
     }
 
     private String formattedWhere() {
@@ -259,6 +261,10 @@ public class Relation<T> implements FinderMethods<T>, QueryMethods<T>, Querying<
     
     private String separatedByComma(List<String> values) {
         return join(", ", values);
+    }
+    
+    private String distinctExp() {
+        return distinct && !calculation ? "DISTINCT " : "";
     }
     
 }
