@@ -5,7 +5,7 @@
     <artifactId>jsfcrud</artifactId>
     <version>0.0.1</version>
     <packaging>war</packaging>
-    <name>jsfcrud</name>
+    <name>jsfcrud</name>         
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,7 +21,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.activepersistence</groupId>
+            <groupId>com.github.lazaronixon</groupId>
             <artifactId>active-persistence</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>        
