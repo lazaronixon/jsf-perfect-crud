@@ -1,15 +1,12 @@
 package com.example.jsfcrud.services;
 
 import com.example.jsfcrud.models.Student;
-import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @ApplicationScoped
-public class StudentsService extends ApplicationService<Student> implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class StudentsService extends ApplicationService<Student> {
 
     @PersistenceContext(unitName = "jsfcrud")
     private EntityManager em;
