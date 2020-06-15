@@ -53,26 +53,26 @@ public abstract class ApplicationService<T> {
     }
 
     public List<T> all() {
-        return createQuery(format("SELECT this FROM %s this", entityClass.getSimpleName())).getResultList();
+        return buildQuery(format("SELECT this FROM %s this", entityClass.getSimpleName())).getResultList();
     }
 
-    public Query createNativeQuery(String qlString) {
+    public Query buildNativeQuery(String qlString) {
         return getEntityManager().createNativeQuery(qlString, entityClass);
     }
 
-    public Query createNativeQuery(String qlString, Class resultClass) {
+    public Query buildNativeQuery(String qlString, Class resultClass) {
         return getEntityManager().createNativeQuery(qlString, resultClass);
     }
 
-    public Query createNativeQueryAlt(String sqlQuery) {
+    public Query buildNativeQueryAlt(String sqlQuery) {
         return getEntityManager().createNativeQuery(sqlQuery);
     }
 
-    public TypedQuery<T> createQuery(String qlString) {
+    public TypedQuery<T> buildQuery(String qlString) {
         return getEntityManager().createQuery(qlString, entityClass);
     }
 
-    public <R> TypedQuery<R> createQuery(String qlString, Class<R> resultClass) {
+    public <R> TypedQuery<R> buildQuery(String qlString, Class<R> resultClass) {
         return getEntityManager().createQuery(qlString, resultClass);
     }
 
