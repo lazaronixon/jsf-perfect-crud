@@ -4,17 +4,10 @@ import com.activepersistence.service.Base;
 
 public abstract class ApplicationService<T> extends Base<T> {
 
-    public abstract T find(String id);
-
-    private final Class<T> entityClass;
-
     public ApplicationService(Class<T> entityClass) {
-        this.entityClass = entityClass;
+        super(entityClass);
     }
 
-    @Override
-    public Class<T> getEntityClass() {
-        return entityClass;
-    }
+    public abstract T find(String id);
 
 }
