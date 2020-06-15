@@ -55,6 +55,10 @@ public abstract class ApplicationService<T> {
     public List<T> all() {
         return buildQuery(format("SELECT this FROM %s this", entityClass.getSimpleName())).getResultList();
     }
+    
+    public List<T> order(String fields) {
+        return buildQuery(format("SELECT this FROM %s this ORDER BY %s", entityClass.getSimpleName(), fields)).getResultList();
+    }    
 
     public Query buildNativeQuery(String qlString) {
         return getEntityManager().createNativeQuery(qlString, entityClass);
