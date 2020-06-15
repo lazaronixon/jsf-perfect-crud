@@ -8,7 +8,7 @@ import javax.persistence.PersistenceContext;
 @ApplicationScoped
 public class StudentsService extends ApplicationService<Student> {
 
-    @PersistenceContext(unitName = "jsfcrud")
+    @PersistenceContext
     private EntityManager em;
 
     public StudentsService() {
