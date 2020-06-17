@@ -9,21 +9,20 @@ import javax.persistence.PersistenceContext;
 public class StudentsService extends ApplicationService<Student> {
 
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
+
+    @Override
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
 
     public StudentsService() {
         super(Student.class);
     }
 
     @Override
-    public EntityManager getEntityManager() {
-        return em;
-    }
-
-    @Override
     public Student find(String id) {
         return getEntityManager().find(Student.class, Integer.parseInt(id));
     }
-    
-    
+
 }
