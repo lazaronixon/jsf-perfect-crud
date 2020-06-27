@@ -22,7 +22,7 @@ public class StudentsService extends ApplicationService<Student> {
 
     @Override
     public Student find(String id) {
-        return getEntityManager().find(Student.class, Integer.parseInt(id));
+        return find(Integer.parseInt(id));
     }
 
 }
