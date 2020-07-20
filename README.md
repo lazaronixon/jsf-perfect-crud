@@ -31,7 +31,7 @@ students = studentsService.limit(10).fetch();
 students = studentsService.limit(10).offset(2).fetch();
 students = studentsService.all().fetch();
 
-boolean exists = studentsService.exists("this.id = 1");
+boolean exists = studentsService.exists("student.id = 1");
 
 long   count   = (Long)    studentsService.count();
 long   count1  = (Long)    studentsService.count("student.id");
