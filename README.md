@@ -23,10 +23,10 @@ This project is a implementation of generated crud of Ruby on Rails using JSF 2.
 
 ```java
 student  = studentsService.find(10);
-student  = studentsService.findBy("this.id = 10");
+student  = studentsService.findBy("student.id = 10");
 
-students = studentsService.where("this.id = ?", 10).fetch();
-students = studentsService.where("this.id > 10").order("this.id").fetch();
+students = studentsService.where("student.id = ?", 10).fetch();
+students = studentsService.where("student.id > 10").order("student.id").fetch();
 students = studentsService.limit(10).fetch();
 students = studentsService.limit(10).offset(2).fetch();
 students = studentsService.all().fetch();
@@ -34,11 +34,11 @@ students = studentsService.all().fetch();
 boolean exists = studentsService.exists("this.id = 1");
 
 long   count   = (Long)    studentsService.count();
-long   count1  = (Long)    studentsService.count("this.id");
-int    maximum = (Integer) studentsService.max("this.id", Integer.class);
-int    minimum = (Integer) studentsService.min("this.id", Integer.class);
-long   sum     = (Long)    studentsService.sum("this.id", Long.class);
-double average = (Double)  studentsService.avg("this.id", Double.class);
+long   count1  = (Long)    studentsService.count("student.id");
+int    maximum = (Integer) studentsService.max("student.id", Integer.class);
+int    minimum = (Integer) studentsService.min("student.id", Integer.class);
+long   sum     = (Long)    studentsService.sum("student.id", Long.class);
+double average = (Double)  studentsService.avg("student.id", Double.class);
 ```
 
 ## Requirements
