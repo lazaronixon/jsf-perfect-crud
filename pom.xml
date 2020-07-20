@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.github.lazaronixon</groupId>
             <artifactId>active-persistence</artifactId>
-            <version>0.0.7-SNAPSHOT</version>
+            <version>0.0.13</version>
         </dependency>        
     </dependencies>
 </project>
