@@ -1,21 +1,11 @@
 package com.example.jsfcrud.models;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
 @Entity
-public class Student extends ApplicationRecord<Integer> implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Student extends ApplicationRecord {
 
     @NotBlank
     private String name;
@@ -30,15 +20,6 @@ public class Student extends ApplicationRecord<Integer> implements Serializable 
     }
 
     //<editor-fold defaultstate="collapsed" desc="Get/Set">
-    @Override
-    public Integer getId() {
-        return this.id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -72,6 +53,5 @@ public class Student extends ApplicationRecord<Integer> implements Serializable 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
     //</editor-fold>
 }
