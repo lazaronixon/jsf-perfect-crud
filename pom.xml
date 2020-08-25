@@ -19,11 +19,11 @@
             <artifactId>jakarta.jakartaee-api</artifactId>
             <version>8.0.0</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency>    
         <dependency>
             <groupId>com.github.lazaronixon</groupId>
             <artifactId>active-persistence</artifactId>
-            <version>0.0.17-SNAPSHOT</version>
+            <version>0.0.18-SNAPSHOT</version>
         </dependency>        
     </dependencies>
 </project>
