@@ -5,5 +5,5 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class ApplicationRecord extends BaseIdentity {
-    
+
 }
