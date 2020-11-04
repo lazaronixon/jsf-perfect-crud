@@ -10,14 +10,12 @@ public class Student extends ApplicationRecord {
     @NotBlank
     private String name;
 
+    @NotBlank
     private String address;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-
-    public Student() {
-    }
 
     //<editor-fold defaultstate="collapsed" desc="Get/Set">
     public String getName() {
