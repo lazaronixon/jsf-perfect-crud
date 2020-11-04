@@ -33,12 +33,12 @@ public class StudentsController extends ApplicationController implements Seriali
     }
 
     public String create() {
-        studentsService.create(student);
+        studentsService.save(student);
         return redirectTo(studentPath(student), SEVERITY_INFO, "Student was successfully created.");
     }
 
     public String update() {
-        studentsService.update(student);
+        studentsService.save(student);
         return redirectTo(studentPath(student), SEVERITY_INFO, "Student was successfully updated.");
     }
 

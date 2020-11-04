@@ -1,18 +1,18 @@
 package com.example.jsfcrud.services;
 
 import com.example.jsfcrud.models.ApplicationRecord;
+import static java.beans.Introspector.decapitalize;
 import static java.lang.String.format;
 import java.util.List;
+import java.util.function.Supplier;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 public abstract class ApplicationService<T> {
 
-    protected abstract EntityManager getEntityManager();
-
-    public abstract T find(String id);
+    @PersistenceContext
+    private EntityManager em;
 
     private final Class<T> entityClass;
 
@@ -21,22 +21,9 @@ public abstract class ApplicationService<T> {
     }
 
     @Transactional
-    public T create(T entity) {
-        getEntityManager().persist(entity); return entity;
-    }
-
-    @Transactional
-    public T update(T entity) {
-        return getEntityManager().merge(entity);
-    }
-
-    @Transactional
-    public void destroy(T entity) {
-        getEntityManager().remove(getEntityManager().merge(entity));
-    }
-
-    @Transactional
     public T save(ApplicationRecord entity) {
+        if (entity.isDestroyed()) return (T) entity;
+
         if (entity.isNewRecord()) {
             return create((T) entity);
         } else {
@@ -44,40 +31,65 @@ public abstract class ApplicationService<T> {
         }
     }
 
+    @Transactional
+    public void destroy(ApplicationRecord entity) {
+        if (!entity.isPersisted()) return;
+
+        flush(() -> {
+            if (em.contains(entity)) {
+                em.remove(entity);
+            } else {
+                em.remove(em.merge(entity));
+            }
+        });
+    }
+
     public void reload(T entity) {
-        getEntityManager().refresh(entity);
+        em.refresh(entity);
     }
 
     public T find(Object id) {
-        return getEntityManager().find(entityClass, id);
+        return em.find(entityClass, id);
+    }
+
+    public EntityManager getEntityManager() {
+        return em;
     }
 
     public List<T> all() {
-        return buildQuery(format("SELECT this FROM %s this", entityClass.getSimpleName())).getResultList();
+        return em.createQuery(format("SELECT this FROM %s this", getName())).getResultList();
     }
-    
+
     public List<T> order(String fields) {
-        return buildQuery(format("SELECT this FROM %s this ORDER BY %s", entityClass.getSimpleName(), fields)).getResultList();
-    }        
-
-    public Query buildNativeQuery(String qlString) {
-        return getEntityManager().createNativeQuery(qlString, entityClass);
+        return em.createQuery(format("SELECT this FROM %s this ORDER BY %s", getName(), fields)).getResultList();
     }
 
-    public Query buildNativeQuery(String qlString, Class resultClass) {
-        return getEntityManager().createNativeQuery(qlString, resultClass);
+    public String where(String conditions) {
+        return format("SELECT %s FROM %s %s WHERE ", getAlias(), getName(), getAlias()) + conditions;
     }
 
-    public Query buildNativeQueryAlt(String sqlQuery) {
-        return getEntityManager().createNativeQuery(sqlQuery);
+    private T create(T entity) {
+        return flush(() -> { em.persist(entity); return entity; });
     }
 
-    public TypedQuery<T> buildQuery(String qlString) {
-        return getEntityManager().createQuery(qlString, entityClass);
+    private T update(T entity) {
+        return flush(() -> em.merge(entity));
     }
 
-    public <R> TypedQuery<R> buildQuery(String qlString, Class<R> resultClass) {
-        return getEntityManager().createQuery(qlString, resultClass);
+    private T flush(Supplier<T> yield) {
+        var result = yield.get(); em.flush(); return result;
+    }
+
+    private void flush(Runnable yield) {
+        yield.run(); em.flush();
+    }
+
+    private String getAlias() {
+        return decapitalize(entityClass.getSimpleName());
+    }
+
+    private String getName() {
+        return entityClass.getSimpleName();
     }
 
 }
