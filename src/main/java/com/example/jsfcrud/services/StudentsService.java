@@ -1,27 +1,18 @@
 package com.example.jsfcrud.services;
 
 import com.example.jsfcrud.models.Student;
+import static java.lang.Long.parseLong;
 import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @ApplicationScoped
 public class StudentsService extends ApplicationService<Student> {
-
-    @PersistenceContext
-    private EntityManager em;
 
     public StudentsService() {
         super(Student.class);
     }
 
-    @Override
-    public EntityManager getEntityManager() {
-        return em;
+    public Student find(String id) {
+        return super.find(parseLong(id));
     }
 
-    @Override
-    public Student find(String id) {
-        return getEntityManager().find(Student.class, Integer.parseInt(id));
-    }
 }

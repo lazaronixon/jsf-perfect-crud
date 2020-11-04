@@ -11,8 +11,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-@Named
-@ViewScoped
+@Named @ViewScoped
 public class StudentsController extends ApplicationController implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,12 +32,12 @@ public class StudentsController extends ApplicationController implements Seriali
     }
 
     public String create() {
-        studentsService.create(student);
+        studentsService.save(student);
         return redirectTo(studentPath(student), SEVERITY_INFO, "Student was successfully created.");
     }
 
     public String update() {
-        studentsService.update(student);
+        studentsService.save(student);
         return redirectTo(studentPath(student), SEVERITY_INFO, "Student was successfully updated.");
     }
 
