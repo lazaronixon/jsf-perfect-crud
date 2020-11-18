@@ -65,7 +65,7 @@ public abstract class ApplicationService<T> {
     }
 
     public String where(String conditions) {
-        return format("SELECT %s FROM %s %s WHERE ", getAlias(), getName(), getAlias()) + conditions;
+        return format("SELECT this FROM %s this WHERE ", getName()) + conditions;
     }
 
     private T create(T entity) {
@@ -82,10 +82,6 @@ public abstract class ApplicationService<T> {
 
     private void flush(Runnable yield) {
         yield.run(); em.flush();
-    }
-
-    private String getAlias() {
-        return decapitalize(entityClass.getSimpleName());
     }
 
     private String getName() {
