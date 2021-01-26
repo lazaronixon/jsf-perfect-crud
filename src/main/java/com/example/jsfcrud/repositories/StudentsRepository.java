@@ -1,9 +1,9 @@
-package com.example.jsfcrud.services;
+package com.example.jsfcrud.repositories;
 
 import com.example.jsfcrud.models.Student;
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class StudentsService extends ApplicationService<Student> {
+public class StudentsRepository extends ApplicationRepository<Student> {
 
 }
