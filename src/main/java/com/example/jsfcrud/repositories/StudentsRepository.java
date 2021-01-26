@@ -2,9 +2,9 @@ package com.example.jsfcrud.repositories;
 
 import com.example.jsfcrud.models.Student;
 import static java.lang.Long.parseLong;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 
-@ApplicationScoped
+@RequestScoped
 public class StudentsRepository extends ApplicationRepository<Student> {
 
     public StudentsRepository() {
