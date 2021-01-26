@@ -1,4 +1,4 @@
-package com.example.jsfcrud.services;
+package com.example.jsfcrud.repositories;
 
 import com.example.jsfcrud.models.ApplicationRecord;
 import static java.beans.Introspector.decapitalize;
@@ -9,14 +9,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-public abstract class ApplicationService<T> {
+public abstract class ApplicationRepository<T> {
 
     @PersistenceContext
     private EntityManager em;
 
     private final Class<T> entityClass;
 
-    public ApplicationService(Class<T> entityClass) {
+    public ApplicationRepository(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 
