@@ -3,7 +3,7 @@ package com.example.jsfcrud.controllers;
 import static com.example.jsfcrud.helpers.StudentsHelper.studentPath;
 import static com.example.jsfcrud.helpers.StudentsHelper.studentsPath;
 import com.example.jsfcrud.models.Student;
-import com.example.jsfcrud.repositories.StudentsRepository;
+import com.example.jsfcrud.services.StudentService;
 import java.io.Serializable;
 import java.util.List;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
@@ -17,14 +17,14 @@ public class StudentsController extends ApplicationController implements Seriali
     private static final long serialVersionUID = 1L;
 
     @Inject
-    private StudentsRepository studentsRepository;
+    private StudentService studentService;
 
     private List<Student> students;
 
     private Student student;
 
     public void index() {
-        students = studentsRepository.all();
+        students = studentService.all();
     }
 
     public void new_() {
@@ -32,22 +32,22 @@ public class StudentsController extends ApplicationController implements Seriali
     }
 
     public String create() {
-        studentsRepository.save(student);
+        studentService.save(student);
         return redirectTo(studentPath(student), SEVERITY_INFO, "Student was successfully created.");
     }
 
     public String update() {
-        studentsRepository.save(student);
+        studentService.save(student);
         return redirectTo(studentPath(student), SEVERITY_INFO, "Student was successfully updated.");
     }
 
     public String destroy() {
-        studentsRepository.destroy(student);
+        studentService.destroy(student);
         return redirectTo(studentsPath(), SEVERITY_INFO, "Student was successfully destroyed.");
     }
 
     public void loadStudent() {
-        student = studentsRepository.find(getParams().get("id"));
+        student = studentService.find(getParams().get("id"));
     }
 
     //<editor-fold defaultstate="collapsed" desc="Get/Set">

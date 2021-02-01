@@ -1,4 +1,4 @@
-package com.example.jsfcrud.repositories;
+package com.example.jsfcrud.services;
 
 import com.example.jsfcrud.models.ApplicationRecord;
 import static java.lang.String.format;
@@ -8,14 +8,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-public abstract class ApplicationRepository<T> {
+public abstract class ApplicationService<T> {
 
     @PersistenceContext
     private EntityManager em;
 
     private final Class<T> entityClass;
 
-    public ApplicationRepository(Class<T> entityClass) {
+    public ApplicationService(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 
