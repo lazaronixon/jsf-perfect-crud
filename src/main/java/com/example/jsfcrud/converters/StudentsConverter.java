@@ -1,7 +1,7 @@
 package com.example.jsfcrud.converters;
 
 import com.example.jsfcrud.models.Student;
-import com.example.jsfcrud.services.StudentService;
+import com.example.jsfcrud.repositories.StudentRepository;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -12,7 +12,7 @@ import javax.inject.Inject;
 public class StudentsConverter implements Converter {
 
     @Inject
-    private StudentService studentService;
+    private StudentRepository studentService;
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
