@@ -1,13 +1,13 @@
-package com.example.jsfcrud.services;
+package com.example.jsfcrud.repositories;
 
 import com.example.jsfcrud.models.Student;
 import static java.lang.Long.parseLong;
 import javax.enterprise.context.RequestScoped;
 
 @RequestScoped
-public class StudentService extends ApplicationService<Student> {
+public class StudentRepository extends ApplicationRepository<Student> {
 
-    public StudentService() {
+    public StudentRepository() {
         super(Student.class);
     }
 
